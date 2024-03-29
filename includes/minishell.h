@@ -16,10 +16,13 @@
 # include <readline/history.h>
 # include <stdbool.h>
 
+# define TRUE 1
+# define FALSE 0
 # define CLEAR " \e[1;H\e[2J"
-# define ERR_CNF "mimishell: %s: command not found\n"
-# define ERR_SYNTX "mimishell: syntax error near unexpected token '%c'\n"
-# define ERR_SYNTX_NL "mimishell: syntax error near unexpected token 'newline'\n"
+# define ERR_CNF "shell: %s: command not found\n"
+# define ERR_SYNTX "shell: syntax error near unexpected token '%c'\n"
+# define ERR_SYNTX_NL "shell: syntax error near unexpected token 'newline'\n"
+# define ERR_QUOTE "shell: quote is not closed\n"
 # define ERR_M_OR_L "Malloc failed or no limiter found on here_doc\n"
 
 typedef struct s_cmds
@@ -40,6 +43,7 @@ typedef struct s_data
 	t_cmds	*head;
 	char 	**env;
 	char	*line;
+	char	*no_space_line;
 	char	**splited_line;
 	int		last_signal;
 }					t_data;

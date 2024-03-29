@@ -28,6 +28,7 @@ void	close_free_exit(t_data *data, int ret)
 	// 	close_fds(data);
 	ft_free_strings(data->splited_line);
 	free(data->line);
+	free(data->no_space_line);
 	if (ret != EXIT_SUCCESS)
 		exit(ret);
 }
@@ -38,10 +39,15 @@ void	error(t_data *data, int error, char c)
 		ft_dprintf(2, ERR_SYNTX, c);
 	else if (error == 2 && !c)
 		ft_dprintf(2, ERR_SYNTX_NL);
-	close_free_exit(data, error);
+	else if (error == 'q')
+		ft_dprintf(2, ERR_QUOTE);
+	if (error != 2)
+		data->last_signal = 1;
+	else
+		data->last_signal = error;
 }
 
-int		is_in_s_quote(char *line, char *ptr)
+int		is_in_quote(char *line, char *ptr, char q)
 {
 	int s_quote_left;
 	int s_quote_right;
@@ -49,10 +55,10 @@ int		is_in_s_quote(char *line, char *ptr)
 	s_quote_left = 0;
 	s_quote_right = 0;
 	while (line != ptr)
-		if (*line++ == '\'')
+		if (*line++ == q)
 			s_quote_left++;
-	while (*ptr && *ptr != '|')
-		if (*ptr++ == '\'')
+	while (*ptr)
+		if (*ptr++ == q)
 			s_quote_right++;
 	return (s_quote_left % 2 && s_quote_right % 2);
 }
@@ -65,30 +71,73 @@ void	expend(t_data *data)
 	ptr = data->line;
 	i = -1;
 	while (ptr[++i])
-		if (ptr[i] == '$' && !is_in_s_quote(ptr, ptr + i))
-			ft_printf("to expend\n");
+	{
+		if (ptr[i] == '$' && ptr[i + 1] && !is_in_quote(ptr, ptr + i, '\''))
+		{
+			if (ptr[i + 1] == '$')
+				ft_printf("pid\n");
+			else if (ft_iswhitespace(ptr[i + 1]) || ft_ismeta(ptr[i + 1]))
+				continue;
+			else if (ptr[i + 1] != '"' && ptr[i + 1] != '\'')
+				ft_printf("expend\n");
+		}
+	}
 }
 
-void	check_syntax(t_data *data)
+int	check_syntax(t_data *data)
 {
-	// size_t	i;
 	char *ptr;
 
-	// i = -1;
-	ptr = data->line;
+	data->no_space_line = ft_strdelspace(data->line);
+	if (!data->no_space_line)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
+	ptr = data->no_space_line;
 	while (*ptr)
 	{
-		if (ft_ismeta(*ptr))
+		if (ft_ismeta(*ptr) && \
+		!is_in_quote(data->no_space_line, ptr, '\'') && \
+		!is_in_quote(data->no_space_line, ptr, '"'))
 		{
-			if (*ptr == '|' && ptr[1] == '|')
-				return (error(data, 2, *ptr));
-			if (*ptr != ptr[1] && (ft_ismeta(ptr[1]) || ptr[1] == '\0'))
-				return (error(data, 2, ptr[1]));
-			if (*ptr == ptr[1] && (ft_ismeta(ptr[2]) || ptr[1] == '\0'))
-				return (error(data, 2, ptr[2]));
+			if (*ptr == '|' && (ptr[1] == '|' || \
+			ptr[1] == '\0' || ptr == data->no_space_line))
+				return (error(data, 2, *ptr), 1);
+			else if (*ptr != ptr[1] && (ft_ismeta(ptr[1]) || ptr[1] == '\0'))
+				return (error(data, 2, ptr[1]), 1);
+			else if (*ptr == ptr[1] && (ft_ismeta(ptr[2]) || ptr[1] == '\0'))
+				return (error(data, 2, ptr[2]), 1);
 		}
 		ptr++;
 	}
+	return (EXIT_SUCCESS);
+}
+
+bool	check_quote(t_data *data)
+{
+	bool	in_quote;
+	bool	in_s_quote;
+	char	*ptr;
+
+	in_quote = FALSE;
+	in_s_quote = FALSE;
+	ptr = data->line;
+	while (*ptr)
+	{
+		if (*ptr == '"' && !in_s_quote)
+		{
+			if (!in_quote)
+				in_quote = TRUE;
+			else
+				in_quote = FALSE;
+		}
+		if (*ptr++ == '\'' && !in_quote)
+		{
+			if (!in_s_quote)
+				in_s_quote = TRUE;
+			else
+				in_s_quote = FALSE;
+		}
+	}
+	return (in_s_quote || in_quote);
 }
 
 void	parse(t_data *data)
@@ -99,7 +148,10 @@ void	parse(t_data *data)
 	// data->splited_line = ft_split(data->line, ' ');
 	// if (!data->splited_line)
 	// 	return (perror("Malloc"), error(data, 1, 0));
-	check_syntax(data);
+	if (check_syntax(data))
+		return;
+	if (check_quote(data))
+		return (error(data, 'q', 0));
 	expend(data);
 	// ptr = data->line;
 	// while (*ptr)
@@ -125,7 +177,7 @@ int	main(int argc, char **argv, char **env)
 	write(1, CLEAR, 11);
 	while (1)
 	{
-		data.line = readline("mimishell : ");
+		data.line = readline("mimishell: ");
 		if (!data.line)
 			break ;
 		if (*data.line)
@@ -133,6 +185,5 @@ int	main(int argc, char **argv, char **env)
 		parse(&data);
 		close_free_exit(&data, 0);
 	}
-	close_free_exit(&data, 0);
 	return (0);
 }
