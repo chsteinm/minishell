@@ -46,6 +46,8 @@ typedef struct s_data
 	char	*no_space_line;
 	char	**splited_line;
 	int		last_signal;
+	pid_t	pid;
+	char	*tmp;
 }					t_data;
 
 #endif

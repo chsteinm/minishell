@@ -33,20 +33,6 @@ void	close_free_exit(t_data *data, int ret)
 		exit(ret);
 }
 
-void	error(t_data *data, int error, char c)
-{
-	if (error == 2 && c)
-		ft_dprintf(2, ERR_SYNTX, c);
-	else if (error == 2 && !c)
-		ft_dprintf(2, ERR_SYNTX_NL);
-	else if (error == 'q')
-		ft_dprintf(2, ERR_QUOTE);
-	if (error != 2)
-		data->last_signal = 1;
-	else
-		data->last_signal = error;
-}
-
 int		is_in_quote(char *line, char *ptr, char q)
 {
 	int s_quote_left;
@@ -63,6 +49,69 @@ int		is_in_quote(char *line, char *ptr, char q)
 	return (s_quote_left % 2 && s_quote_right % 2);
 }
 
+char	*join_3_strs(char *s1, char *s2, char *s3)
+{
+	char	*ret;
+	char	*tmp;
+
+	tmp = ft_strjoin(s1, s2);
+	if (!tmp)
+		return (NULL);
+	ret = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (ret);
+}
+
+void	replace_var(t_data *data, char *ptr)
+{
+	char	*to_rep;
+	char	*var;
+	size_t	len;
+	size_t	i;
+
+	len = 0;
+	while (ptr[++len] && !ft_iswhitespace(ptr[len]) && \
+	!ft_ismeta(ptr[len]) && ptr[len] != '$')
+		continue;
+	to_rep = ft_calloc(len + 1, 1);
+	if (!to_rep)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+	ft_strlcpy(to_rep, ptr + 1, len);
+	to_rep[len - 1] = '=';
+	var = NULL;
+	i = -1;
+	while (!var && data->env[++i])
+		var = ft_strnstr(data->env[i], to_rep, len);
+	if (var)
+		var += len;
+	free(to_rep);
+	*ptr = 0;
+	ptr[len - 1] = 0;
+	data->tmp = data->line;
+	data->line = join_3_strs(data->line, var, ptr + len);
+	free(data->tmp);
+	if (!data->line)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+}
+
+void	replace_pid(t_data *data, char *ptr)
+{
+	char	*pid;
+	char	*tmp;
+
+	pid = ft_itoa(data->pid);
+	if (!pid)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+	*ptr = 0;
+	ptr[1] = 0;
+	tmp = data->line;
+	data->line = join_3_strs(data->line, pid, ptr + 2);
+	free(tmp);
+	free(pid);
+	if (!data->line)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+}
+
 void	expend(t_data *data)
 {
 	char	*ptr;
@@ -75,13 +124,33 @@ void	expend(t_data *data)
 		if (ptr[i] == '$' && ptr[i + 1] && !is_in_quote(ptr, ptr + i, '\''))
 		{
 			if (ptr[i + 1] == '$')
-				ft_printf("pid\n");
+			{
+				replace_pid(data, ptr + i);
+				return (expend(data));
+			}
 			else if (ft_iswhitespace(ptr[i + 1]) || ft_ismeta(ptr[i + 1]))
 				continue;
 			else if (ptr[i + 1] != '"' && ptr[i + 1] != '\'')
-				ft_printf("expend\n");
+			{
+				replace_var(data, ptr + i);
+				return (expend(data));
+			}
 		}
 	}
+}
+
+void	error(t_data *data, int error, char c)
+{
+	if (error == 2 && c)
+		ft_dprintf(2, ERR_SYNTX, c);
+	else if (error == 2 && !c)
+		ft_dprintf(2, ERR_SYNTX_NL);
+	else if (error == 'q')
+		ft_dprintf(2, ERR_QUOTE);
+	if (error != 2)
+		data->last_signal = 1;
+	else
+		data->last_signal = error;
 }
 
 int	check_syntax(t_data *data)
@@ -169,10 +238,12 @@ void	parse(t_data *data)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-
 	(void)argc;
 	(void)argv;
 	ft_bzero((char *)&data, sizeof(t_data));
+	data.pid = fork();
+	if (!data.pid--)
+		return (0);
 	data.env = env;
 	write(1, CLEAR, 11);
 	while (1)
@@ -183,6 +254,7 @@ int	main(int argc, char **argv, char **env)
 		if (*data.line)
 			add_history(data.line);
 		parse(&data);
+		ft_printf("%s\n", data.line);
 		close_free_exit(&data, 0);
 	}
 	return (0);
