@@ -26,7 +26,7 @@ void	close_free_exit(t_data *data, int ret)
 {
 	// if (ret)
 	// 	close_fds(data);
-	ft_free_strings(data->splited_line);
+	// ft_free_strings(data->splited_line);
 	free(data->line);
 	free(data->no_space_line);
 	if (ret != EXIT_SUCCESS)

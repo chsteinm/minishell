@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # include "./libft/libft.h"
-# include "get_next_line_bonus.h"
+# include "get_next_line.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -28,10 +28,9 @@
 typedef struct s_cmds
 {
 	char			**cmd;
-	char			**envs; 
 	char  			*file_in;
 	char			*file_out;
-	bool			erase_out;
+	bool			append_out;
 	int				*pipe;
 	char			*lim;
 	struct s_cmds	*next;
@@ -44,7 +43,7 @@ typedef struct s_data
 	char 	**env;
 	char	*line;
 	char	*no_space_line;
-	char	**splited_line;
+	//char	**splited_line;
 	int		last_signal;
 	pid_t	pid;
 	char	*tmp;
