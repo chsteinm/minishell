@@ -261,6 +261,7 @@ char	*str__dup(t_data *data, char **ptr)
 	char	*str;
 
 	len = 0;
+	quote = 0;
 	if (**ptr == '"' || **ptr == '\'')
 	{
 		quote = **ptr;
@@ -269,12 +270,15 @@ char	*str__dup(t_data *data, char **ptr)
 			len++;
 	}
 	else
-		while (!ft_iswhitespace((*ptr)[len]) && !ft_ismeta((*ptr)[len]))
+		while ((*ptr)[len] && \
+		!ft_iswhitespace((*ptr)[len]) && !ft_ismeta((*ptr)[len]))
 			len++;
 	str = ft_strndup(*ptr, len);
 	if (!str)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
-	*ptr = (*ptr) + len + 1;
+	if (quote)
+		*ptr = (*ptr) + 1;
+	*ptr = (*ptr) + len;
 	return (str);
 }
 
@@ -288,8 +292,11 @@ void	parse_cmd(t_data *data, t_cmds *node, char **begin)
 		if (*ptr == '>')
 		{
 			ptr++;
-			if (*ptr++ == '>')
+			if (*ptr == '>')
+			{
 				node->append_out = TRUE;
+				ptr++;
+			}
 			else
 				node->append_out = FALSE;
 			while (ft_iswhitespace(*ptr))
@@ -301,9 +308,9 @@ void	parse_cmd(t_data *data, t_cmds *node, char **begin)
 		else if (*ptr == '<')
 		{
 			ptr++;
-			if (*ptr++ == '<')
+			if (*ptr == '<')
 			{
-				node->append_out = TRUE;
+				ptr++;
 				while (ft_iswhitespace(*ptr))
 					ptr++;
 				node->lim = str__dup(data, &ptr);
@@ -339,7 +346,6 @@ void	parse(t_data *data)
 			ft_printf("file_in = %s\n", node->file_in);
 			ft_printf("file_out = %s\n", node->file_out);
 			ft_printf("append = %d\n", node->append_out);
-			printf("pf lim = %s\n", node->lim);
 			ft_printf("lim = %s\n", node->lim);
 		}
 		if (*ptr)

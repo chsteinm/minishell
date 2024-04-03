@@ -1,28 +1,17 @@
-NAME = minishell
-NAME_BONUS = 
+NAME = minishell 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -lreadline -lhistory -g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address 
 PATH_SRCS = ./srcs/
 SRCS = main.c
-# SRCS_BONUS = main_bonus.c exec_bonus.c set_bonus.c get_next_line_bonus.c here_doc_manage_bonus.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
-# OBJ_BONUS = $(addprefix $(BUILD_DIR)/,$(SRCS_BONUS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@ -lreadline -lhistory
 	@echo "\nmimishell is ready for use!\n"
-# @echo 'tape "./pipex file1 cmd1 cmd2 file2"'"\n"
-
-bonus: $(NAME_BONUS)
-
-$(NAME_BONUS): $(OBJ_BONUS)
-	@$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) -o $@
-	@echo "\npipex is ready for use!\n"
-	@echo 'tape "./pipex_bonus file1 cmd1 ... cmdn file2"'"\n"
 
 $(BUILD_DIR)/%.o: $(PATH_SRCS)%.c Makefile $(LIBFT)
 	@mkdir -p $(BUILD_DIR)
