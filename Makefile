@@ -1,7 +1,7 @@
 NAME = minishell
 NAME_BONUS = 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -lreadline -g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -lreadline -lhistory -g3 -fsanitize=address 
 PATH_SRCS = ./srcs/
 SRCS = main.c
 # SRCS_BONUS = main_bonus.c exec_bonus.c set_bonus.c get_next_line_bonus.c here_doc_manage_bonus.c

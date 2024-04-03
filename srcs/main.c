@@ -46,6 +46,7 @@ void	close_free_exit(t_data *data, int ret)
 	free_cmds_list(&data->head);
 	free(data->line);
 	free(data->no_space_line);
+	free(data->one_space_line);
 	if (ret != EXIT_SUCCESS)
 		exit(ret);
 }
@@ -183,8 +184,11 @@ int	check_space(t_data *data)
 {
 	size_t	j;
 
-	replace_white_space(data->line);
-	data->splited_line = ft_split(data->line, ' ');
+	data->one_space_line = ft_strdup(data->line);
+	if (!data->one_space_line)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
+	replace_white_space(data->one_space_line);
+	data->splited_line = ft_split(data->one_space_line, ' ');
 	j = 0;
 	while (data->splited_line[++j])
 		if (ft_ismeta(data->splited_line[j][0]))
@@ -250,24 +254,26 @@ bool	check_quote(t_data *data)
 	return (in_s_quote || in_quote);
 }
 
-char	*str_quote_dup(t_data *data, char **ptr)
+char	*str__dup(t_data *data, char **ptr)
 {
 	char	quote;
 	size_t	len;
-	size_t	i;
 	char	*str;
 
-	quote = **ptr;
-	*ptr = (*ptr) + 1;
 	len = 0;
-	while ((*ptr)[len] != quote)
-		len++;
-	str = ft_calloc(len + 1, sizeof(char));
+	if (**ptr == '"' || **ptr == '\'')
+	{
+		quote = **ptr;
+		*ptr = (*ptr) + 1;
+		while ((*ptr)[len] != quote)
+			len++;
+	}
+	else
+		while (!ft_iswhitespace((*ptr)[len]) && !ft_ismeta((*ptr)[len]))
+			len++;
+	str = ft_strndup(*ptr, len);
 	if (!str)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
-	i = -1;
-	while (++i < len)
-		str[i] = (*ptr)[i];
 	*ptr = (*ptr) + len + 1;
 	return (str);
 }
@@ -277,17 +283,34 @@ void	parse_cmd(t_data *data, t_cmds *node, char **begin)
 	char	*ptr;
 
 	ptr = *begin;
-	while (*ptr && !ft_iswhitespace(*ptr))
+	while (*ptr && *ptr != '|')
 	{
 		if (*ptr == '>')
 		{
 			ptr++;
 			if (*ptr++ == '>')
 				node->append_out = TRUE;
+			else
+				node->append_out = FALSE;
 			while (ft_iswhitespace(*ptr))
 				ptr++;
-			if (*ptr == '"' || *ptr == '\'')
-				node->file_out = str_quote_dup(data, &ptr);
+			free(node->file_out);
+			node->file_out = str__dup(data, &ptr);
+
+		}
+		else if (*ptr == '<')
+		{
+			ptr++;
+			if (*ptr++ == '<')
+			{
+				node->append_out = TRUE;
+				while (ft_iswhitespace(*ptr))
+					ptr++;
+				node->lim = str__dup(data, &ptr);
+			}
+			while (ft_iswhitespace(*ptr))
+				ptr++;
+			node->file_in = str__dup(data, &ptr);
 		}
 	}
 	*begin = ptr;
@@ -316,6 +339,7 @@ void	parse(t_data *data)
 			ft_printf("file_in = %s\n", node->file_in);
 			ft_printf("file_out = %s\n", node->file_out);
 			ft_printf("append = %d\n", node->append_out);
+			printf("pf lim = %s\n", node->lim);
 			ft_printf("lim = %s\n", node->lim);
 		}
 		if (*ptr)

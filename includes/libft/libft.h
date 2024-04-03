@@ -58,6 +58,7 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strdup(char *src);
+char	*ft_strndup(char *ptr, size_t len);
 char	*ft_strdelspace(char *src);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
