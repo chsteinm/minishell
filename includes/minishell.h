@@ -43,7 +43,7 @@ typedef struct s_data
 	char 	**env;
 	char	*line;
 	char	*no_space_line;
-	//char	**splited_line;
+	char	**splited_line;
 	int		last_signal;
 	pid_t	pid;
 	char	*tmp;

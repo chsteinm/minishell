@@ -22,11 +22,28 @@
 // 	}
 // }
 
+void	free_cmds_list(t_cmds **head)
+{
+	t_cmds	*prev;
+	while (*head)
+	{
+		free((*head)->file_in);
+		free((*head)->file_out);
+		ft_free_strings((*head)->cmd);
+		free((*head)->lim);
+		free((*head)->pipe);
+		prev = *head;
+		*head = (*head)->next;
+		free(prev);
+	}
+}
+
 void	close_free_exit(t_data *data, int ret)
 {
 	// if (ret)
 	// 	close_fds(data);
-	// ft_free_strings(data->splited_line);
+	ft_free_strings(data->splited_line);
+	free_cmds_list(&data->head);
 	free(data->line);
 	free(data->no_space_line);
 	if (ret != EXIT_SUCCESS)
@@ -112,7 +129,7 @@ void	replace_pid(t_data *data, char *ptr)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
 }
 
-void	expend(t_data *data)
+void	expand(t_data *data)
 {
 	char	*ptr;
 	size_t	i;
@@ -126,14 +143,14 @@ void	expend(t_data *data)
 			if (ptr[i + 1] == '$')
 			{
 				replace_pid(data, ptr + i);
-				return (expend(data));
+				return (expand(data));
 			}
 			else if (ft_iswhitespace(ptr[i + 1]) || ft_ismeta(ptr[i + 1]))
 				continue;
 			else if (ptr[i + 1] != '"' && ptr[i + 1] != '\'')
 			{
 				replace_var(data, ptr + i);
-				return (expend(data));
+				return (expand(data));
 			}
 		}
 	}
@@ -152,11 +169,35 @@ void	error(t_data *data, int error, char c)
 	else
 		data->last_signal = error;
 }
+void	replace_white_space(char *line)
+{
+	while (*line)
+	{
+		if (ft_iswhitespace(*line))
+			*line = ' ';
+		line++;
+	}
+}
+
+int	check_space(t_data *data)
+{
+	size_t	j;
+
+	replace_white_space(data->line);
+	data->splited_line = ft_split(data->line, ' ');
+	j = 0;
+	while (data->splited_line[++j])
+		if (ft_ismeta(data->splited_line[j][0]))
+			if (ft_ismeta(data->splited_line[j-1][0]))
+				return (error(data, 2, data->splited_line[j][0]), 1);
+	return (0);
+}
 
 int	check_syntax(t_data *data)
 {
 	char *ptr;
 
+	
 	data->no_space_line = ft_strdelspace(data->line);
 	if (!data->no_space_line)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
@@ -177,7 +218,7 @@ int	check_syntax(t_data *data)
 		}
 		ptr++;
 	}
-	return (EXIT_SUCCESS);
+	return (check_space(data));
 }
 
 bool	check_quote(t_data *data)
@@ -209,37 +250,84 @@ bool	check_quote(t_data *data)
 	return (in_s_quote || in_quote);
 }
 
+char	*str_quote_dup(t_data *data, char **ptr)
+{
+	char	quote;
+	size_t	len;
+	size_t	i;
+	char	*str;
+
+	quote = **ptr;
+	*ptr = (*ptr) + 1;
+	len = 0;
+	while ((*ptr)[len] != quote)
+		len++;
+	str = ft_calloc(len + 1, sizeof(char));
+	if (!str)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
+	i = -1;
+	while (++i < len)
+		str[i] = (*ptr)[i];
+	*ptr = (*ptr) + len + 1;
+	return (str);
+}
+
+void	parse_cmd(t_data *data, t_cmds *node, char **begin)
+{
+	char	*ptr;
+
+	ptr = *begin;
+	while (*ptr && !ft_iswhitespace(*ptr))
+	{
+		if (*ptr == '>')
+		{
+			ptr++;
+			if (*ptr++ == '>')
+				node->append_out = TRUE;
+			while (ft_iswhitespace(*ptr))
+				ptr++;
+			if (*ptr == '"' || *ptr == '\'')
+				node->file_out = str_quote_dup(data, &ptr);
+		}
+	}
+	*begin = ptr;
+}
+
 void	parse(t_data *data)
 {
-	// char	*ptr;
-	// t_cmds	*node;
+	char	*ptr;
+	t_cmds	*node;
 
-	// data->splited_line = ft_split(data->line, ' ');
-	// if (!data->splited_line)
-	// 	return (perror("Malloc"), error(data, 1, 0));
 	if (check_syntax(data))
 		return;
 	if (check_quote(data))
 		return (error(data, 'q', 0));
-	expend(data);
-	// ptr = data->line;
-	// while (*ptr)
-	// {
-	// 	while (*ptr == ' ')
-	// 		ptr++;
-	// 	if (*ptr)
-	// 	{
-	// 		node = ft_calloc(1, sizeof(t_cmds));
-	// 		node = ft_lstadd_back((t_list)&data->head, (t_list)node);			
-	// 	}
-	// }
+	expand(data);
+	ptr = data->line;
+	while (*ptr)
+	{
+		while (ft_iswhitespace(*ptr))
+			ptr++;
+		if (*ptr)
+		{
+			node = ft_calloc(1, sizeof(t_cmds));
+			ft_lstadd_back((t_list **)&data->head, (t_list *)node);			
+			parse_cmd(data, node, &ptr);
+			ft_printf("file_in = %s\n", node->file_in);
+			ft_printf("file_out = %s\n", node->file_out);
+			ft_printf("append = %d\n", node->append_out);
+			ft_printf("lim = %s\n", node->lim);
+		}
+		if (*ptr)
+			ptr++;
+	}
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **line, char **env)
 {
 	t_data	data;
 	(void)argc;
-	(void)argv;
+	(void)line;
 	ft_bzero((char *)&data, sizeof(t_data));
 	data.pid = fork();
 	if (!data.pid--)
