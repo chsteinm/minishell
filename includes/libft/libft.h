@@ -17,23 +17,22 @@
 # include <unistd.h>
 # include <stddef.h>
 # include <stdarg.h>
+# include <stdbool.h>
 
 # define BASE16LOW "0123456789abcdef"
 # define BASE16UP "0123456789ABCDEF"
 
 typedef struct s_list
 {
+	char			**cmd;
+	char  			*file_in;
+	char			*file_out;
+	bool			append_out;
+	int				*pipe;
+	char			*lim;
 	void			*content;
-	int				index;
-	char			*index_base;
-	int				len_index_base;
 	struct s_list	*next;
 	struct s_list	*prev;
-	int				price;
-	int				place;
-	int				nearest_index_place;
-	int				near_diff;
-	int				nb_bigger;
 }	t_list;
 
 int		ft_isalpha(int c);

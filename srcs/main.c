@@ -22,20 +22,30 @@
 // 	}
 // }
 
-void	free_cmds_list(t_cmds **head)
+void	free_cmds_list(t_list **head)
 {
-	t_cmds	*prev;
-	while (*head)
+	t_list	*prev;
+	t_list	*node;
+
+	node = *head;
+	while (node)
 	{
-		free((*head)->file_in);
-		free((*head)->file_out);
-		ft_free_strings((*head)->cmd);
-		free((*head)->lim);
-		free((*head)->pipe);
-		prev = *head;
-		*head = (*head)->next;
+		ft_printf("cmd : ");
+		ft_printstrs(node->cmd);
+		ft_printf("file_in = %s\n", node->file_in);
+		ft_printf("file_out = %s\n", node->file_out);
+		ft_printf("append = %d\n", node->append_out);
+		ft_printf("lim = %s\n\n", node->lim);
+		free(node->file_in);
+		free(node->file_out);
+		free(node->cmd);
+		free(node->lim);
+		free(node->pipe);
+		prev = node;
+		node = node->next;
 		free(prev);
 	}
+	*head = 0;
 }
 
 void	close_free_exit(t_data *data, int ret)
@@ -43,12 +53,27 @@ void	close_free_exit(t_data *data, int ret)
 	// if (ret)
 	// 	close_fds(data);
 	ft_free_strings(data->splited_line);
-	free_cmds_list(&data->head);
+	free_cmds_list(&data->cmds);
+	ft_lstclear(&data->cmd_param, &free);
 	free(data->line);
 	free(data->no_space_line);
-	free(data->one_space_line);
+	free(data->no_w_space_line);
 	if (ret != EXIT_SUCCESS)
 		exit(ret);
+}
+
+void	error(t_data *data, int error, char c)
+{
+	if (error == 2 && c)
+		ft_dprintf(2, ERR_SYNTX, c);
+	else if (error == 2 && !c)
+		ft_dprintf(2, ERR_SYNTX_NL);
+	else if (error == 'q')
+		ft_dprintf(2, ERR_QUOTE);
+	if (error != 2)
+		data->last_signal = 1;
+	else
+		data->last_signal = error;
 }
 
 int		is_in_quote(char *line, char *ptr, char q)
@@ -157,19 +182,6 @@ void	expand(t_data *data)
 	}
 }
 
-void	error(t_data *data, int error, char c)
-{
-	if (error == 2 && c)
-		ft_dprintf(2, ERR_SYNTX, c);
-	else if (error == 2 && !c)
-		ft_dprintf(2, ERR_SYNTX_NL);
-	else if (error == 'q')
-		ft_dprintf(2, ERR_QUOTE);
-	if (error != 2)
-		data->last_signal = 1;
-	else
-		data->last_signal = error;
-}
 void	replace_white_space(char *line)
 {
 	while (*line)
@@ -184,16 +196,23 @@ int	check_space(t_data *data)
 {
 	size_t	j;
 
-	data->one_space_line = ft_strdup(data->line);
-	if (!data->one_space_line)
+	data->no_w_space_line = ft_strdup(data->line);
+	if (!data->no_w_space_line)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
-	replace_white_space(data->one_space_line);
-	data->splited_line = ft_split(data->one_space_line, ' ');
+	replace_white_space(data->no_w_space_line);
+	data->splited_line = ft_split(data->no_w_space_line, ' ');
+	j = 0;
+	while (data->splited_line[++j])
+		if (ft_ismeta(data->splited_line[j][ft_strlen(data->splited_line[j]) - 1]))
+			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j - 1]) - 1]))
+				if (data->splited_line[j-1][ft_strlen(data->splited_line[j]) - 1] != '|')
+					return (error(data, 2, data->splited_line[j][0]), 1);
 	j = 0;
 	while (data->splited_line[++j])
 		if (ft_ismeta(data->splited_line[j][0]))
-			if (ft_ismeta(data->splited_line[j-1][0]))
-				return (error(data, 2, data->splited_line[j][0]), 1);
+			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1]))
+				if (data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1] != '|')
+					return (error(data, 2, data->splited_line[j][0]), 1);
 	return (0);
 }
 
@@ -215,13 +234,15 @@ int	check_syntax(t_data *data)
 			if (*ptr == '|' && (ptr[1] == '|' || \
 			ptr[1] == '\0' || ptr == data->no_space_line))
 				return (error(data, 2, *ptr), 1);
-			else if (*ptr != ptr[1] && (ft_ismeta(ptr[1]) || ptr[1] == '\0'))
+			else if (*ptr != ptr[1] && *ptr != '|' && \
+			(ft_ismeta(ptr[1]) || ptr[1] == '\0'))
 				return (error(data, 2, ptr[1]), 1);
 			else if (*ptr == ptr[1] && (ft_ismeta(ptr[2]) || ptr[1] == '\0'))
 				return (error(data, 2, ptr[2]), 1);
 		}
 		ptr++;
 	}
+	// return (0);
 	return (check_space(data));
 }
 
@@ -282,7 +303,36 @@ char	*str__dup(t_data *data, char **ptr)
 	return (str);
 }
 
-void	parse_cmd(t_data *data, t_cmds *node, char **begin)
+char	**fill_cmd(t_data *data, char **begin)
+{
+	char	*ptr;
+	char	**cmd;
+	t_list	*node_ptr;
+	int		j;
+
+	ptr = *begin;
+	while (*ptr && !ft_ismeta(*ptr))
+	{
+		while (ft_iswhitespace(*ptr))
+			ptr++;
+		ft_lstadd_back(&(data->cmd_param), ft_lstnew(str__dup(data, &ptr)));
+	}
+	*begin = ptr;
+	cmd = malloc(sizeof(char *) * (ft_lstsize(data->cmd_param) + 1));
+	if (!cmd)
+		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
+	node_ptr = data->cmd_param;
+	j = -1;
+	while (node_ptr)
+	{
+		cmd[++j] = node_ptr->content;
+		node_ptr = node_ptr->next;
+	}
+	cmd[++j] = 0;
+	return (cmd);
+}
+
+void	parse_cmd(t_data *data, t_list *node, char **begin)
 {
 	char	*ptr;
 
@@ -317,16 +367,24 @@ void	parse_cmd(t_data *data, t_cmds *node, char **begin)
 			}
 			while (ft_iswhitespace(*ptr))
 				ptr++;
+			free(node->file_in);
 			node->file_in = str__dup(data, &ptr);
 		}
+		else
+			node->cmd = fill_cmd(data, &ptr);
+		while (ft_iswhitespace(*ptr))
+			ptr++;
 	}
+	ft_printf("end %c\n", *ptr);
+	// if (*ptr == '|')
+	// 	ptr++;
 	*begin = ptr;
 }
 
 void	parse(t_data *data)
 {
 	char	*ptr;
-	t_cmds	*node;
+	t_list	*node;
 
 	if (check_syntax(data))
 		return;
@@ -336,17 +394,14 @@ void	parse(t_data *data)
 	ptr = data->line;
 	while (*ptr)
 	{
+		ft_printf("beg %c\n", *ptr);
 		while (ft_iswhitespace(*ptr))
 			ptr++;
 		if (*ptr)
 		{
-			node = ft_calloc(1, sizeof(t_cmds));
-			ft_lstadd_back((t_list **)&data->head, (t_list *)node);			
+			node = ft_calloc(1, sizeof(t_list));
+			ft_lstadd_back(&data->cmds, node);			
 			parse_cmd(data, node, &ptr);
-			ft_printf("file_in = %s\n", node->file_in);
-			ft_printf("file_out = %s\n", node->file_out);
-			ft_printf("append = %d\n", node->append_out);
-			ft_printf("lim = %s\n", node->lim);
 		}
 		if (*ptr)
 			ptr++;

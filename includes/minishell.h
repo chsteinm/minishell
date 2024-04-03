@@ -25,25 +25,26 @@
 # define ERR_QUOTE "shell: quote is not closed\n"
 # define ERR_M_OR_L "Malloc failed or no limiter found on here_doc\n"
 
-typedef struct s_cmds
-{
-	char			**cmd;
-	char  			*file_in;
-	char			*file_out;
-	bool			append_out;
-	int				*pipe;
-	char			*lim;
-	struct s_cmds	*next;
-	struct s_cmds	*prev;
-}	t_cmds;
+// typedef struct s_cmds
+// {
+// 	char			**cmd;
+// 	char  			*file_in;
+// 	char			*file_out;
+// 	bool			append_out;
+// 	int				*pipe;
+// 	char			*lim;
+// 	struct s_cmds	*next;
+// 	struct s_cmds	*prev;
+// }	t_cmds;
 
 typedef struct s_data
 {
-	t_cmds	*head;
+	t_list	*cmd_param;
+	t_list	*cmds;
 	char 	**env;
 	char	*line;
 	char	*no_space_line;
-	char	*one_space_line;
+	char	*no_w_space_line;
 	char	**splited_line;
 	int		last_signal;
 	pid_t	pid;
