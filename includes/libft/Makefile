@@ -10,6 +10,7 @@ SRCS = 	ft_atol.c \
 		ft_isprint.c \
 		ft_iswhitespace.c \
 		ft_ismeta.c \
+		ft_replace_white_space.c \
 		ft_itoa.c \
 		ft_memchr.c \
 		ft_memcmp.c \

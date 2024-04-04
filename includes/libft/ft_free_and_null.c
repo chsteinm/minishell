@@ -1,10 +1,10 @@
 #include "libft.h"
 
-void	ft_free_and_null(void *ptr)
+void	ft_free_and_null(void *ptr_adrs)
 {
-    if (ptr != NULL)
+    if (ptr_adrs != NULL)
 	{
-    	free(*(void **)ptr);
-        *(void **)ptr = NULL;
+    	free(*(void **)ptr_adrs);
+        *(void **)ptr_adrs = NULL;
     }
 }
