@@ -12,6 +12,7 @@ char	**fill_cmd(t_data *data, char **begin)
 	{
 		while (ft_iswhitespace(*ptr))
 			ptr++;
+		ft_printf("beg = [%s]\n", ptr);
 		ft_lstadd_back(&(data->cmd_param), ft_lstnew(str__dup(data, &ptr)));
 	}
 	*begin = ptr;
@@ -85,7 +86,7 @@ void	parse(t_data *data)
 		return (error(data, 'q', 0));
 	if (check_syntax(data))
 		return;
-	expand(data);
+	expand(data); //les modifications se font directement sur la ligne renvoyer par readline
 	ptr = data->line;
 	while (*ptr)
 	{

@@ -42,8 +42,7 @@ int	check_syntax(t_data *data)
 {
 	char *ptr;
 
-	
-	data->no_space_line = ft_strdelspace(data->line);
+	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
 	if (!data->no_space_line)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
 	ptr = data->no_space_line;
@@ -93,5 +92,5 @@ bool	check_quote(t_data *data)
 				in_s_quote = FALSE;
 		}
 	}
-	return (in_s_quote || in_quote);
+	return (in_s_quote || in_quote); // il faut qu'à la fin de la ligne, les deux soit FALSE / fermé
 }

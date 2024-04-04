@@ -69,21 +69,23 @@ int	main(int argc, char **line, char **env)
 	(void)argc;
 	(void)line;
 	ft_bzero((char *)&data, sizeof(t_data));
-	data.pid = fork();
-	if (!data.pid--)
+	data.pid = fork(); // pour le cas où on rentre $$ qui correspond au pid
+	if (!data.pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
 		return (0);
 	data.env = env;
-	// write(1, CLEAR, 11);
+	// write(1, CLEAR, 11); //met l'invite de commande tout en haut de la fenêtre
 	while (1)
 	{
 		data.line = readline("mimishell: ");
 		if (!data.line)
 			break ;
 		if (*data.line)
+		{
 			add_history(data.line);
-		parse(&data);
-		ft_printf("%s\n", data.line);
-		close_free_exit(&data, 0);
+			parse(&data);
+			ft_printf("%s\n", data.line);
+			close_free_exit(&data, 0);
+		}
 	}
 	return (0);
 }
