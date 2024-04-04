@@ -8,9 +8,10 @@ SRCS = 	ft_atol.c \
 		ft_isascii.c \
 		ft_isdigit.c \
 		ft_isprint.c \
-		ft_iswhitespace.c \
 		ft_ismeta.c \
+		ft_iswhitespace.c \
 		ft_replace_white_space.c \
+		ft_skip_wspaces.c \
 		ft_itoa.c \
 		ft_memchr.c \
 		ft_memcmp.c \

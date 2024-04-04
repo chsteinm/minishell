@@ -54,27 +54,15 @@ void	strdelquotes(char *str)
 
 char	*str__dup(t_data *data, char **ptr)
 {
-	char	quote;
 	size_t	len;
 	char	*str;
 
 	len = 0;
-	quote = 0;
-	if (**ptr == '"' || **ptr == '\'')
-	{
-		quote = **ptr;
-		*ptr = (*ptr) + 1;
-		while ((*ptr)[len] != quote)
-			len++;
-	}
-	else
-		while ((*ptr)[len] && !is_sep(*ptr, len))
-			len++;
+	while ((*ptr)[len] && !is_sep(*ptr, len))
+		len++;
 	str = ft_strndup(*ptr, len);
 	if (!str)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
-	if (quote)
-		*ptr = (*ptr) + 1;
 	*ptr = (*ptr) + len;
 	strdelquotes(str);
 	return (str);

@@ -10,10 +10,9 @@ char	**fill_cmd(t_data *data, char **begin)
 	ptr = *begin;
 	while (*ptr && !ft_ismeta(*ptr))
 	{
-		while (ft_iswhitespace(*ptr))
-			ptr++;
-		ft_printf("beg = [%s]\n", ptr);
+		ft_skip_wspaces(&ptr);
 		ft_lstadd_back(&(data->cmd_param), ft_lstnew(str__dup(data, &ptr)));
+		ft_skip_wspaces(&ptr);
 	}
 	*begin = ptr;
 	cmd = malloc(sizeof(char *) * (ft_lstsize(data->cmd_param) + 1));
@@ -47,8 +46,7 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 			}
 			else
 				node->append_out = FALSE;
-			while (ft_iswhitespace(*ptr))
-				ptr++;
+			ft_skip_wspaces(&ptr);
 			free(node->file_out);
 			node->file_out = str__dup(data, &ptr);
 		}
@@ -58,21 +56,18 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 			if (*ptr == '<')
 			{
 				ptr++;
-				while (ft_iswhitespace(*ptr))
-					ptr++;
+				ft_skip_wspaces(&ptr);
 				free(node->lim);
 				node->lim = str__dup(data, &ptr);
 				continue;
 			}
-			while (ft_iswhitespace(*ptr))
-				ptr++;
+			ft_skip_wspaces(&ptr);
 			free(node->file_in);
 			node->file_in = str__dup(data, &ptr);
 		}
 		else if (!ft_iswhitespace(*ptr))
 			node->cmd = fill_cmd(data, &ptr);
-		while (ft_iswhitespace(*ptr))
-			ptr++;
+		ft_skip_wspaces(&ptr);
 	}
 	*begin = ptr;
 }
@@ -90,13 +85,13 @@ void	parse(t_data *data)
 	ptr = data->line;
 	while (*ptr)
 	{
-		while (ft_iswhitespace(*ptr))
-			ptr++;
+		ft_skip_wspaces(&ptr);
 		if (*ptr)
 		{
 			node = ft_calloc(1, sizeof(t_list));
 			ft_lstadd_back(&data->cmds, node);			
 			parse_cmd(data, node, &ptr);
+			ft_lstclear(&data->cmd_param, NULL);
 		}
 		if (*ptr)
 			ptr++;

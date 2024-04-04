@@ -36,9 +36,9 @@ void	free_cmds_list(t_list **head)
 		ft_printf("file_out = %s\n", node->file_out);
 		ft_printf("append = %d\n", node->append_out);
 		ft_printf("lim = %s\n\n", node->lim);
+		ft_free_strings(node->cmd);
 		ft_free_and_null(&node->file_in);
 		ft_free_and_null(&node->file_out);
-		ft_free_and_null(&node->cmd);
 		ft_free_and_null(&node->lim);
 		ft_free_and_null(&node->pipe);
 		prev = node;
@@ -53,7 +53,6 @@ void	close_free_exit(t_data *data, int ret)
 	// if (ret)
 	// 	close_fds(data);
 	ft_free_strings(data->splited_line);
-	data->splited_line = NULL;
 	free_cmds_list(&data->cmds);
 	ft_lstclear(&data->cmd_param, &free);
 	ft_free_and_null(&data->line);
