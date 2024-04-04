@@ -1,5 +1,19 @@
 #include "../includes/minishell.h"
 
+void	error(t_data *data, int error, char c)
+{
+	if (error == 2 && c)
+		ft_dprintf(2, ERR_SYNTX, c);
+	else if (error == 2 && !c)
+		ft_dprintf(2, ERR_SYNTX_NL);
+	else if (error == 'q')
+		ft_dprintf(2, ERR_QUOTE);
+	if (error != 2)
+		data->last_signal = 1;
+	else
+		data->last_signal = error;
+}
+
 int	check_space(t_data *data)
 {
 	size_t	j;
@@ -50,7 +64,6 @@ int	check_syntax(t_data *data)
 		}
 		ptr++;
 	}
-	// return (0);
 	return (check_space(data));
 }
 

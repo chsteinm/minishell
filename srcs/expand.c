@@ -9,7 +9,7 @@ void	replace_var(t_data *data, char *ptr)
 
 	len = 0;
 	while (ptr[++len] && !ft_iswhitespace(ptr[len]) && \
-	!ft_ismeta(ptr[len]) && ptr[len] != '$')
+	!ft_ismeta(ptr[len]) && ptr[len] != '$' && ptr[len] != '"')
 		continue;
 	to_rep = ft_calloc(len + 1, 1);
 	if (!to_rep)

@@ -1,19 +1,5 @@
 #include "../includes/minishell.h"
 
-void	error(t_data *data, int error, char c)
-{
-	if (error == 2 && c)
-		ft_dprintf(2, ERR_SYNTX, c);
-	else if (error == 2 && !c)
-		ft_dprintf(2, ERR_SYNTX_NL);
-	else if (error == 'q')
-		ft_dprintf(2, ERR_QUOTE);
-	if (error != 2)
-		data->last_signal = 1;
-	else
-		data->last_signal = error;
-}
-
 int		is_in_quote(char *line, char *ptr, char q)
 {
 	int s_quote_left;
@@ -43,6 +29,29 @@ char	*join_3_strs(char *s1, char *s2, char *s3)
 	return (ret);
 }
 
+int		is_sep(char *ptr, int i)
+{
+	if (!is_in_quote(ptr, ptr + i, '"') && \
+		!is_in_quote(ptr, ptr + i, '\''))
+		if (ft_iswhitespace(ptr[i]) || ft_ismeta(ptr[i]))
+			return (1);
+	return (0);
+}
+
+void	strdelquotes(char *str)
+{
+	char	*ptr;
+
+	ptr = str;
+	while (*str)
+	{
+		if (*str != '"' && *str != '\'')
+			*ptr++ = *str;
+		str++;
+	}
+	*ptr = 0;
+}
+
 char	*str__dup(t_data *data, char **ptr)
 {
 	char	quote;
@@ -59,8 +68,7 @@ char	*str__dup(t_data *data, char **ptr)
 			len++;
 	}
 	else
-		while ((*ptr)[len] && \
-		!ft_iswhitespace((*ptr)[len]) && !ft_ismeta((*ptr)[len]))
+		while ((*ptr)[len] && !is_sep(*ptr, len))
 			len++;
 	str = ft_strndup(*ptr, len);
 	if (!str)
@@ -68,5 +76,6 @@ char	*str__dup(t_data *data, char **ptr)
 	if (quote)
 		*ptr = (*ptr) + 1;
 	*ptr = (*ptr) + len;
+	strdelquotes(str);
 	return (str);
 }

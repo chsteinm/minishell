@@ -73,9 +73,6 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 		while (ft_iswhitespace(*ptr))
 			ptr++;
 	}
-	ft_printf("end %c\n", *ptr);
-	// if (*ptr == '|')
-	// 	ptr++;
 	*begin = ptr;
 }
 
@@ -92,7 +89,6 @@ void	parse(t_data *data)
 	ptr = data->line;
 	while (*ptr)
 	{
-		ft_printf("beg %c\n", *ptr);
 		while (ft_iswhitespace(*ptr))
 			ptr++;
 		if (*ptr)
