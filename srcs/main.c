@@ -36,14 +36,14 @@ void	free_cmds_list(t_list **head)
 		ft_printf("file_out = %s\n", node->file_out);
 		ft_printf("append = %d\n", node->append_out);
 		ft_printf("lim = %s\n\n", node->lim);
-		free(node->file_in);
-		free(node->file_out);
-		free(node->cmd);
-		free(node->lim);
-		free(node->pipe);
+		ft_free_and_null(&node->file_in);
+		ft_free_and_null(&node->file_out);
+		ft_free_and_null(&node->cmd);
+		ft_free_and_null(&node->lim);
+		ft_free_and_null(&node->pipe);
 		prev = node;
 		node = node->next;
-		free(prev);
+		ft_free_and_null(&prev);
 	}
 	*head = 0;
 }
@@ -53,11 +53,12 @@ void	close_free_exit(t_data *data, int ret)
 	// if (ret)
 	// 	close_fds(data);
 	ft_free_strings(data->splited_line);
+	data->splited_line = NULL;
 	free_cmds_list(&data->cmds);
 	ft_lstclear(&data->cmd_param, &free);
-	free(data->line);
-	free(data->no_space_line);
-	free(data->no_w_space_line);
+	ft_free_and_null(&data->line);
+	ft_free_and_null(&data->no_space_line);
+	ft_free_and_null(&data->no_w_space_line);
 	if (ret != EXIT_SUCCESS)
 		exit(ret);
 }
@@ -353,7 +354,6 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 				ptr++;
 			free(node->file_out);
 			node->file_out = str__dup(data, &ptr);
-
 		}
 		else if (*ptr == '<')
 		{
@@ -363,14 +363,16 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 				ptr++;
 				while (ft_iswhitespace(*ptr))
 					ptr++;
+				free(node->lim);
 				node->lim = str__dup(data, &ptr);
+				continue;
 			}
 			while (ft_iswhitespace(*ptr))
 				ptr++;
 			free(node->file_in);
 			node->file_in = str__dup(data, &ptr);
 		}
-		else
+		else if (!ft_iswhitespace(*ptr))
 			node->cmd = fill_cmd(data, &ptr);
 		while (ft_iswhitespace(*ptr))
 			ptr++;
@@ -418,7 +420,7 @@ int	main(int argc, char **line, char **env)
 	if (!data.pid--)
 		return (0);
 	data.env = env;
-	write(1, CLEAR, 11);
+	// write(1, CLEAR, 11);
 	while (1)
 	{
 		data.line = readline("mimishell: ");

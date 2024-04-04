@@ -17,6 +17,8 @@ void	ft_printstrs(char **strs)
 	size_t	i;
 
 	i = -1;
+	if (!strs)
+		ft_printf("%s", strs);
 	while (strs && strs[++i])
 		ft_printf("[%s]", strs[i]);
 	ft_printf("\n");
