@@ -27,8 +27,13 @@ typedef struct s_list
 	char			**cmd;
 	char  			*file_in;
 	char			*file_out;
+	int				fd_in;
+	int				fd_out;
+	bool			fd_in_to_close;
+	bool			fd_out_to_close;
 	bool			append_out;
-	int				*pipe;
+	int				pipe[2];
+	int				pipe_heredoc[2];
 	char			*lim;
 	void			*content;
 	struct s_list	*next;

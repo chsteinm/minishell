@@ -22,6 +22,19 @@
 // 	}
 // }
 
+void	debug(t_list *node)
+{
+		ft_printf("cmd : ");
+		ft_printstrs(node->cmd);
+		ft_printf("file_in = %s\n", node->file_in);
+		ft_printf("fd = %d, to close = %d\n", \
+		node->fd_in, node->fd_in_to_close);
+		ft_printf("file_out = %s\n", node->file_out);
+		ft_printf("fd = %d, to close = %d, append = %d\n", \
+		node->fd_out, node->fd_out_to_close, node->append_out);
+		ft_printf("lim = %s\n\n", node->lim);
+}
+
 void	free_cmds_list(t_list **head)
 {
 	t_list	*prev;
@@ -30,12 +43,11 @@ void	free_cmds_list(t_list **head)
 	node = *head;
 	while (node)
 	{
-		ft_printf("cmd : ");
-		ft_printstrs(node->cmd);
-		ft_printf("file_in = %s\n", node->file_in);
-		ft_printf("file_out = %s\n", node->file_out);
-		ft_printf("append = %d\n", node->append_out);
-		ft_printf("lim = %s\n\n", node->lim);
+		debug(node); // à suppr / mettre à jour
+		if (node->fd_out_to_close)
+			close(node->fd_out);
+		if (node->fd_in_to_close)
+			close(node->fd_in);
 		ft_free_strings(node->cmd);
 		node->cmd = NULL;
 		ft_free_and_null(&node->file_in);
@@ -64,11 +76,11 @@ void	close_free_exit(t_data *data, int ret)
 		exit(ret);
 }
 
-int	main(int argc, char **line, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-	(void)argc;
-	(void)line;
+	// (void)argc;
+	(void)argv[argc];
 	ft_bzero((char *)&data, sizeof(t_data));
 	data.pid = fork(); // pour le cas où on rentre $$ qui correspond au pid
 	if (!data.pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
@@ -84,7 +96,8 @@ int	main(int argc, char **line, char **env)
 		{
 			add_history(data.line);
 			parse(&data);
-			ft_printf("%s\n", data.line);
+			// ft_printf("%s\n", data.line);
+			// exec(&data);
 			close_free_exit(&data, 0);
 		}
 	}

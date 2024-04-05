@@ -48,5 +48,7 @@ char	*join_3_strs(char *s1, char *s2, char *s3);
 int		is_in_quote(char *line, char *ptr, char q);
 void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
+void	open_out(t_data *data, t_list *node, char **ptr);
+void	open_in(t_data *data, t_list *node, char **ptr);
 
 #endif

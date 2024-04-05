@@ -46,6 +46,7 @@ void	parse_in(t_data *data, t_list *node, char **begin)
 		ft_skip_wspaces(&ptr);
 		free(node->file_in);
 		node->file_in = str__dup(data, &ptr);
+		open_in(data, node, &ptr);
 	}
 	*begin = ptr;
 }
@@ -65,6 +66,7 @@ void	parse_out(t_data *data, t_list *node, char **begin)
 	ft_skip_wspaces(&ptr);
 	free(node->file_out);
 	node->file_out = str__dup(data, &ptr);
+	open_out(data, node, &ptr);
 	*begin = ptr;
 }
 
