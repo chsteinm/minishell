@@ -98,7 +98,7 @@ void	parse(t_data *data)
 	t_list	*node;
 
 	if (check_quote(data))
-		return (error(data, 'q', 0));
+		return (error(data, 1, 'q'));
 	if (check_syntax(data))
 		return;
 	expand(data); //les modifications se font directement sur la ligne renvoyer par readline (data->line)

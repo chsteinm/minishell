@@ -6,12 +6,9 @@ void	error(t_data *data, int error, char c)
 		ft_dprintf(2, ERR_SYNTX, c);
 	else if (error == 2 && !c)
 		ft_dprintf(2, ERR_SYNTX_NL);
-	else if (error == 'q')
+	else if (c == 'q')
 		ft_dprintf(2, ERR_QUOTE);
-	if (error != 2)
-		data->last_signal = 1;
-	else
-		data->last_signal = error;
+	data->last_status = error;
 }
 // error if < <... / > >... / 
 int	check_space(t_data *data)
