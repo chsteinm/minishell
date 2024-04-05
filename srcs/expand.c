@@ -1,20 +1,19 @@
 #include "../includes/minishell.h"
 
-void	replace_var(t_data *data, char *ptr)
+char	*replace_var(t_data *data, char *ptr)
 {
 	char	*to_rep;
 	char	*var;
 	size_t	len;
 	size_t	i;
 
-	len = 0;
-	while (ptr[++len] && !ft_iswhitespace(ptr[len]) && \
+	len = 1;
+	while (ptr[len] && !ft_iswhitespace(ptr[len]) && \
 	!ft_ismeta(ptr[len]) && ptr[len] != '$' && ptr[len] != '"')
-		continue;
-	to_rep = ft_calloc(len + 1, 1);
+		len++;
+	to_rep = ft_strndup(ptr + 1, len);
 	if (!to_rep)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
-	ft_strlcpy(to_rep, ptr + 1, len);
+		return (NULL);
 	to_rep[len - 1] = '=';
 	var = NULL;
 	i = -1;
@@ -23,15 +22,14 @@ void	replace_var(t_data *data, char *ptr)
 	if (var)
 		var += len;
 	free(to_rep);
-	*ptr = 0;
-	ptr[len - 1] = 0;
+	*ptr = 0; //remplace le $ par un \0
 	data->tmp = data->line;
 	data->line = join_3_strs(data->line, var, ptr + len);
 	free(data->tmp);
-	if (!data->line)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+	return (data->tmp);
 }
 
+//replace "$$" by the pid of the curate processus
 void	replace_pid(t_data *data, char *ptr)
 {
 	char	*pid;
@@ -71,6 +69,8 @@ void	expand(t_data *data)
 			else if (ptr[i + 1] != '"' && ptr[i + 1] != '\'')
 			{
 				replace_var(data, ptr + i);
+				if (!data->line)
+					return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
 				return (expand(data));
 			}
 		}

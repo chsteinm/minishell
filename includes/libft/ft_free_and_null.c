@@ -2,9 +2,15 @@
 
 void	ft_free_and_null(void *ptr_adrs)
 {
-    if (ptr_adrs != NULL)
+	void	**tmp;
+
+    if (ptr_adrs)
 	{
-    	free(*(void **)ptr_adrs);
-        *(void **)ptr_adrs = NULL;
+		tmp = (void **)ptr_adrs;
+		if (*tmp)
+		{
+    		free(*tmp);
+        	*tmp = NULL;
+		}
     }
 }

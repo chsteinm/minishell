@@ -29,6 +29,45 @@ char	**fill_cmd(t_data *data, char **begin)
 	return (cmd);
 }
 
+void	parse_in(t_data *data, t_list *node, char **begin)
+{
+	char	*ptr;
+
+	ptr = *begin;
+	if (*ptr == '<')
+	{
+		ptr++;
+		ft_skip_wspaces(&ptr);
+		free(node->lim);
+		node->lim = str__dup(data, &ptr);
+	}
+	else
+	{
+		ft_skip_wspaces(&ptr);
+		free(node->file_in);
+		node->file_in = str__dup(data, &ptr);
+	}
+	*begin = ptr;
+}
+
+void	parse_out(t_data *data, t_list *node, char **begin)
+{
+	char	*ptr;
+
+	ptr = *begin;
+	if (*ptr == '>')
+	{
+		node->append_out = TRUE;
+		ptr++;
+	}
+	else
+		node->append_out = FALSE;
+	ft_skip_wspaces(&ptr);
+	free(node->file_out);
+	node->file_out = str__dup(data, &ptr);
+	*begin = ptr;
+}
+
 void	parse_cmd(t_data *data, t_list *node, char **begin)
 {
 	char	*ptr;
@@ -39,31 +78,12 @@ void	parse_cmd(t_data *data, t_list *node, char **begin)
 		if (*ptr == '>')
 		{
 			ptr++;
-			if (*ptr == '>')
-			{
-				node->append_out = TRUE;
-				ptr++;
-			}
-			else
-				node->append_out = FALSE;
-			ft_skip_wspaces(&ptr);
-			free(node->file_out);
-			node->file_out = str__dup(data, &ptr);
+			parse_out(data, node, &ptr);
 		}
 		else if (*ptr == '<')
 		{
 			ptr++;
-			if (*ptr == '<')
-			{
-				ptr++;
-				ft_skip_wspaces(&ptr);
-				free(node->lim);
-				node->lim = str__dup(data, &ptr);
-				continue;
-			}
-			ft_skip_wspaces(&ptr);
-			free(node->file_in);
-			node->file_in = str__dup(data, &ptr);
+			parse_in(data, node, &ptr);
 		}
 		else if (!ft_iswhitespace(*ptr))
 			node->cmd = fill_cmd(data, &ptr);
@@ -81,7 +101,7 @@ void	parse(t_data *data)
 		return (error(data, 'q', 0));
 	if (check_syntax(data))
 		return;
-	expand(data); //les modifications se font directement sur la ligne renvoyer par readline
+	expand(data); //les modifications se font directement sur la ligne renvoyer par readline (data->line)
 	ptr = data->line;
 	while (*ptr)
 	{
@@ -89,6 +109,8 @@ void	parse(t_data *data)
 		if (*ptr)
 		{
 			node = ft_calloc(1, sizeof(t_list));
+			if (!node)
+				return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
 			ft_lstadd_back(&data->cmds, node);			
 			parse_cmd(data, node, &ptr);
 			ft_lstclear(&data->cmd_param, NULL);

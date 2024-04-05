@@ -13,7 +13,7 @@ void	error(t_data *data, int error, char c)
 	else
 		data->last_signal = error;
 }
-
+// error if < <... / > >... / 
 int	check_space(t_data *data)
 {
 	size_t	j;
@@ -25,19 +25,13 @@ int	check_space(t_data *data)
 	data->splited_line = ft_split(data->no_w_space_line, ' ');
 	j = 0;
 	while (data->splited_line[++j])
-		if (ft_ismeta(data->splited_line[j][ft_strlen(data->splited_line[j]) - 1]))
-			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j - 1]) - 1]))
-				if (data->splited_line[j-1][ft_strlen(data->splited_line[j]) - 1] != '|')
-					return (error(data, 2, data->splited_line[j][0]), 1);
-	j = 0;
-	while (data->splited_line[++j])
 		if (ft_ismeta(data->splited_line[j][0]))
 			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1]))
 				if (data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1] != '|')
 					return (error(data, 2, data->splited_line[j][0]), 1);
 	return (0);
 }
-
+//error if # |...   or #<<<.. / >>>..  or #><... / <>...  or #>ø / <ø  or  #...|ø / ||
 int	check_syntax(t_data *data)
 {
 	char *ptr;
@@ -63,7 +57,7 @@ int	check_syntax(t_data *data)
 		}
 		ptr++;
 	}
-	return (check_space(data));
+	return (check_space(data)); //et une deuxieme en splitant sur les white spaces
 }
 
 bool	check_quote(t_data *data)
