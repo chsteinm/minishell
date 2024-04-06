@@ -53,7 +53,7 @@ void	write_until_lim(t_data *data, t_list *node)
 			if (!ft_strncmp(node->lim, line, ft_strlen(line) + 1))
 				return (free(line));
 			expand(data, &line);
-			printf("%s\n", line);
+			// printf("%s\n", line);
 			if (!ft_strncmp(node->lim, line, ft_strlen(line) + 1))
 				return (free(line));
 			if (write(node->pipe_heredoc[1], line, ft_strlen(line)) == -1)
@@ -68,13 +68,12 @@ void	write_until_lim(t_data *data, t_list *node)
 
 void	here_doc_manage(t_data *data, t_list *node)
 {
-	if (!node->pipe_heredoc)
+	if (!node->fds_pipe_hd_to_close)
 	{
-		node->pipe_heredoc = malloc(sizeof(int) * 2);
-		if (!node->pipe_heredoc)
-			return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
 		if (pipe(node->pipe_heredoc) == -1)
 			return (perror("pipe"), close_free_exit(data, EXIT_FAILURE));
+		else
+			node->fds_pipe_hd_to_close = TRUE;
 	}
 	write_until_lim(data, node);
 }

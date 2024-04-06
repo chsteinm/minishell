@@ -1,0 +1,6 @@
+.build
+includes/libft/.build
+includes/libft/libft.a
+minishell
+in
+out

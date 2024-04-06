@@ -19,6 +19,9 @@
 # include <stdarg.h>
 # include <stdbool.h>
 
+# define TRUE 1
+# define FALSE 0
+# define CLEAR " \e[1;H\e[2J"
 # define BASE16LOW "0123456789abcdef"
 # define BASE16UP "0123456789ABCDEF"
 
@@ -29,11 +32,13 @@ typedef struct s_list
 	char			*file_out;
 	int				fd_in;
 	int				fd_out;
+	bool			append_out;
 	bool			fd_in_to_close;
 	bool			fd_out_to_close;
-	bool			append_out;
 	int				pipe[2];
-	int				*pipe_heredoc;
+	bool			fds_pipe_to_close;
+	int				pipe_heredoc[2];
+	bool			fds_pipe_hd_to_close;
 	char			*lim;
 	void			*content;
 	struct s_list	*next;

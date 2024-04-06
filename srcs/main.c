@@ -10,7 +10,9 @@ void	debug(t_list *node)
 		ft_printf("file_out = %s\n", node->file_out);
 		ft_printf("fd = %d, to close = %d, append = %d\n", \
 		node->fd_out, node->fd_out_to_close, node->append_out);
-		ft_printf("lim = %s\n\n", node->lim);
+		ft_printf("lim = %s, ", node->lim);
+		ft_printf("pipe_hd = %d\n", node->fds_pipe_hd_to_close);
+		ft_printf("pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
 void	close_fds(t_list *node)
@@ -19,11 +21,19 @@ void	close_fds(t_list *node)
 		close(node->fd_out);
 	if (node->fd_in_to_close)
 		close(node->fd_in);
-	if (node->pipe_heredoc)
+	if (node->fds_pipe_to_close)
+	{
+		close(node->pipe[0]);
+		close(node->pipe[1]);
+		// node->fds_pipe_to_close = FALSE;
+	}
+	if (node->fds_pipe_hd_to_close)
 	{
 		close(node->pipe_heredoc[0]);
 		close(node->pipe_heredoc[1]);
+		// node->fds_pipe_hd_to_close = FALSE;
 	}
+		
 }
 
 void	free_cmds_list(t_list **head)
@@ -38,11 +48,9 @@ void	free_cmds_list(t_list **head)
 		ft_free_strings(node->cmd);
 		node->cmd = NULL;
 		close_fds(node);
-		ft_free_and_null(&node->pipe_heredoc);
 		ft_free_and_null(&node->file_in);
 		ft_free_and_null(&node->file_out);
 		ft_free_and_null(&node->lim);
-		ft_free_and_null(&node->pipe);
 		prev = node;
 		node = node->next;
 		ft_free_and_null(&prev);
@@ -84,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(data.line);
 			parse(&data);
 			// ft_printf("%s\n", data.line);
-			// exec(&data);
+			exec(&data, data.cmds);
 			close_free_exit(&data, 0);
 		}
 	}

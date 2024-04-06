@@ -16,9 +16,6 @@
 # include <readline/history.h>
 # include <stdbool.h>
 
-# define TRUE 1
-# define FALSE 0
-# define CLEAR " \e[1;H\e[2J"
 # define ERR_CNF "shell: %s: command not found\n"
 # define ERR_SYNTX "shell: syntax error near unexpected token '%c'\n"
 # define ERR_SYNTX_NL "shell: syntax error near unexpected token 'newline'\n"
@@ -51,5 +48,6 @@ void	close_free_exit(t_data *data, int ret);
 void	open_out(t_data *data, t_list *node, char **ptr);
 void	open_in(t_data *data, t_list *node, char **ptr);
 void	here_doc_manage(t_data *data, t_list *node);
+void	exec(t_data *data, t_list *cmd);
 
 #endif

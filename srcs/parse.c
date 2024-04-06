@@ -36,14 +36,15 @@ void	parse_in(t_data *data, t_list *node, char **begin)
 	ptr = *begin;
 	if (*ptr == '<')
 	{
+		free(node->lim);
 		ptr++;
 		ft_skip_wspaces(&ptr);
-		free(node->lim);
 		node->lim = str__dup(data, &ptr);
 		here_doc_manage(data, node);
 	}
 	else
 	{
+		ft_free_and_null(&node->lim);
 		ft_skip_wspaces(&ptr);
 		free(node->file_in);
 		node->file_in = str__dup(data, &ptr);
@@ -64,8 +65,8 @@ void	parse_out(t_data *data, t_list *node, char **begin)
 	}
 	else
 		node->append_out = FALSE;
-	ft_skip_wspaces(&ptr);
 	free(node->file_out);
+	ft_skip_wspaces(&ptr);
 	node->file_out = str__dup(data, &ptr);
 	open_out(data, node, &ptr);
 	*begin = ptr;
