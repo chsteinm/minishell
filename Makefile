@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
 PATH_SRCS = ./srcs/
-SRCS = main.c parse.c utils.c expand.c error_check.c open_files.c
+SRCS = main.c parse.c utils.c expand.c error_check.c open_files.c get_next_line.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a

@@ -1,27 +1,5 @@
 #include "../includes/minishell.h"
 
-// void	close_fds(t_data *data)
-// {
-// 	int	i;
-
-// 	if (data->fd_in != -1 && !data->is_here_doc)
-// 		close(data->fd_in);
-// 	if (data->fd_out != -1)
-// 		close(data->fd_out);
-// 	if (data->is_here_doc)
-// 	{
-// 		close(data->fildes_hd[0]);
-// 		close(data->fildes_hd[1]);
-// 	}
-// 	i = -1;
-// 	while (data->fildes && data->fildes[++i])
-// 	{
-// 		close(data->fildes[i][0]);
-// 		close(data->fildes[i][1]);
-// 		free(data->fildes[i]);
-// 	}
-// }
-
 void	debug(t_list *node)
 {
 		ft_printf("cmd : ");
@@ -35,6 +13,19 @@ void	debug(t_list *node)
 		ft_printf("lim = %s\n\n", node->lim);
 }
 
+void	close_fds(t_list *node)
+{
+	if (node->fd_out_to_close)
+		close(node->fd_out);
+	if (node->fd_in_to_close)
+		close(node->fd_in);
+	if (node->pipe_heredoc)
+	{
+		close(node->pipe_heredoc[0]);
+		close(node->pipe_heredoc[1]);
+	}
+}
+
 void	free_cmds_list(t_list **head)
 {
 	t_list	*prev;
@@ -43,13 +34,11 @@ void	free_cmds_list(t_list **head)
 	node = *head;
 	while (node)
 	{
-		debug(node); // à suppr / mettre à jour
-		if (node->fd_out_to_close)
-			close(node->fd_out);
-		if (node->fd_in_to_close)
-			close(node->fd_in);
+		debug(node);
 		ft_free_strings(node->cmd);
 		node->cmd = NULL;
+		close_fds(node);
+		ft_free_and_null(&node->pipe_heredoc);
 		ft_free_and_null(&node->file_in);
 		ft_free_and_null(&node->file_out);
 		ft_free_and_null(&node->lim);
@@ -63,8 +52,6 @@ void	free_cmds_list(t_list **head)
 
 void	close_free_exit(t_data *data, int ret)
 {
-	// if (ret)
-	// 	close_fds(data);
 	ft_free_strings(data->splited_line);
 	data->splited_line = NULL;
 	free_cmds_list(&data->cmds);
@@ -79,7 +66,7 @@ void	close_free_exit(t_data *data, int ret)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-	// (void)argc;
+	
 	(void)argv[argc];
 	ft_bzero((char *)&data, sizeof(t_data));
 	data.pid = fork(); // pour le cas où on rentre $$ qui correspond au pid

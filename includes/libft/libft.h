@@ -33,7 +33,7 @@ typedef struct s_list
 	bool			fd_out_to_close;
 	bool			append_out;
 	int				pipe[2];
-	int				pipe_heredoc[2];
+	int				*pipe_heredoc;
 	char			*lim;
 	void			*content;
 	struct s_list	*next;

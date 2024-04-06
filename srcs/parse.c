@@ -40,6 +40,7 @@ void	parse_in(t_data *data, t_list *node, char **begin)
 		ft_skip_wspaces(&ptr);
 		free(node->lim);
 		node->lim = str__dup(data, &ptr);
+		here_doc_manage(data, node);
 	}
 	else
 	{
@@ -103,7 +104,7 @@ void	parse(t_data *data)
 		return (error(data, 1, 'q'));
 	if (check_syntax(data))
 		return;
-	expand(data); //les modifications se font directement sur la ligne renvoyer par readline (data->line)
+	expand(data, &data->line); //les modifications se font directement sur la ligne renvoyer par readline (data->line)
 	ptr = data->line;
 	while (*ptr)
 	{

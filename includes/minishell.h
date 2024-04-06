@@ -41,7 +41,7 @@ typedef struct s_data
 
 bool	check_quote(t_data *data);
 int		check_syntax(t_data *data);
-void	expand(t_data *data);
+void	expand(t_data *data, char **line);
 void	parse(t_data *data);
 char	*str__dup(t_data *data, char **ptr);
 char	*join_3_strs(char *s1, char *s2, char *s3);
@@ -50,5 +50,6 @@ void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
 void	open_out(t_data *data, t_list *node, char **ptr);
 void	open_in(t_data *data, t_list *node, char **ptr);
+void	here_doc_manage(t_data *data, t_list *node);
 
 #endif
