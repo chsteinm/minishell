@@ -52,13 +52,14 @@ void	close_free_exit(t_data *data, int ret)
 {
 	ft_free_strings(data->splited_line);
 	data->splited_line = NULL;
-	ft_free_strings(data->path);
-	data->path = NULL;
 	free_cmds_list(&data->cmds);
 	ft_lstclear(&data->cmd_param, &free);
 	ft_free_and_null(&data->line);
 	ft_free_and_null(&data->no_space_line);
 	ft_free_and_null(&data->no_w_space_line);
 	if (ret != EXIT_SUCCESS)
+	{
+		ft_free_strings(data->path);
 		exit(ret);
+	}
 }

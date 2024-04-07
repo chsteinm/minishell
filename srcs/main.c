@@ -2,7 +2,7 @@
 
 void	debug(t_list *node)
 {
-		ft_printf("cmd : ");
+		ft_printf("\ncmd : ");
 		ft_printstrs(node->cmd);
 		ft_printf("file_in = %s\n", node->file_in);
 		ft_printf("fd = %d, to close = %d\n", \
@@ -85,5 +85,6 @@ int	main(int argc, char **argv, char **env)
 			close_free_exit(&data, 0);
 		}
 	}
+	ft_free_strings(data.path);
 	return (0);
 }

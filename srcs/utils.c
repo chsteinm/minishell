@@ -38,18 +38,20 @@ int		is_sep(char *ptr, int i)
 	return (0);
 }
 
-void	strdelquotes(char *str)
+void	strdelquotes(char *str, char *ptr, size_t len)
 {
-	char	*ptr;
+	size_t	i;
+	size_t	i_str;
 
-	ptr = str;
-	while (*str)
+	i_str = 0;
+	i = -1;
+	while (++i < len)
 	{
-		if (*str != '"' && *str != '\'')
-			*ptr++ = *str;
-		str++;
+		if ((ptr[i] != '"' && ptr[i] != '\'') || \
+		is_in_quote(ptr, ptr + i, '"') || is_in_quote(ptr, ptr + i, '\''))
+				str[i_str++] = ptr[i];
 	}
-	*ptr = 0;
+	str[i_str] = 0;
 }
 
 char	*str__dup(t_data *data, char **ptr)
@@ -63,7 +65,7 @@ char	*str__dup(t_data *data, char **ptr)
 	str = ft_strndup(*ptr, len);
 	if (!str)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
+	strdelquotes(str, *ptr, len);
 	*ptr = (*ptr) + len;
-	strdelquotes(str);
 	return (str);
 }
