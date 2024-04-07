@@ -100,7 +100,7 @@ void	exec(t_data *data, t_list *node)
 				perror(*node->cmd);
 				close_free_exit(data, 1);
 			}
-			node = node->next;
 		}
+		node = node->next;
 	}
 }
