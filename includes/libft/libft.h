@@ -18,6 +18,7 @@
 # include <stddef.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include "get_next_line.h"
 
 # define TRUE 1
 # define FALSE 0

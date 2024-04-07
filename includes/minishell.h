@@ -16,9 +16,10 @@
 # include <stdbool.h>
 
 # define ERR_CNF "%s: command not found\n"
-# define ERR_SYNTX "syntax error near unexpected token '%c'\n"
-# define ERR_SYNTX_NL "syntax error near unexpected token 'newline'\n"
+# define ERR_SYNTX "syntax error near unexpected token `%c'\n"
+# define ERR_SYNTX_NL "syntax error near unexpected token `newline'\n"
 # define ERR_QUOTE "quote is not closed\n"
+# define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 
 typedef struct s_data
 {
@@ -33,6 +34,7 @@ typedef struct s_data
 	int		last_status;
 	pid_t	pid;
 	char	*tmp;
+	int		nb_line_hd;
 	size_t	i;
 }					t_data;
 

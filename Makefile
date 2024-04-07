@@ -8,6 +8,7 @@ SRCS =	main.c \
 		expand.c \
 		error_check.c \
 		open_files.c \
+		here_doc_manage.c \
 		exec.c \
 		close.c 
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
