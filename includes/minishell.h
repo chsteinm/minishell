@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # include "./libft/libft.h"
-# include "get_next_line.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -16,17 +15,17 @@
 # include <readline/history.h>
 # include <stdbool.h>
 
-# define ERR_CNF "shell: %s: command not found\n"
-# define ERR_SYNTX "shell: syntax error near unexpected token '%c'\n"
-# define ERR_SYNTX_NL "shell: syntax error near unexpected token 'newline'\n"
-# define ERR_QUOTE "shell: quote is not closed\n"
-# define ERR_M_OR_L "Malloc failed or no limiter found on here_doc\n"
+# define ERR_CNF "%s: command not found\n"
+# define ERR_SYNTX "syntax error near unexpected token '%c'\n"
+# define ERR_SYNTX_NL "syntax error near unexpected token 'newline'\n"
+# define ERR_QUOTE "quote is not closed\n"
 
 typedef struct s_data
 {
 	t_list	*cmd_param;
 	t_list	*cmds;
 	char 	**env;
+	char 	**path;
 	char	*line;
 	char	*no_space_line;
 	char	*no_w_space_line;
@@ -34,20 +33,22 @@ typedef struct s_data
 	int		last_status;
 	pid_t	pid;
 	char	*tmp;
+	size_t	i;
 }					t_data;
 
 bool	check_quote(t_data *data);
 int		check_syntax(t_data *data);
+int		is_in_quote(char *line, char *ptr, char q);
 void	expand(t_data *data, char **line);
+char	*join_3_strs(char *s1, char *s2, char *s3);
 void	parse(t_data *data);
 char	*str__dup(t_data *data, char **ptr);
-char	*join_3_strs(char *s1, char *s2, char *s3);
-int		is_in_quote(char *line, char *ptr, char q);
-void	error(t_data *data, int error, char c);
-void	close_free_exit(t_data *data, int ret);
 void	open_out(t_data *data, t_list *node, char **ptr);
 void	open_in(t_data *data, t_list *node, char **ptr);
 void	here_doc_manage(t_data *data, t_list *node);
 void	exec(t_data *data, t_list *cmd);
+void	error(t_data *data, int error, char c);
+void	close_free_exit(t_data *data, int ret);
+void	close_fds(t_list *node);
 
 #endif

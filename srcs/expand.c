@@ -5,7 +5,6 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 	char	*to_rep;
 	char	*var;
 	size_t	len;
-	size_t	i;
 
 	len = 1;
 	while (ptr[len] && !ft_iswhitespace(ptr[len]) && \
@@ -16,9 +15,9 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 		return (NULL);
 	to_rep[len - 1] = '=';
 	var = NULL;
-	i = -1;
-	while (!var && data->env[++i])
-		var = ft_strnstr(data->env[i], to_rep, len);
+	data->i = -1;
+	while (!var && data->env[++data->i])
+		var = ft_strnstr(data->env[data->i], to_rep, len);
 	if (var)
 		var += len;
 	free(to_rep);

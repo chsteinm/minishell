@@ -5,7 +5,6 @@ char	**fill_cmd(t_data *data, char **begin)
 	char	*ptr;
 	char	**cmd;
 	t_list	*node_ptr;
-	int		j;
 
 	ptr = *begin;
 	while (*ptr && !ft_ismeta(*ptr))
@@ -19,13 +18,13 @@ char	**fill_cmd(t_data *data, char **begin)
 	if (!cmd)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
 	node_ptr = data->cmd_param;
-	j = -1;
+	data->i = -1;
 	while (node_ptr)
 	{
-		cmd[++j] = node_ptr->content;
+		cmd[++data->i] = node_ptr->content;
 		node_ptr = node_ptr->next;
 	}
-	cmd[++j] = 0;
+	cmd[++data->i] = 0;
 	return (cmd);
 }
 

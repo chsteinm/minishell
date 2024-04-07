@@ -15,60 +15,52 @@ void	debug(t_list *node)
 		ft_printf("pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
-void	close_fds(t_list *node)
+void	give_env_path(t_data *data)
 {
-	if (node->fd_out_to_close)
-		close(node->fd_out);
-	if (node->fd_in_to_close)
-		close(node->fd_in);
-	if (node->fds_pipe_to_close)
+	char	*ptr;
+	size_t	i;
+
+	i = -1;
+	ptr = NULL;
+	while(!ptr && data->env[++i])
+		ptr = ft_strnstr(data->env[i], "PATH=", 6);
+	if (!ptr)
+		return;
+	data->path = ft_split(ptr, ':');
+	if (!data->path)
 	{
-		close(node->pipe[0]);
-		close(node->pipe[1]);
-		// node->fds_pipe_to_close = FALSE;
+		perror("Malloc");
+		close_free_exit(data, EXIT_FAILURE);
 	}
-	if (node->fds_pipe_hd_to_close)
-	{
-		close(node->pipe_heredoc[0]);
-		close(node->pipe_heredoc[1]);
-		// node->fds_pipe_hd_to_close = FALSE;
-	}
-		
 }
 
-void	free_cmds_list(t_list **head)
+void	init_data(t_data *data, char **env)
 {
-	t_list	*prev;
+	ft_bzero((char *)data, sizeof(t_data));
+	data->pid = fork(); // pour le cas où on rentre $$ qui correspond au pid
+	if (data->pid == -1)
+	{
+		perror("fork");
+		close_free_exit(data, EXIT_FAILURE);
+	}
+	if (!data->pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
+		exit(0);
+	data->env = env;
+	give_env_path(data);
+}
+
+void	wait_all_pid(t_data *data)
+{
 	t_list	*node;
 
-	node = *head;
+	node = data->cmds;
 	while (node)
 	{
 		debug(node);
-		ft_free_strings(node->cmd);
-		node->cmd = NULL;
 		close_fds(node);
-		ft_free_and_null(&node->file_in);
-		ft_free_and_null(&node->file_out);
-		ft_free_and_null(&node->lim);
-		prev = node;
+		waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
-		ft_free_and_null(&prev);
 	}
-	*head = 0;
-}
-
-void	close_free_exit(t_data *data, int ret)
-{
-	ft_free_strings(data->splited_line);
-	data->splited_line = NULL;
-	free_cmds_list(&data->cmds);
-	ft_lstclear(&data->cmd_param, &free);
-	ft_free_and_null(&data->line);
-	ft_free_and_null(&data->no_space_line);
-	ft_free_and_null(&data->no_w_space_line);
-	if (ret != EXIT_SUCCESS)
-		exit(ret);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -76,11 +68,7 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 	
 	(void)argv[argc];
-	ft_bzero((char *)&data, sizeof(t_data));
-	data.pid = fork(); // pour le cas où on rentre $$ qui correspond au pid
-	if (!data.pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
-		return (0);
-	data.env = env;
+	init_data(&data, env);
 	// write(1, CLEAR, 11); //met l'invite de commande tout en haut de la fenêtre
 	while (1)
 	{
@@ -93,6 +81,7 @@ int	main(int argc, char **argv, char **env)
 			parse(&data);
 			// ft_printf("%s\n", data.line);
 			exec(&data, data.cmds);
+			wait_all_pid(&data);
 			close_free_exit(&data, 0);
 		}
 	}

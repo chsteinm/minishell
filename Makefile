@@ -9,7 +9,7 @@ SRCS =	main.c \
 		error_check.c \
 		open_files.c \
 		exec.c \
-		get_next_line.c 
+		close.c \
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a

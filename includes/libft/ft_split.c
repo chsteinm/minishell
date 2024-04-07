@@ -46,11 +46,12 @@ char	**ft_split(char const *s, char c)
 	int		len;
 	char	**strs;
 
+	if (!s)
+		return (NULL);
 	w = count_words(s, c);
-	strs = malloc(sizeof(char *) * (w + 1));
+	strs = ft_calloc((w + 1), sizeof(char *));
 	if (!strs)
 		return (NULL);
-	strs[w] = 0;
 	j = -1;
 	while (++j < w)
 	{
@@ -59,11 +60,10 @@ char	**ft_split(char const *s, char c)
 		len = 0;
 		while (s[len] != c && s[len])
 			len++;
-		strs[j] = malloc(sizeof(char) * ++len);
+		strs[j] = ft_strndup(s, len + 1);
 		if (!strs[j])
 			return (free_strs(strs, j));
-		ft_strlcpy(strs[j], s, len);
-		s += len;
+		s += len + 1;
 	}
 	return (strs);
 }
