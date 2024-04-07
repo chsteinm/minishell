@@ -2,17 +2,17 @@
 
 void	debug(t_list *node)
 {
-		ft_printf("\ncmd : ");
+		ft_dprintf(2, "\ncmd : ");
 		ft_printstrs(node->cmd);
-		ft_printf("file_in = %s\n", node->file_in);
-		ft_printf("fd = %d, to close = %d\n", \
+		ft_dprintf(2, "file_in = %s\n", node->file_in);
+		ft_dprintf(2, "fd = %d, to close = %d\n", \
 		node->fd_in, node->fd_in_to_close);
-		ft_printf("file_out = %s\n", node->file_out);
-		ft_printf("fd = %d, to close = %d, append = %d\n", \
+		ft_dprintf(2, "file_out = %s\n", node->file_out);
+		ft_dprintf(2, "fd = %d, to close = %d, append = %d\n", \
 		node->fd_out, node->fd_out_to_close, node->append_out);
-		ft_printf("lim = %s, ", node->lim);
-		ft_printf("pipe_hd = %d\n", node->fds_pipe_hd_to_close);
-		ft_printf("pipe = %d\n\n", node->fds_pipe_to_close);
+		ft_dprintf(2, "lim = %s, ", node->lim);
+		ft_dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
+		ft_dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
 void	give_env_path(t_data *data)
@@ -79,7 +79,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(data.line);
 			parse(&data);
-			// ft_printf("%s\n", data.line);
+			// ft_dprintf(2, "%s\n", data.line);
 			exec(&data, data.cmds);
 			wait_all_pid(&data);
 			close_free_exit(&data, 0);
