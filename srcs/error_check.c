@@ -20,13 +20,15 @@ int	check_space(t_data *data)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
 	ft_replace_white_space(data->no_w_space_line);
 	data->splited_line = ft_split(data->no_w_space_line, ' ');
+	if (!data->splited_line || !*data->splited_line)
+		return (0);
 	j = 0;
 	while (data->splited_line[++j])
 		if (ft_ismeta(data->splited_line[j][0]))
 			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1]))
 				if (data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1] != '|')
 					return (error(data, 2, data->splited_line[j][0]), 1);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 //error if # |...   or #<<<.. / >>>..  or #><... / <>...  or #>ø / <ø  or  #...|ø / ||
 int	check_syntax(t_data *data)

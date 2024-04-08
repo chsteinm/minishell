@@ -56,11 +56,15 @@ void	wait_all_pid(t_data *data)
 	node = data->cmds;
 	while (node)
 	{
-		debug(node);
+		debug(node); 
 		close_fds(node);
 		waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
 	}
+	ft_dprintf(2, "status = %d\n", data->last_status);
+	if (WEXITSTATUS(data->last_status))
+		data->last_status = WEXITSTATUS(data->last_status);
+	ft_dprintf(2, "status = %d\n", data->last_status);
 }
 
 int	main(int argc, char **argv, char **env)
