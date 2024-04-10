@@ -2,8 +2,17 @@
 
 void	debug(t_list *node)
 {
+	if (!node)
+		return;
 	dprintf(2, "\ncmd : ");
-	ft_printstrs(node->cmd);
+	if (node->cmd)
+	{
+		for (int i = 0; node->cmd[i]; i++)
+			dprintf(2, "[%s] ", node->cmd[i]);
+	}
+	else
+		dprintf(2, "(null)");
+	dprintf(2, "\n");
 	dprintf(2, "file_in = %s\n", node->file_in);
 	dprintf(2, "fd = %d, to close = %d\n", \
 	node->fd_in, node->fd_in_to_close);
