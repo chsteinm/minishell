@@ -49,12 +49,9 @@ void	wait_all_pid(t_data *data)
 void	give_env_path(t_data *data)
 {
 	char	*ptr;
-	size_t	i;
 
-	i = -1;
 	ptr = NULL;
-	while(!ptr && data->env[++i])
-		ptr = ft_strnstr(data->env[i], "PATH=", 5);
+	ptr = getenv("PATH");
 	if (!ptr)
 		return;
 	data->path = ft_split(ptr, ':');
