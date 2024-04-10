@@ -10,8 +10,8 @@ int		is_in_quote(char *line, char *ptr, char q)
 	while (line != ptr)
 		if (*line++ == q)
 			s_quote_left++;
-	while (*ptr)
-		if (*ptr++ == q)
+	while (*ptr++)
+		if (*ptr == q)
 			s_quote_right++;
 	return (s_quote_left % 2 && s_quote_right % 2);
 }
@@ -38,6 +38,7 @@ int		is_sep(char *ptr, int i)
 	return (0);
 }
 
+//supprime les quotes qui ne sont pas dans des quotes
 void	strdelquotes(char *str, char *ptr, size_t len)
 {
 	size_t	i;
@@ -63,6 +64,7 @@ char	*str__dup(t_data *data, char **ptr)
 	while ((*ptr)[len] && !is_sep(*ptr, len))
 		len++;
 	str = ft_strndup(*ptr, len);
+	dprintf(2, "%s\n", str);
 	if (!str)
 		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
 	strdelquotes(str, *ptr, len);

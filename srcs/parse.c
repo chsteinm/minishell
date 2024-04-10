@@ -103,7 +103,7 @@ void	parse(t_data *data)
 	if (check_quote(data))
 		return (error(data, 1, 'q'));
 	if (check_syntax(data))
-		return;
+		return ;
 	expand(data, &data->line); //les modifications se font directement sur la ligne renvoyer par readline (data->line)
 	ptr = data->line;
 	while (*ptr)

@@ -54,6 +54,8 @@ void	find_good_path(t_data *data, t_list *node)
 
 bool	to_exec(t_list *node)
 {
+	if (!node)
+		return (FALSE);
 	if (!node->cmd)
 		return (FALSE);
 	if (!node->lim && node->fd_in == -1)
