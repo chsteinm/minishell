@@ -57,6 +57,7 @@ int		ft_iswhitespace(char c);
 void	ft_replace_white_space(char *line);
 void	ft_skip_wspaces(char **ptr);
 size_t	ft_strlen(const char *str);
+size_t	ft_strssize(char **strs);
 long	ft_atol(const char *str);
 void	*ft_bzero(char *str, int size);
 void	*ft_memset(void *str, int c, size_t size);

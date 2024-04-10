@@ -17,7 +17,7 @@ char	**ft_strsdup(char **strs, size_t size)
 	char	**ret;
 	size_t	i;
 
-	ret = malloc(sizeof(char *) * (size + 1));
+	ret = ft_calloc((size + 1), sizeof(char *));
 	if (!ret)
 		return (NULL);
 	i = -1;
