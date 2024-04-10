@@ -57,8 +57,13 @@ void	open_out(t_data *data, t_list *node, char **ptr);
 void	open_in(t_data *data, t_list *node, char **ptr);
 void	here_doc_manage(t_data *data, t_list *node);
 void	exec(t_data *data, t_list *cmd);
+void	make_pipes(t_data *data, t_list *node);
+bool	to_exec(t_list *node);
+void	find_good_path(t_data *data, t_list *node);
+void	make_dup2(t_data *data, t_list *node);
 void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
 void	close_fds(t_list *node);
+
 
 #endif

@@ -3,6 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
 PATH_SRCS = ./srcs/
 SRCS =	main.c \
+		close.c \
 		parse.c \
 		utils.c \
 		expand.c \
@@ -10,7 +11,7 @@ SRCS =	main.c \
 		open_files.c \
 		here_doc_manage.c \
 		exec.c \
-		close.c 
+		exec_utils.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a

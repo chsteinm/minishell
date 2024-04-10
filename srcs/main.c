@@ -2,17 +2,17 @@
 
 void	debug(t_list *node)
 {
-		ft_dprintf(2, "\ncmd : ");
-		ft_printstrs(node->cmd);
-		ft_dprintf(2, "file_in = %s\n", node->file_in);
-		ft_dprintf(2, "fd = %d, to close = %d\n", \
-		node->fd_in, node->fd_in_to_close);
-		ft_dprintf(2, "file_out = %s\n", node->file_out);
-		ft_dprintf(2, "fd = %d, to close = %d, append = %d\n", \
-		node->fd_out, node->fd_out_to_close, node->append_out);
-		ft_dprintf(2, "lim = %s, ", node->lim);
-		ft_dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
-		ft_dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
+	ft_dprintf(2, "\ncmd : ");
+	ft_printstrs(node->cmd);
+	ft_dprintf(2, "file_in = %s\n", node->file_in);
+	ft_dprintf(2, "fd = %d, to close = %d\n", \
+	node->fd_in, node->fd_in_to_close);
+	ft_dprintf(2, "file_out = %s\n", node->file_out);
+	ft_dprintf(2, "fd = %d, to close = %d, append = %d\n", \
+	node->fd_out, node->fd_out_to_close, node->append_out);
+	ft_dprintf(2, "lim = %s, ", node->lim);
+	ft_dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
+	ft_dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
 void	wait_all_pid(t_data *data)
