@@ -8,7 +8,8 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 
 	len = 1;
 	while (ptr[len] && !ft_iswhitespace(ptr[len]) && \
-	!ft_ismeta(ptr[len]) && ptr[len] != '$' && ptr[len] != '"')
+	!ft_ismeta(ptr[len]) && ptr[len] != '$' && \
+	ptr[len] != '"' && ptr[len] != '\'')
 		len++;
 	to_rep = ft_strndup(ptr + 1, len);
 	if (!to_rep)
@@ -79,7 +80,7 @@ void	expand(t_data *data, char **line)
 				return (replace_pid(data, line, ptr + i));
 			else if (ptr[i + 1] == '?')
 				return (replace_status(data, line, ptr + i));
-			else if (ptr[i + 1] != '"' && ptr[i + 1] != '\'')
+			else if (!ft_iswhitespace(ptr[i + 1]) && ptr[i + 1])
 			{
 				if (!replace_var(data, line, ptr + i))
 				{
