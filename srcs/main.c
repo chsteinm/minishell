@@ -37,7 +37,8 @@ void	wait_all_pid(t_data *data)
 	close_all_fds(node);
 	while (node)
 	{
-		waitpid(node->pid, &data->last_status, 0);
+		if (node->pid)
+			waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
 	}
 	if (WEXITSTATUS(data->last_status))
