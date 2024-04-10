@@ -26,6 +26,15 @@ void	close_fds(t_list *node)
 	}
 }
 
+void	close_all_fds(t_list *head)
+{
+	while (head)
+	{
+		close_fds(head);
+		head = head->next;
+	}
+}
+
 void	free_cmds_list(t_list **head)
 {
 	t_list	*prev;

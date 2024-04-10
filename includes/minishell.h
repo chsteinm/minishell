@@ -63,6 +63,7 @@ void	find_good_path(t_data *data, t_list *node);
 void	make_dup2(t_data *data, t_list *node);
 void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
+void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
 
 

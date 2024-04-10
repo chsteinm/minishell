@@ -40,7 +40,7 @@ bool	exec_builtins_in_child(t_data *data, t_list *node)
 void	exec_in_child(t_data *data, t_list *node)
 {
 	make_dup2(data, node);
-	close_fds(node);
+	close_all_fds(data->cmds);
 	if (exec_builtins_in_child(data, node) == FALSE)
 	{
 		find_good_path(data, node);

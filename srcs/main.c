@@ -2,27 +2,29 @@
 
 void	debug(t_list *node)
 {
-	if (!node)
-		return;
-	dprintf(2, "\ncmd : ");
-	if (node->cmd)
+	while (node)
 	{
-		for (int i = 0; node->cmd[i]; i++)
-			dprintf(2, "[%s] ", node->cmd[i]);
+		dprintf(2, "\ncmd : ");
+		if (node->cmd)
+		{
+			for (int i = 0; node->cmd[i]; i++)
+				dprintf(2, "[%s] ", node->cmd[i]);
+		}
+		else
+			dprintf(2, "(null)");
+		dprintf(2, "\n");
+		dprintf(2, "file_in = %s\n", node->file_in);
+		dprintf(2, "fd = %d, to close = %d\n", \
+		node->fd_in, node->fd_in_to_close);
+		dprintf(2, "file_out = %s\n", node->file_out);
+		dprintf(2, "fd = %d, ", node->fd_out);
+		dprintf(2, "to close = %d, ", node->fd_out_to_close);
+		dprintf(2, "append = %d\n", node->append_out);
+		dprintf(2, "lim = %s, ", node->lim);
+		dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
+		dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
+		node = node->next;
 	}
-	else
-		dprintf(2, "(null)");
-	dprintf(2, "\n");
-	dprintf(2, "file_in = %s\n", node->file_in);
-	dprintf(2, "fd = %d, to close = %d\n", \
-	node->fd_in, node->fd_in_to_close);
-	dprintf(2, "file_out = %s\n", node->file_out);
-	dprintf(2, "fd = %d, ", node->fd_out);
-	dprintf(2, "to close = %d, ", node->fd_out_to_close);
-	dprintf(2, "append = %d\n", node->append_out);
-	dprintf(2, "lim = %s, ", node->lim);
-	dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
-	dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
 void	wait_all_pid(t_data *data)
@@ -30,10 +32,10 @@ void	wait_all_pid(t_data *data)
 	t_list	*node;
 
 	node = data->cmds;
+	debug(node);
+	close_all_fds(node);
 	while (node)
 	{
-		debug(node); 
-		close_fds(node);
 		waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
 	}

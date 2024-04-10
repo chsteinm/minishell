@@ -21,7 +21,6 @@ void	make_dup2(t_data *data, t_list *node)
 	}
 	else if (node->next && dup2(node->next->pipe[1], STDOUT_FILENO) == -1)
 		return (perror("dup2"), close_free_exit(data, FAILURE));
-
 }
 
 void	find_good_path(t_data *data, t_list *node)
