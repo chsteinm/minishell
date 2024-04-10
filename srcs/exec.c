@@ -24,8 +24,8 @@ bool	exec_builtins_in_child(t_data *data, t_list *node)
 	// 	return (ft_echo(data, node), TRUE);
 	// if (!ft_strncmp(*node->cmd, "pwd", 4))
 	// 	return (ft_pwd(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "env", 4))
-	// 	return (ft_env(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "env", 4))
+		return (ft_printstrs(data->env), TRUE);
 	// if (!ft_strncmp(*node->cmd, "cd", 3))
 	// 	return (ft_cd(data, node), TRUE);
 	// if (!ft_strncmp(*node->cmd, "export", 7))
@@ -39,16 +39,16 @@ bool	exec_builtins_in_child(t_data *data, t_list *node)
 
 void	exec_in_child(t_data *data, t_list *node)
 {
-	find_good_path(data, node);
 	make_dup2(data, node);
 	close_fds(node);
 	if (exec_builtins_in_child(data, node) == FALSE)
 	{
+		find_good_path(data, node);
 		execve(*node->cmd, node->cmd, data->env);
 		perror("execve");
 		close_free_exit(data, FAILURE);
 	}
-	return (close_free_exit(data, SUCCESS));
+	return (close_free_exit(data, SUCCESS), exit(SUCCESS));
 }
 
 void	exec(t_data *data, t_list *node)

@@ -60,7 +60,7 @@ char	**ft_split(char const *s, char c)
 		len = 0;
 		while (s[len] != c && s[len])
 			len++;
-		strs[j] = ft_strndup(s, len + 1);
+		strs[j] = ft_strndup(s, len);
 		if (!strs[j])
 			return (free_strs(strs, j));
 		s += len + 1;

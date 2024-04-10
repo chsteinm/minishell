@@ -18,8 +18,7 @@ void	ft_printstrs(char **strs)
 
 	i = -1;
 	if (!strs)
-		ft_printf("%s", strs);
+		ft_printf("(null)");
 	while (strs && strs[++i])
-		ft_printf("[%s]", strs[i]);
-	ft_printf("\n");
+		ft_printf("%s\n", strs[i]);
 }

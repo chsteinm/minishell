@@ -2,17 +2,18 @@
 
 void	debug(t_list *node)
 {
-	ft_dprintf(2, "\ncmd : ");
+	dprintf(2, "\ncmd : ");
 	ft_printstrs(node->cmd);
-	ft_dprintf(2, "file_in = %s\n", node->file_in);
-	ft_dprintf(2, "fd = %d, to close = %d\n", \
+	dprintf(2, "file_in = %s\n", node->file_in);
+	dprintf(2, "fd = %d, to close = %d\n", \
 	node->fd_in, node->fd_in_to_close);
-	ft_dprintf(2, "file_out = %s\n", node->file_out);
-	ft_dprintf(2, "fd = %d, to close = %d, append = %d\n", \
-	node->fd_out, node->fd_out_to_close, node->append_out);
-	ft_dprintf(2, "lim = %s, ", node->lim);
-	ft_dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
-	ft_dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
+	dprintf(2, "file_out = %s\n", node->file_out);
+	dprintf(2, "fd = %d, ", node->fd_out);
+	dprintf(2, "to close = %d, ", node->fd_out_to_close);
+	dprintf(2, "append = %d\n", node->append_out);
+	dprintf(2, "lim = %s, ", node->lim);
+	dprintf(2, "pipe_hd = %d\n", node->fds_pipe_hd_to_close);
+	dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
 void	wait_all_pid(t_data *data)
@@ -39,7 +40,7 @@ void	give_env_path(t_data *data)
 	i = -1;
 	ptr = NULL;
 	while(!ptr && data->env[++i])
-		ptr = ft_strnstr(data->env[i], "PATH=", 6);
+		ptr = ft_strnstr(data->env[i], "PATH=", 5);
 	if (!ptr)
 		return;
 	data->path = ft_split(ptr, ':');
@@ -94,7 +95,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(data.line);
 			parse(&data);
-			// ft_dprintf(2, "%s\n", data.line);
+			// dprintf(2, "%s\n", data.line);
 			exec(&data, data.cmds);
 			wait_all_pid(&data);
 			close_free_exit(&data, 0);
