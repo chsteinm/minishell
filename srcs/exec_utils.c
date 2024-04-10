@@ -25,7 +25,7 @@ void	make_dup2(t_data *data, t_list *node)
 
 void	error_cmd(t_data *data, t_list *node)
 {
-	if (!access(*node->cmd, F_OK))
+	if (!access(*node->cmd, F_OK) && access(*node->cmd, R_OK))
 	{
 		ft_dprintf(STDERR_FILENO, ERR_DENIED, *node->cmd);
 		close_free_exit(data, 126);
