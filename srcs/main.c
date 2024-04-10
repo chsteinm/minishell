@@ -33,7 +33,7 @@ void	wait_all_pid(t_data *data)
 	t_list	*node;
 
 	node = data->cmds;
-	debug(node);
+	// debug(node);
 	close_all_fds(node);
 	while (node)
 	{
