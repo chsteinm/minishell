@@ -24,11 +24,10 @@ int	check_space(t_data *data)
 		!is_in_quote(data->line, tmp, '\'') && \
 		!is_in_quote(data->line, tmp, '"'))
 		{
-			while (tmp[index] && ft_iswhitespace(*(tmp + 1)))
-			{
-				if (tmp[index++] == *tmp)
-					return (error(data, 2, *tmp), 1);
-			}
+			while (ft_iswhitespace(tmp[index]))
+				index++;
+			if (tmp[index] == *tmp && &tmp[index] != tmp)
+				return (error(data, 2, *tmp), 1);
 			index = 0;
 		}
 		tmp++;
