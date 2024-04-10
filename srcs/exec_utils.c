@@ -23,6 +23,20 @@ void	make_dup2(t_data *data, t_list *node)
 		return (perror("dup2"), close_free_exit(data, FAILURE));
 }
 
+void	error_cmd(t_data *data, t_list *node)
+{
+	if (!access(*node->cmd, F_OK))
+	{
+		ft_dprintf(STDERR_FILENO, ERR_DENIED, *node->cmd);
+		close_free_exit(data, 126);
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
+		close_free_exit(data, 127);
+	}
+}
+
 void	find_good_path(t_data *data, t_list *node)
 {
 	char	*cmd_with_path;
@@ -47,8 +61,7 @@ void	find_good_path(t_data *data, t_list *node)
 		}
 		free(cmd_with_path);
 	}
-	ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
-	close_free_exit(data, 127);
+	return (error_cmd(data, node));
 }
 
 bool	to_exec(t_list *node)

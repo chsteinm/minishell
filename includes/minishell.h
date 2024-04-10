@@ -23,6 +23,7 @@
 # define SIGOUT 3
 
 # define ERR_CNF "%s: command not found\n"
+# define ERR_DENIED "%s: Permission denied\n"
 # define ERR_SYNTX "syntax error near unexpected token `%c'\n"
 # define ERR_SYNTX_NL "syntax error near unexpected token `newline'\n"
 # define ERR_QUOTE "quote is not closed\n"
