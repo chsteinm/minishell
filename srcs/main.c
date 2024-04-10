@@ -15,6 +15,22 @@ void	debug(t_list *node)
 		ft_dprintf(2, "pipe = %d\n\n", node->fds_pipe_to_close);
 }
 
+void	wait_all_pid(t_data *data)
+{
+	t_list	*node;
+
+	node = data->cmds;
+	while (node)
+	{
+		debug(node); 
+		close_fds(node);
+		waitpid(node->pid, &data->last_status, 0);
+		node = node->next;
+	}
+	if (WEXITSTATUS(data->last_status))
+		data->last_status = WEXITSTATUS(data->last_status);
+}
+
 void	give_env_path(t_data *data)
 {
 	char	*ptr;
@@ -30,7 +46,7 @@ void	give_env_path(t_data *data)
 	if (!data->path)
 	{
 		perror("Malloc");
-		close_free_exit(data, EXIT_FAILURE);
+		close_free_exit(data, FAILURE);
 	}
 }
 
@@ -41,7 +57,7 @@ void	init_data(t_data *data, char **env)
 	if (data->pid == -1)
 	{
 		perror("fork");
-		close_free_exit(data, EXIT_FAILURE);
+		close_free_exit(data, FAILURE);
 	}
 	if (!data->pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
 		exit(0);
@@ -49,22 +65,15 @@ void	init_data(t_data *data, char **env)
 	give_env_path(data);
 }
 
-void	wait_all_pid(t_data *data)
+void	sig_handler(int signum)
 {
-	t_list	*node;
-
-	node = data->cmds;
-	while (node)
+	if (signum == SIGINT)
 	{
-		debug(node); 
-		close_fds(node);
-		waitpid(node->pid, &data->last_status, 0);
-		node = node->next;
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
-	ft_dprintf(2, "status = %d\n", data->last_status);
-	if (WEXITSTATUS(data->last_status))
-		data->last_status = WEXITSTATUS(data->last_status);
-	ft_dprintf(2, "status = %d\n", data->last_status);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -72,6 +81,8 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 	
 	(void)argv[argc];
+	signal(SIGINT, sig_handler);
+	signal(SIGOUT, sig_handler);
 	init_data(&data, env);
 	// write(1, CLEAR, 11); //met l'invite de commande tout en haut de la fenêtre
 	while (1)

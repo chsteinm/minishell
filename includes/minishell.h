@@ -14,6 +14,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>
+# include <signal.h>
+
+# define SUCCESS 0
+# define FAILURE 1
+
+# define SIGINT 2
+# define SIGOUT 3
 
 # define ERR_CNF "%s: command not found\n"
 # define ERR_SYNTX "syntax error near unexpected token `%c'\n"
@@ -35,6 +42,7 @@ typedef struct s_data
 	pid_t	pid;
 	char	*tmp;
 	int		nb_line_hd;
+	size_t	nb_cmds;
 	size_t	i;
 }					t_data;
 

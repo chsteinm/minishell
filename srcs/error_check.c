@@ -17,7 +17,7 @@ int	check_space(t_data *data)
 
 	data->no_w_space_line = ft_strdup(data->line);
 	if (!data->no_w_space_line)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
+		return (perror("Malloc"), close_free_exit(data, FAILURE), 1);
 	ft_replace_white_space(data->no_w_space_line);
 	data->splited_line = ft_split(data->no_w_space_line, ' ');
 	if (!data->splited_line || !*data->splited_line)
@@ -28,7 +28,7 @@ int	check_space(t_data *data)
 			if (ft_ismeta(data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1]))
 				if (data->splited_line[j-1][ft_strlen(data->splited_line[j-1]) - 1] != '|')
 					return (error(data, 2, data->splited_line[j][0]), 1);
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 //error if # |...   or #<<<.. / >>>..  or #><... / <>...  or #>ø / <ø  or  #...|ø / ||
 int	check_syntax(t_data *data)
@@ -37,7 +37,7 @@ int	check_syntax(t_data *data)
 
 	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
 	if (!data->no_space_line)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), 1);
+		return (perror("Malloc"), close_free_exit(data, FAILURE), 1);
 	ptr = data->no_space_line;
 	while (*ptr)
 	{
@@ -85,5 +85,5 @@ bool	check_quote(t_data *data)
 				in_s_quote = FALSE;
 		}
 	}
-	return (in_s_quote || in_quote); // il faut qu'à la fin de la ligne, les deux soit FALSE / fermé
+	return (in_s_quote || in_quote); // il faut qu'à la fin de la ligne, les deux soit FALSE / fermé, sinon, 1 est retouré
 }

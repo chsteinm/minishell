@@ -24,11 +24,11 @@ void	write_until_lim(t_data *data, t_list *node)
 		line = ft_strjoin(line, "\n");
 		free(data->tmp);
 		if (!line)
-			return (perror("malloc"), close_free_exit(data, EXIT_FAILURE));
+			return (perror("malloc"), close_free_exit(data, FAILURE));
 		if (write(node->pipe_heredoc[1], line, ft_strlen(line)) == -1)
 		{
 			perror("write");
-			close_free_exit(data, EXIT_FAILURE);
+			close_free_exit(data, FAILURE);
 		}
 		free(line);
 	}
@@ -39,7 +39,7 @@ void	here_doc_manage(t_data *data, t_list *node)
 	if (!node->fds_pipe_hd_to_close)
 	{
 		if (pipe(node->pipe_heredoc) == -1)
-			return (perror("pipe"), close_free_exit(data, EXIT_FAILURE));
+			return (perror("pipe"), close_free_exit(data, FAILURE));
 		else
 			node->fds_pipe_hd_to_close = TRUE;
 	}

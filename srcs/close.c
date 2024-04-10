@@ -24,7 +24,6 @@ void	close_fds(t_list *node)
 		close(node->pipe_heredoc[1]);
 		node->fds_pipe_hd_to_close = FALSE;
 	}
-		
 }
 
 void	free_cmds_list(t_list **head)
@@ -57,7 +56,7 @@ void	close_free_exit(t_data *data, int ret)
 	ft_free_and_null(&data->line);
 	ft_free_and_null(&data->no_space_line);
 	ft_free_and_null(&data->no_w_space_line);
-	if (ret != EXIT_SUCCESS)
+	if (ret != SUCCESS)
 	{
 		ft_free_strings(data->path);
 		exit(ret);

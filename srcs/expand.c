@@ -34,14 +34,14 @@ void	replace_status(t_data *data, char **line, char *ptr)
 
 	status = ft_itoa(data->last_status);
 	if (!status)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	*ptr = 0;
 	data->tmp = *line;
 	*line = join_3_strs(*line, status, ptr + 2);
 	free(data->tmp);
 	free(status);
 	if (!*line)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	return (expand(data, line));
 }
 
@@ -53,14 +53,14 @@ void	replace_pid(t_data *data, char **line, char *ptr)
 
 	pid = ft_itoa(data->pid);
 	if (!pid)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	*ptr = 0;
 	tmp = *line;
 	*line = join_3_strs(*line, pid, ptr + 2);
 	free(tmp);
 	free(pid);
 	if (!*line)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE));
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	return (expand(data, line));
 }
 
@@ -84,7 +84,7 @@ void	expand(t_data *data, char **line)
 				if (!replace_var(data, line, ptr + i))
 				{
 					perror("Malloc");
-					return (close_free_exit(data, EXIT_FAILURE));
+					return (close_free_exit(data, FAILURE));
 				}
 				return (expand(data, line));
 			}
