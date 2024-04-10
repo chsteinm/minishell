@@ -32,7 +32,7 @@ void	wait_all_pid(t_data *data)
 	node = data->cmds;
 	while (node)
 	{
-		debug(node); 
+		// debug(node); 
 		close_fds(node);
 		waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
