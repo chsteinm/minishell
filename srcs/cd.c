@@ -6,32 +6,32 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/11 19:17:09 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/11 19:30:21 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**ft_export_env(char **env, char *name, char *value)
+void	ft_export_env(t_data *data, char *name, char *value)
 {
 	int		i;
 	char	*tmp;
 
 	i = 0;
-	while (env[i])
+	while (data->env[i])
 	{
-		if (!ft_strncmp(env[i], name, ft_strlen(name)))
+		if (!ft_strncmp(data->env[i], name, ft_strlen(name)))
 		{
 			tmp = ft_strdup(name);
-			// free(env[i]);
-			env[i] = ft_strjoin(tmp, value);
-			printf("DEBUG env[i]: %s\n", env[i]);
+			// free(data->env[i]);
+			data->env[i] = ft_strjoin(tmp, value);
+			printf("DEBUG env[i]: %s\n", data->env[i]);
 			// free(tmp);
-			return (env);
+			// return (data->env);
 		}
 		i++;
 	}
-	return (env);
+	// return (data->env);
 }
 
 void	ft_cd(t_data *data, t_list *node)
@@ -54,8 +54,8 @@ void	ft_cd(t_data *data, t_list *node)
 	printf("pwd: %s\n", pwd);
 	printf("oldpwd: %s\n", oldpwd);
 
-	data->env = ft_export_env(data->env, "OLDPWD=", oldpwd);
-	data->env = ft_export_env(data->env, "PWD=", pwd);
+	ft_export_env(data, "OLDPWD=", oldpwd);
+	ft_export_env(data, "PWD=", pwd);
 	// free(oldpwd);
 	// free(pwd);
 
