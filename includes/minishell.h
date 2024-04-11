@@ -27,6 +27,7 @@
 # define ERR_SYNTX "syntax error near unexpected token `%c'\n"
 # define ERR_SYNTX_NL "syntax error near unexpected token `newline'\n"
 # define ERR_QUOTE "quote is not closed\n"
+# define ERR_EXIT "exit: too many arguments\n"
 # define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 
 typedef struct s_data
@@ -67,5 +68,6 @@ void	close_free_exit(t_data *data, int ret);
 void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
 
+void	ft_exit(t_data *data, t_list *node);
 
 #endif
