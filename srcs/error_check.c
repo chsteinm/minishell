@@ -10,7 +10,7 @@ void	error(t_data *data, int error, char c)
 		ft_dprintf(2, ERR_QUOTE);
 	data->last_status = error;
 }
-// error if < <... / > >... / 
+// error if < <... / > >... /
 int	check_space(t_data *data)
 {
 	char	*tmp;
@@ -38,7 +38,7 @@ int	check_space(t_data *data)
 //error if # |...   or #<<<.. / >>>..  or #><... / <>...  or #>ø / <ø  or  #...|ø / ||
 int	check_syntax(t_data *data)
 {
-	char *ptr;
+	char	*ptr;
 
 	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
 	if (!data->no_space_line)

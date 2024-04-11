@@ -1,6 +1,6 @@
-NAME = minishell 
+NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 PATH_SRCS = ./srcs/
 SRCS =	main.c \
 		close.c \
@@ -11,7 +11,8 @@ SRCS =	main.c \
 		open_files.c \
 		here_doc_manage.c \
 		exec.c \
-		exec_utils.c
+		exec_utils.c \
+		cd.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a

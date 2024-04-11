@@ -33,9 +33,10 @@ typedef struct s_data
 {
 	t_list	*cmd_param;
 	t_list	*cmds;
-	char 	**env;
-	char 	**path;
+	char	**env;
+	char	**path;
 	char	*line;
+	char	*pwd;
 	char	*no_space_line;
 	char	*no_w_space_line;
 	char	**splited_line;
@@ -67,5 +68,6 @@ void	close_free_exit(t_data *data, int ret);
 void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
 
+void	ft_cd(t_data *data, t_list *node);
 
 #endif
