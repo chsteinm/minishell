@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/11 19:30:21 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/11 19:36:27 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ void	ft_export_env(t_data *data, char *name, char *value)
 		{
 			tmp = ft_strdup(name);
 			// free(data->env[i]);
+			// LEEK ?
 			data->env[i] = ft_strjoin(tmp, value);
-			printf("DEBUG env[i]: %s\n", data->env[i]);
-			// free(tmp);
-			// return (data->env);
+			free(tmp);
 		}
 		i++;
 	}
-	// return (data->env);
 }
 
 void	ft_cd(t_data *data, t_list *node)
@@ -50,14 +48,8 @@ void	ft_cd(t_data *data, t_list *node)
 	pwd = getcwd(NULL, 0);
 	data->pwd = pwd;
 
-	printf("pwd: %s\n", node->cmd[1]);
-	printf("pwd: %s\n", pwd);
-	printf("oldpwd: %s\n", oldpwd);
-
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", pwd);
-	// free(oldpwd);
-	// free(pwd);
-
-
+	free(oldpwd);
+	free(pwd);
 }
