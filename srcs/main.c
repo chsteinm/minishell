@@ -57,7 +57,7 @@ void	give_env_path(t_data *data)
 	data->path = ft_split(ptr, ':');
 	if (!data->path)
 	{
-		perror("Malloc");
+		perror("malloc");
 		close_free_exit(data, FAILURE);
 	}
 }
@@ -73,7 +73,12 @@ void	init_data(t_data *data, char **env)
 	}
 	if (!data->pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
 		exit(0);
-	data->env = env;
+	data->env = ft_strsdup(env, ft_strssize(env));
+	if (!data->env)
+	{
+		perror("malloc");
+		close_free_exit(data, FAILURE);
+	}
 	give_env_path(data);
 }
 
@@ -113,5 +118,6 @@ int	main(int argc, char **argv, char **env)
 		}
 	}
 	ft_free_strings(data.path);
+	ft_free_strings(data.env);
 	return (0);
 }

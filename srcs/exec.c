@@ -11,8 +11,8 @@ bool	exec_builtins_in_parent(t_data *data, t_list *node)
 	// 	return (ft_export(data, node), TRUE);
 	// if (!ft_strncmp(*node->cmd, "unset", 6))
 	// 	return (ft_unset(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "exit", 5))
-	// 	return (ft_exit(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "exit", 5))
+		return (ft_exit(data, node), TRUE);
 	return (FALSE);
 }
 
@@ -54,6 +54,7 @@ void	exec_in_child(t_data *data, t_list *node)
 void	exec(t_data *data, t_list *node)
 {
 	make_pipes(data, node);
+	data->nb_cmds = ft_lstsize(node);
 	if (data->nb_cmds == 1 && exec_builtins_in_parent(data, node))
 	{
 		return (close_free_exit(data, SUCCESS));

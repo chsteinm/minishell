@@ -38,8 +38,6 @@ typedef struct s_data
 	char 	**path;
 	char	*line;
 	char	*no_space_line;
-	char	*no_w_space_line;
-	char	**splited_line;
 	int		last_status;
 	pid_t	pid;
 	char	*tmp;

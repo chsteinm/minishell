@@ -50,7 +50,7 @@ void	find_good_path(t_data *data, t_list *node)
 		cmd_with_path = join_3_strs(data->path[i], "/", *node->cmd);
 		if (!cmd_with_path)
 		{
-			perror("Malloc");
+			perror("malloc");
 			close_free_exit(data, FAILURE);
 		}
 		if (!access(cmd_with_path, X_OK))

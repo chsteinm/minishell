@@ -41,7 +41,7 @@ int	check_syntax(t_data *data)
 
 	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
 	if (!data->no_space_line)
-		return (perror("Malloc"), close_free_exit(data, FAILURE), 1);
+		return (perror("malloc"), close_free_exit(data, FAILURE), 1);
 	ptr = data->no_space_line;
 	while (*ptr)
 	{
