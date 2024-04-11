@@ -36,6 +36,7 @@ typedef struct s_data
 	t_list	*cmds;
 	char 	**env;
 	char 	**path;
+	char	*pwd;
 	char	*line;
 	char	*no_space_line;
 	int		last_status;
@@ -65,6 +66,7 @@ void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
 void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
+void	final_free(t_data *data);
 
 void	ft_exit(t_data *data, t_list *node);
 

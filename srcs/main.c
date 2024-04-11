@@ -44,6 +44,7 @@ void	wait_all_pid(t_data *data)
 	if (WEXITSTATUS(data->last_status))
 		data->last_status = WEXITSTATUS(data->last_status);
 	// dprintf(2, "last status = %d\n", data->last_status);
+	dprintf(2, "data.pwd =%s\n", data->pwd);
 }
 
 void	give_env_path(t_data *data)
@@ -80,6 +81,12 @@ void	init_data(t_data *data, char **env)
 		close_free_exit(data, FAILURE);
 	}
 	give_env_path(data);
+	data->pwd = getcwd(NULL, 0);
+	if (!data->pwd)
+	{
+		perror("getcwd");
+		close_free_exit(data, FAILURE);
+	}
 }
 
 void	sig_handler(int signum)
@@ -117,7 +124,6 @@ int	main(int argc, char **argv, char **env)
 			close_free_exit(&data, 0);
 		}
 	}
-	ft_free_strings(data.path);
-	ft_free_strings(data.env);
+	final_free(&data);
 	return (0);
 }
