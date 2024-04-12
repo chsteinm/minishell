@@ -73,6 +73,8 @@ int		ft_pwd(t_data *data, t_list *node);
 void	ft_export_env(t_data *data, char *name, char *value);
 char	*ft_getenv(char **env, char *name);
 void	ft_export(t_data *data, t_list *node);
+void	ft_echo(t_data *data, t_list *node);
+
 
 
 

@@ -20,8 +20,8 @@ bool	exec_builtins_in_child(t_data *data, t_list *node)
 {
 	(void)data;
 	(void)node;
-	// if (!ft_strncmp(*node->cmd, "echo", 5))
-	// 	return (ft_echo(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "echo", 5))
+		return (ft_echo(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "pwd", 4))
 		return (ft_pwd(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "env", 4))
