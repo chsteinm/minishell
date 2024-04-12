@@ -48,7 +48,9 @@ void	exec_in_child(t_data *data, t_list *node)
 		perror("execve");
 		close_free_exit(data, FAILURE);
 	}
-	return (close_free_exit(data, SUCCESS), exit(SUCCESS));
+	close_free_exit(data, SUCCESS);
+	final_free(data);
+	exit(data->last_status);
 }
 
 void	exec(t_data *data, t_list *node)

@@ -2,8 +2,6 @@
 # define MINISHELL_H
 
 # include "./libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
 # include <limits.h>
 # include <stdio.h>
 # include <string.h>
@@ -16,9 +14,6 @@
 # include <stdbool.h>
 # include <signal.h>
 
-# define SUCCESS 0
-# define FAILURE 1
-
 # define SIGINT 2
 # define SIGOUT 3
 
@@ -28,6 +23,7 @@
 # define ERR_SYNTX_NL "syntax error near unexpected token `newline'\n"
 # define ERR_QUOTE "quote is not closed\n"
 # define ERR_EXIT "exit: too many arguments\n"
+# define ERR_EXIT_N "exit: %s: numeric argument required\n"
 # define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 
 typedef struct s_data

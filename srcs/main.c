@@ -1,8 +1,9 @@
 #include "../includes/minishell.h"
 
+// valgrind --leak-check=full --trace-children=yes --track-fds=yes
 void	debug(t_list *node)
 {
-	sleep(1);
+	// sleep(1);
 	while (node)
 	{
 		dprintf(2, "\ncmd : ");
@@ -44,7 +45,7 @@ void	wait_all_pid(t_data *data)
 	if (WEXITSTATUS(data->last_status))
 		data->last_status = WEXITSTATUS(data->last_status);
 	// dprintf(2, "last status = %d\n", data->last_status);
-	dprintf(2, "data.pwd =%s\n", data->pwd);
+	// dprintf(2, "data.pwd =%s\n", data->pwd);
 }
 
 void	give_env_path(t_data *data)
