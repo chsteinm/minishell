@@ -68,6 +68,7 @@ void	close_free_exit(t_data *data, int ret);
 void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
 
-void	ft_cd(t_data *data, t_list *node);
+int		ft_cd(t_data *data, t_list *node);
+int		ft_pwd(t_data *data, t_list *node);
 
 #endif

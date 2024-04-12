@@ -43,7 +43,7 @@ void	wait_all_pid(t_data *data)
 	}
 	if (WEXITSTATUS(data->last_status))
 		data->last_status = WEXITSTATUS(data->last_status);
-	dprintf(2, "last status = %d\n", data->last_status);
+	// dprintf(2, "last status = %d\n", data->last_status);
 }
 
 void	give_env_path(t_data *data)
@@ -94,7 +94,7 @@ void	sig_handler(int signum)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-	
+
 	(void)argv[argc];
 	signal(SIGINT, sig_handler);
 	signal(SIGOUT, sig_handler);
