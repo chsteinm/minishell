@@ -13,7 +13,8 @@ SRCS =	main.c \
 		exec.c \
 		exec_utils.c \
 		cd.c \
-		pwd.c
+		pwd.c \
+		export.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a
