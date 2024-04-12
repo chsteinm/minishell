@@ -20,6 +20,7 @@ void	ft_export(t_data *data, t_list *node)
 	if (ft_parse_env(name, node->cmd[1]) == 1)
 	{
 		free(name);
+		data->last_status = 1;
 		return ;
 	}
 	if (ft_getenv(data->env, name))
