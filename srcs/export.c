@@ -139,8 +139,7 @@ void	ft_export_env(t_data *data, char *name, char *value)
 			tmp = ft_strdup(name);
 			if (!tmp)
 				malloc_error(data);
-			// free(data->env[i]);
-			// LEEK ?
+			ft_free_and_null((void **)&data->env[i]);
 			if (ft_strncmp(tmp, value, ft_strlen(value)))
 				data->env[i] = ft_strjoin(tmp, value);
 			else
@@ -169,29 +168,19 @@ char	*ft_getenv(char **env, char *name)
 	return (NULL);
 }
 
-void	ft_add_env(t_data *data, char *to_add)
+void	ft_add_env(t_data data, char *to_add)
 {
-	char	**new_env;
-	int		i;
+	char	new_env;
+	size_t	i;
 
-	i = 0;
+
 	while (data->env[i])
 		i++;
-	new_env = malloc(sizeof(char *) * (i + 2));
+	new_env = ft_strsdup(data->env, i + 2);
+	new_env[i] = to_add;
 	if (!new_env)
 		malloc_error(data);
-	i = -1;
-	while (data->env[++i])
-	{
-		new_env[i] = ft_strdup(data->env[i]);
-		if (!new_env[i])
-			malloc_error(data);
-	}
-	new_env[i] = ft_strdup(to_add);
-	if (!new_env[i])
-		malloc_error(data);
-	// free_tab(data->env); // TODO: fix leak
-	new_env[i + 1] = NULL;
+	ft_free_strings(data->env);
 	data->env = new_env;
 }
 
@@ -205,10 +194,10 @@ void	free_tab(char **tab)
 		while (tab[i])
 		{
 			if (tab[i])
-				free(tab[i]);
+				ft_free_and_null(&tab[i]);
 			i++;
 		}
-		free(tab);
+		ft_free_and_null(&tab);
 	}
 }
 
