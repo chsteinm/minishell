@@ -58,16 +58,22 @@ void	free_cmds_list(t_list **head)
 
 void	close_free_exit(t_data *data, int ret)
 {
-	ft_free_strings(data->splited_line);
-	data->splited_line = NULL;
 	free_cmds_list(&data->cmds);
 	ft_lstclear(&data->cmd_param, &free);
 	ft_free_and_null(&data->line);
 	ft_free_and_null(&data->no_space_line);
-	ft_free_and_null(&data->no_w_space_line);
 	if (ret != SUCCESS)
 	{
+		ft_free_and_null(&data->pwd);
 		ft_free_strings(data->path);
+		ft_free_strings(data->env);
 		exit(ret);
 	}
+}
+
+void	final_free(t_data *data)
+{
+	ft_free_and_null(&data->pwd);
+	ft_free_strings(data->path);
+	ft_free_strings(data->env);
 }

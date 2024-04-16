@@ -1,8 +1,9 @@
 #include "../includes/minishell.h"
 
+// valgrind --leak-check=full --trace-children=yes --track-fds=yes
 void	debug(t_list *node)
 {
-	sleep(1);
+	// sleep(1);
 	while (node)
 	{
 		dprintf(2, "\ncmd : ");
@@ -44,6 +45,7 @@ void	wait_all_pid(t_data *data)
 	if (WEXITSTATUS(data->last_status))
 		data->last_status = WEXITSTATUS(data->last_status);
 	// dprintf(2, "last status = %d\n", data->last_status);
+	// dprintf(2, "data.pwd =%s\n", data->pwd);
 }
 
 void	give_env_path(t_data *data)
@@ -57,7 +59,7 @@ void	give_env_path(t_data *data)
 	data->path = ft_split(ptr, ':');
 	if (!data->path)
 	{
-		perror("Malloc");
+		perror("malloc");
 		close_free_exit(data, FAILURE);
 	}
 }
@@ -73,8 +75,19 @@ void	init_data(t_data *data, char **env)
 	}
 	if (!data->pid--) //fork renvoit le pid du precessus actuel + 1 (qui correspond à celui de l'enfant)
 		exit(0);
-	data->env = env;
+	data->env = ft_strsdup(env, ft_strssize(env));
+	if (!data->env)
+	{
+		perror("malloc");
+		close_free_exit(data, FAILURE);
+	}
 	give_env_path(data);
+	data->pwd = getcwd(NULL, 0);
+	if (!data->pwd)
+	{
+		perror("getcwd");
+		close_free_exit(data, FAILURE);
+	}
 }
 
 void	sig_handler(int signum)
@@ -112,6 +125,6 @@ int	main(int argc, char **argv, char **env)
 			close_free_exit(&data, 0);
 		}
 	}
-	ft_free_strings(data.path);
+	final_free(&data);
 	return (0);
 }

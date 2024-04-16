@@ -11,7 +11,8 @@ SRCS =	main.c \
 		open_files.c \
 		here_doc_manage.c \
 		exec.c \
-		exec_utils.c
+		exec_utils.c \
+		ft_exit.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a
