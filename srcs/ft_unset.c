@@ -4,7 +4,6 @@ void	ft_unset(t_data *data, t_list *node)
 {
 	int		j_cmd;
 	int		j_env;
-	char	*var_ptr;
 	char	*tmp;
 	size_t	len_tmp;
 
@@ -15,9 +14,11 @@ void	ft_unset(t_data *data, t_list *node)
 		if (!tmp)
 			return (perror("Malloc"), close_free_exit(data, FAILURE));
 		len_tmp = ft_strlen(tmp);
-		var_ptr = NULL;
-		j_env = -1;
-		while (!var_ptr && data->env[++j_env])
-			var_ptr = ft_strnstr(env[j_env], tmp, len_tmp);
+		j_env = 0;
+		while (data->env[j_env] && !ft_strnstr(data->env[j_env], tmp, len_tmp))
+			j_env++;
+		free(tmp);
+		if (data->env[j_env])
+			ft_free_one_str_in_strs(data->env, j_env);
 	}
 }

@@ -65,5 +65,6 @@ void	close_fds(t_list *node);
 void	final_free(t_data *data);
 
 void	ft_exit(t_data *data, t_list *node);
+void	ft_unset(t_data *data, t_list *node);
 
 #endif
