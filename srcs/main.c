@@ -48,22 +48,6 @@ void	wait_all_pid(t_data *data)
 	// dprintf(2, "data.pwd =%s\n", data->pwd);
 }
 
-void	give_env_path(t_data *data)
-{
-	char	*ptr;
-
-	ptr = NULL;
-	ptr = getenv("PATH");
-	if (!ptr)
-		return;
-	data->path = ft_split(ptr, ':');
-	if (!data->path)
-	{
-		perror("malloc");
-		close_free_exit(data, FAILURE);
-	}
-}
-
 void	init_data(t_data *data, char **env)
 {
 	ft_bzero((char *)data, sizeof(t_data));
@@ -81,7 +65,6 @@ void	init_data(t_data *data, char **env)
 		perror("malloc");
 		close_free_exit(data, FAILURE);
 	}
-	give_env_path(data);
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 	{

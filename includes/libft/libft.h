@@ -19,6 +19,7 @@
 # include <stdarg.h>
 # include <stdbool.h>
 # include <limits.h>
+# include <fcntl.h>
 # include "get_next_line.h"
 
 # define SUCCESS 0
@@ -118,6 +119,6 @@ int		print_p(va_list args);
 int		print_p_fd(va_list args, int fd);
 void	ft_printstrs(char **strs);
 long	ft_strtol(char *str, char **endptr, int base);
-void	ft_free_str_in_strs(char **strs, int i_str);
+void	ft_free_one_str_in_strs(char **strs, int i_str);
 
 #endif

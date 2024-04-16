@@ -1,19 +1,25 @@
 #include "../includes/minishell.h"
 
-int		is_in_quote(char *line, char *ptr, char q)
+bool	is_in_quote(char *line, char *ptr, char q)
 {
-	int s_quote_left;
-	int s_quote_right;
+	bool	in_quote;
+	bool	in_s_quote;
 
-	s_quote_left = 0;
-	s_quote_right = 0;
+	in_quote = FALSE;
+	in_s_quote = FALSE;
 	while (line != ptr)
-		if (*line++ == q)
-			s_quote_left++;
-	while (*ptr++)
-		if (*ptr == q)
-			s_quote_right++;
-	return (s_quote_left % 2 && s_quote_right % 2);
+	{
+		if (*line == '"' && !in_s_quote)
+			in_quote = (in_quote == FALSE);
+		if (*line == '\'' && !in_quote)
+			in_s_quote = (in_s_quote == FALSE);
+		line++;
+	}
+	if (q == '"' && in_quote)
+		return (TRUE);
+	if (q == '\'' && in_s_quote)
+		return (TRUE);
+	return (FALSE);
 }
 
 char	*join_3_strs(char *s1, char *s2, char *s3)

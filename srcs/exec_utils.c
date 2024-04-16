@@ -37,11 +37,33 @@ void	error_cmd(t_data *data, t_list *node)
 	}
 }
 
+void	give_env_path(t_data *data)
+{
+	char	*ptr;
+	size_t	i;
+
+	ft_free_strings(data->path);
+	data->path = NULL;
+	ptr = NULL;
+	i = -1;
+	while (!ptr && data->env[++i])
+		ptr = ft_strnstr(data->env[i], "PATH=", 6);
+	if (!ptr)
+		return;
+	data->path = ft_split(ptr, ':');
+	if (!data->path)
+	{
+		perror("malloc");
+		close_free_exit(data, FAILURE);
+	}
+}
+
 void	find_good_path(t_data *data, t_list *node)
 {
 	char	*cmd_with_path;
 	size_t	i;
-
+	
+	give_env_path(data);
 	if (!access(*node->cmd, X_OK))
 		return ;
 	i = -1;
