@@ -5,7 +5,6 @@ void	update_var(t_data *data, t_list *node, int j_cmd, int j_env)
 	free(data->env[j_env]);
 	data->env[j_env] = node->cmd[j_cmd];
 	node->cmd[j_cmd] = NULL;
-	printf("coucou\n");
 }
 
 void	ft_export(t_data *data, t_list *node)
@@ -29,7 +28,6 @@ void	ft_export(t_data *data, t_list *node)
 		j_env = 0;
 		while (data->env[j_env] && !ft_strnstr(data->env[j_env], tmp, len_var))
 			j_env++;
-		printf("%zu %s\n", len_var, tmp);
 		free(tmp);
 		if (data->env[j_env])
 			return (update_var(data, node, j_cmd, j_env));
