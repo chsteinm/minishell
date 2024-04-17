@@ -6,8 +6,8 @@ bool	exec_builtins_in_parent(t_data *data, t_list *node)
 		return (FALSE);
 	if (!ft_strncmp(*node->cmd, "cd", 3))
 		return (ft_cd(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "export", 7))
-	// 	return (ft_export(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "export", 7))
+		return (ft_export(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "unset", 6))
 		return (ft_unset(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "exit", 5))
@@ -23,10 +23,10 @@ bool	exec_builtins_in_child(t_data *data, t_list *node)
 		return (ft_printf("%s\n", data->pwd), TRUE);
 	if (!ft_strncmp(*node->cmd, "env", 4))
 		return (ft_printstrs(data->env), TRUE);
-	// if (!ft_strncmp(*node->cmd, "cd", 3))
-	// 	return (ft_cd(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "export", 7))
-	// 	return (ft_export(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "cd", 3))
+		return (ft_cd(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "export", 7))
+		return (ft_export(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "unset", 6))
 		return (ft_unset(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "exit", 5))
