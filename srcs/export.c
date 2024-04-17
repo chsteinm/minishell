@@ -23,9 +23,11 @@ void	ft_export(t_data *data, t_list *node)
 		data->last_status = 1;
 		return ;
 	}
+	printf("0  ------- NAME %s, node->cmd[1] = %s\n", name ,node->cmd[1]);
 	if (ft_getenv(data->env, name))
 	{
 		ft_export_env(data, name, node->cmd[1]);
+		printf("NAME %s, node->cmd[1] = %s", name ,node->cmd[1]);
 		free(name);
 		return ;
 	}
@@ -168,16 +170,14 @@ char	*ft_getenv(char **env, char *name)
 	return (NULL);
 }
 
-void	ft_add_env(t_data data, char *to_add)
+void	ft_add_env(t_data *data, char *to_add)
 {
-	char	new_env;
-	size_t	i;
+	char	**new_env;
+	int		tab_size;
 
-
-	while (data->env[i])
-		i++;
-	new_env = ft_strsdup(data->env, i + 2);
-	new_env[i] = to_add;
+	tab_size = ft_strssize(data->env);
+	new_env = ft_strsdup(data->env, tab_size + 1);
+	new_env[tab_size] = ft_strdup(to_add);
 	if (!new_env)
 		malloc_error(data);
 	ft_free_strings(data->env);

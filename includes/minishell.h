@@ -2,8 +2,6 @@
 # define MINISHELL_H
 
 # include "./libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
 # include <limits.h>
 # include <stdio.h>
 # include <string.h>
@@ -16,9 +14,6 @@
 # include <stdbool.h>
 # include <signal.h>
 
-# define SUCCESS 0
-# define FAILURE 1
-
 # define SIGINT 2
 # define SIGOUT 3
 
@@ -27,19 +22,19 @@
 # define ERR_SYNTX "syntax error near unexpected token `%c'\n"
 # define ERR_SYNTX_NL "syntax error near unexpected token `newline'\n"
 # define ERR_QUOTE "quote is not closed\n"
+# define ERR_EXIT "exit: too many arguments\n"
+# define ERR_EXIT_N "exit: %s: numeric argument required\n"
 # define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 
 typedef struct s_data
 {
 	t_list	*cmd_param;
 	t_list	*cmds;
-	char	**env;
-	char	**path;
-	char	*line;
+	char 	**env;
+	char 	**path;
 	char	*pwd;
+	char	*line;
 	char	*no_space_line;
-	char	*no_w_space_line;
-	char	**splited_line;
 	int		last_status;
 	pid_t	pid;
 	char	*tmp;
@@ -67,6 +62,7 @@ void	error(t_data *data, int error, char c);
 void	close_free_exit(t_data *data, int ret);
 void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
+void	final_free(t_data *data);
 
 int		ft_cd(t_data *data, t_list *node);
 int		ft_pwd(t_data *data, t_list *node);
@@ -77,5 +73,6 @@ void	ft_echo(t_data *data, t_list *node);
 
 
 
+void	ft_exit(t_data *data, t_list *node);
 
 #endif

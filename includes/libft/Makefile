@@ -31,6 +31,7 @@ SRCS = 	ft_atol.c \
 		ft_strlcat.c \
 		ft_strlcpy.c \
 		ft_strlen.c \
+		ft_strssize.c \
 		ft_strmapi.c \
 		ft_strncmp.c \
 		ft_strnstr.c \
@@ -53,7 +54,8 @@ SRCS = 	ft_atol.c \
 		ft_putnbr_base.c \
 		ft_putnbr_base_fd.c \
 		ft_printstrs.c \
-		get_next_line.c
+		get_next_line.c \
+		ft_strtol.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 SRCS_BONUS =	ft_lstadd_back_bonus.c \
 				ft_lstadd_front_bonus.c \

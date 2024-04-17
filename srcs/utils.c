@@ -65,7 +65,7 @@ char	*str__dup(t_data *data, char **ptr)
 		len++;
 	str = ft_strndup(*ptr, len);
 	if (!str)
-		return (perror("Malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
+		return (perror("malloc"), close_free_exit(data, EXIT_FAILURE), NULL);
 	strdelquotes(str, *ptr, len);
 	*ptr = (*ptr) + len;
 	return (str);

@@ -25,7 +25,7 @@ void	make_dup2(t_data *data, t_list *node)
 
 void	error_cmd(t_data *data, t_list *node)
 {
-	if (!access(*node->cmd, F_OK))
+	if (!access(*node->cmd, F_OK) && access(*node->cmd, R_OK))
 	{
 		ft_dprintf(STDERR_FILENO, ERR_DENIED, *node->cmd);
 		close_free_exit(data, 126);
@@ -50,7 +50,7 @@ void	find_good_path(t_data *data, t_list *node)
 		cmd_with_path = join_3_strs(data->path[i], "/", *node->cmd);
 		if (!cmd_with_path)
 		{
-			perror("Malloc");
+			perror("malloc");
 			close_free_exit(data, FAILURE);
 		}
 		if (!access(cmd_with_path, X_OK))

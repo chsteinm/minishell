@@ -24,11 +24,10 @@ int	check_space(t_data *data)
 		!is_in_quote(data->line, tmp, '\'') && \
 		!is_in_quote(data->line, tmp, '"'))
 		{
-			while (tmp[index] && ft_iswhitespace(*(tmp + 1)))
-			{
-				if (tmp[index++] == *tmp)
-					return (error(data, 2, *tmp), 1);
-			}
+			while (ft_iswhitespace(tmp[index]))
+				index++;
+			if (tmp[index] == *tmp && &tmp[index] != tmp)
+				return (error(data, 2, *tmp), 1);
 			index = 0;
 		}
 		tmp++;
@@ -42,7 +41,7 @@ int	check_syntax(t_data *data)
 
 	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
 	if (!data->no_space_line)
-		return (perror("Malloc"), close_free_exit(data, FAILURE), 1);
+		return (perror("malloc"), close_free_exit(data, FAILURE), 1);
 	ptr = data->no_space_line;
 	while (*ptr)
 	{

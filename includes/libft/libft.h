@@ -18,8 +18,11 @@
 # include <stddef.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include <limits.h>
 # include "get_next_line.h"
 
+# define SUCCESS 0
+# define FAILURE 1
 # define TRUE 1
 # define FALSE 0
 # define CLEAR " \e[1;H\e[2J"
@@ -57,6 +60,7 @@ int		ft_iswhitespace(char c);
 void	ft_replace_white_space(char *line);
 void	ft_skip_wspaces(char **ptr);
 size_t	ft_strlen(const char *str);
+size_t	ft_strssize(char **strs);
 long	ft_atol(const char *str);
 void	*ft_bzero(char *str, int size);
 void	*ft_memset(void *str, int c, size_t size);
@@ -113,5 +117,6 @@ int		ft_putnbr_base_fd(size_t nb, char *base, size_t base_len, int fd);
 int		print_p(va_list args);
 int		print_p_fd(va_list args, int fd);
 void	ft_printstrs(char **strs);
+long	ft_strtol(char *str, char **endptr, int base);
 
 #endif

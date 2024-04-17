@@ -16,7 +16,7 @@ char	**fill_cmd(t_data *data, char **begin)
 	*begin = ptr;
 	cmd = malloc(sizeof(char *) * (ft_lstsize(data->cmd_param) + 1));
 	if (!cmd)
-		return (perror("Malloc"), close_free_exit(data, FAILURE), NULL);
+		return (perror("malloc"), close_free_exit(data, FAILURE), NULL);
 	node_ptr = data->cmd_param;
 	data->i = -1;
 	while (node_ptr)
@@ -100,6 +100,7 @@ void	parse(t_data *data)
 	char	*ptr;
 	t_list	*node;
 
+	node = NULL;
 	if (check_quote(data))
 		return (error(data, 1, 'q'));
 	if (check_syntax(data))
@@ -113,7 +114,7 @@ void	parse(t_data *data)
 		{
 			node = ft_calloc(1, sizeof(t_list));
 			if (!node)
-				return (perror("Malloc"), close_free_exit(data, FAILURE));
+				return (perror("malloc"), close_free_exit(data, FAILURE));
 			ft_lstadd_back(&data->cmds, node);			
 			parse_cmd(data, node, &ptr);
 			ft_lstclear(&data->cmd_param, NULL);
@@ -121,5 +122,4 @@ void	parse(t_data *data)
 		if (*ptr)
 			ptr++;
 	}
-	data->nb_cmds = ft_lstsize(node);
 }
