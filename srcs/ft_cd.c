@@ -16,19 +16,24 @@ static int	special_cases(t_data *data, t_list *node);
 static int	change_dir(t_list *node);
 static int	minus_case(t_data *data);
 
+void	set_last_status(t_data *data, int i)
+{
+	data->last_status = i;
+}
+
 void	ft_cd(t_data *data, t_list *node)
 {
 	char	*oldpwd;
 
 	if (node->cmd[1] && node->cmd[2])
-		return (ft_putstr_fd("cd: too many arguments\n", 2));
+		return (set_last_status(data, 1) ,ft_putstr_fd("cd: too many arguments\n", 2));
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	if (special_cases(data, node))
 		return (free(oldpwd));
 	if (change_dir(node))
-		return (free(oldpwd));
+		return (set_last_status(data, 1) ,free(oldpwd));
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd)
@@ -65,7 +70,7 @@ static int	minus_case(t_data *data)
 	char	*oldpwd;
 
 	if (!ft_getenv(data->env, "OLDPWD="))
-		return (ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
+		return (set_last_status(data, 1) ,ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);

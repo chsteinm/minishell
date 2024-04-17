@@ -4,6 +4,7 @@ void	error_open(t_data *data, char *file, char **ptr)
 {
 	data->last_status = 1;
 	perror(file);
+	// ft_dprintf(2, "here");
 	while (**ptr && **ptr != '|')
 		(*ptr)++;
 }
