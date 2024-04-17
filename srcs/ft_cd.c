@@ -16,7 +16,7 @@ static int	special_cases(t_data *data, t_list *node);
 static int	change_dir(t_list *node);
 static int	minus_case(t_data *data);
 
-void	ft_cd(t_data *data, t_list *node) //le int n'est pas justifie
+void	ft_cd(t_data *data, t_list *node)
 {
 	char	*oldpwd;
 
@@ -64,20 +64,15 @@ static int	minus_case(t_data *data)
 {
 	char	*oldpwd;
 
+	if (!ft_getenv(data->env, "OLDPWD="))
+		return (ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!data->pwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	free(data->pwd);
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 	if (!data->pwd)
-	{
-		free(oldpwd);
-		if (ft_getenv(data->env, "OLDPWD="))
-			return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
-		else
-			ft_putstr_fd("cd: OLDPWD not set\n", 2);
-		return (-1);
-	}
+		return (free(oldpwd), perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
 	ft_putstr_fd(data->pwd, 1);
