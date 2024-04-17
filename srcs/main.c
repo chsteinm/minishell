@@ -55,7 +55,7 @@ void	give_env_path(t_data *data)
 	ptr = NULL;
 	ptr = getenv("PATH");
 	if (!ptr)
-		return;
+		return ;
 	data->path = ft_split(ptr, ':');
 	if (!data->path)
 	{
@@ -104,7 +104,7 @@ void	sig_handler(int signum)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-	
+
 	(void)argv[argc];
 	signal(SIGINT, sig_handler);
 	signal(SIGOUT, sig_handler);

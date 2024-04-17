@@ -1,6 +1,6 @@
-NAME = minishell 
+NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 PATH_SRCS = ./srcs/
 SRCS =	main.c \
 		close.c \
