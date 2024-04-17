@@ -1,78 +1,35 @@
 #include "../includes/minishell.h"
 
-// int	is_quote_in_quote(char *line, int index, char quote)
-// {
-// 	int	i;
-// 	int	i_in_quotes;
+int	is_quote_open(int actual_quote, int other_quote_type, int index_quote, int index_char)
+{
+	if (actual_quote == 0 && other_quote_type == 0 && index_quote != index_char)
+		actual_quote = 1;
+	else
+		actual_quote = 0;
+	return (actual_quote);
+}
 
-// 	i = 0;
-// 	// dprintf(2, "line = [%s], index = %d, line[index] = [%c], quote = [%c]\n", line, index, line[index], quote);
-// 	while (line[i] && i < index)
-// 	{
-// 		// dprintf(2, "line[i] = %c\n", line[i]);
-// 		i_in_quotes = 0;
-// 		if (line[i] == quote)
-// 		{
-// 			// dprintf(2, "\tin line[i] = quote\n");
-// 			while (line[i_in_quotes] && i_in_quotes < index && (line[i_in_quotes] != quote || i_in_quotes == i))
-// 				i_in_quotes++;
-// 		}
-// 		if (i_in_quotes > index)
-// 		{
-// 			// dprintf(2, "RET1\nline[i] = %c\n", line[i]);
-// 			// dprintf(2, "line = [%s], index = %d, line[index] = [%c], quote = [%c]\n\n", line, index, line[index], quote);
-// 			return (1);
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-int	is_quote_in_quote(char *line, int index)
+int	is_in_quote(char *line, int index)
 {
 	int	i;
-	int	s_quotes = 0;
-	int	d_quotes = 0;
+	int	s_quotes;
+	int	d_quotes;
 
 	i = -1;
+	s_quotes = 0;
+	d_quotes = 0;
 	while (line[++i] && i <= index)
 	{
 		if (line[i] == '\'')
-		{
-			if (s_quotes == 0 && d_quotes == 0 && i != index)
-				s_quotes = 1;
-			else
-				s_quotes = 0;
-		}
+			s_quotes = is_quote_open(s_quotes, d_quotes, i, index);
 		if (line[i] == '"')
-		{
-			if (d_quotes == 0 && s_quotes == 0 && i != index)
-				d_quotes = 1;
-			else
-				d_quotes = 0;
-		}
+			d_quotes = is_quote_open(d_quotes, s_quotes, i, index);
 	}
 	if (d_quotes != 0)
 		return (2);
 	if (s_quotes != 0)
 		return (1);
 	return (0);
-}
-
-int	is_in_quote(char *line, char *ptr, char q)
-{
-	int	s_quote_left;
-	int	s_quote_right;
-
-	s_quote_left = 0;
-	s_quote_right = 0;
-	while (line != ptr)
-		if (*line++ == q)
-			s_quote_left++;
-	while (*ptr++)
-		if (*ptr == q)
-			s_quote_right++;
-	return (s_quote_left % 2 && s_quote_right % 2);
 }
 
 char	*join_3_strs(char *s1, char *s2, char *s3)
@@ -88,17 +45,15 @@ char	*join_3_strs(char *s1, char *s2, char *s3)
 	return (ret);
 }
 
-int		is_sep(char *ptr, int i)
+int	is_sep(char *ptr, int i)
 {
-	// if (!is_in_quote(ptr, ptr + i, '"') && \
-	// 	!is_in_quote(ptr, ptr + i, '\''))
-	if (!is_quote_in_quote(ptr, i))
+	if (!is_in_quote(ptr, i))
 		if (ft_iswhitespace(ptr[i]) || ft_ismeta(ptr[i]))
 			return (1);
 	return (0);
 }
 
-//supprime les quotes qui ne sont pas dans des quotes
+// supprime les quotes qui ne sont pas dans des quotes
 void	strdelquotes(char *str, char *ptr, size_t len)
 {
 	size_t	i;
@@ -107,7 +62,7 @@ void	strdelquotes(char *str, char *ptr, size_t len)
 	i_str = 0;
 	i = -1;
 	while (++i < len)
-		if ((ptr[i] != '"' && ptr[i] != '\'') || is_quote_in_quote(ptr, i))
+		if ((ptr[i] != '"' && ptr[i] != '\'') || is_in_quote(ptr, i))
 			str[i_str++] = ptr[i];
 	str[i_str] = 0;
 }

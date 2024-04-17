@@ -45,8 +45,7 @@ typedef struct s_data
 
 bool	check_quote(t_data *data);
 int		check_syntax(t_data *data);
-int		is_in_quote(char *line, char *ptr, char q);
-int		is_quote_in_quote(char *line, int index);
+int		is_in_quote(char *line, int index);
 void	expand(t_data *data, char **line);
 char	*join_3_strs(char *s1, char *s2, char *s3);
 void	parse(t_data *data);

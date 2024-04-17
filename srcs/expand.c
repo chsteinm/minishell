@@ -74,8 +74,7 @@ void	expand(t_data *data, char **line)
 	i = -1;
 	while (ptr[++i])
 	{
-		//!is_in_quote(ptr, ptr + i, '\''))
-		if (ptr[i] == '$' && ptr[i + 1] && is_quote_in_quote(ptr, i) != 1)
+		if (ptr[i] == '$' && ptr[i + 1] && is_in_quote(ptr, i) != 1)
 		{
 			if (ptr[i + 1] == '$')
 				return (replace_pid(data, line, ptr + i));
