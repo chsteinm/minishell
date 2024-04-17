@@ -1,6 +1,6 @@
 #include "libft.h"
 
-void	ft_free_str_in_strs(char **strs, int i_str)
+void	ft_free_one_str_in_strs(char **strs, int i_str)
 {
 	char	*cpy;
 
