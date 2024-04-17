@@ -14,6 +14,7 @@ SRCS =	main.c \
 		exec_utils.c \
 		ft_exit.c \
 		ft_unset.c \
+		ft_export.c \
 		ft_echo.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
