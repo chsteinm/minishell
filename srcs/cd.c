@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-static int	special_cases(t_data *data, t_list *node);
+static int	special_cases(t_data *data, t_list *node, char **oldpwd);
 static int	error_cases(t_list *node);
 
 int	ft_cd(t_data *data, t_list *node)
@@ -20,12 +20,13 @@ int	ft_cd(t_data *data, t_list *node)
 	char	*oldpwd;
 
 	oldpwd = getcwd(NULL, 0);
-	if (special_cases(data, node) || error_cases(node))
+	if (error_cases(node))
 	{
 		free(oldpwd);
-		close_free_exit(data, FAILURE);
 		return (1);
 	}
+	if (special_cases(data, node, &oldpwd))
+		return (0);
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd || !data->pwd)
@@ -35,34 +36,34 @@ int	ft_cd(t_data *data, t_list *node)
 	}
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
-	free(oldpwd);
-	return (0);
+	return (free(oldpwd), 0);
 }
 
-static int	special_cases(t_data *data, t_list *node)
+static int	special_cases(t_data *data, t_list *node, char **oldpwd)
 {
 	if (ft_strncmp(node->cmd[1], "~", 1) == 0)
 	{
 		ft_export_env(data, "OLDPWD=", data->pwd);
-		data->pwd = ft_getenv(data->env, "HOME=");
+		data->pwd = ft_strdup(ft_getenv(data->env, "HOME="));
 		ft_export_env(data, "PWD=", data->pwd);
 		if (chdir(data->pwd) == -1)
-		{
 			perror("cd");
-			return (1);
-		}
+		
+		return (free(*oldpwd), 1);
 	}
 	else if (ft_strncmp(node->cmd[1], "-", 1) == 0)
 	{
-		ft_export_env(data, "OLDPWD=", data->pwd);
-		data->pwd = ft_getenv(data->env, "OLDPWD=");
+		data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 		ft_export_env(data, "PWD=", data->pwd);
+		ft_export_env(data, "OLDPWD=", data->pwd);
 		ft_putstr_fd(data->pwd, 1);
-		if (chdir(data->env[1] + 4) == -1)
+		ft_putstr_fd("\n", 1);
+		if (chdir(data->pwd) == -1)
 		{
+			printf("here\n");
 			perror("cd");
-			return (1);
 		}
+		return (free(*oldpwd), 1);
 	}
 	return (0);
 }
@@ -70,7 +71,8 @@ static int	special_cases(t_data *data, t_list *node)
 static int	error_cases(t_list *node)
 {
 
-	if (chdir(node->cmd[1]) == -1 && ft_strncmp(node->cmd[1], "~", 1) != 0)
+	if (ft_strncmp(node->cmd[1], "~", 1) != 0 && ft_strncmp(node->cmd[1], "-", 1) != 0 \
+		&& chdir(node->cmd[1]) == -1)
 	{
 		perror("cd");
 		return (1);

@@ -164,7 +164,7 @@ char	*ft_getenv(char **env, char *name)
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], name, len))
-			return (env[i] + len + 1);
+			return (env[i] + len);
 		i++;
 	}
 	return (NULL);
