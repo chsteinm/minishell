@@ -1,5 +1,7 @@
 #include "../includes/minishell.h"
 
+void	insert_new_var
+
 void	ft_export(t_data *data, t_list *node)
 {
 	int		j_cmd;
@@ -23,6 +25,6 @@ void	ft_export(t_data *data, t_list *node)
 			j_env++;
 		free(tmp);
 		if (data->env[j_env])
-			return ; //
+			return ();
 	}
 }
