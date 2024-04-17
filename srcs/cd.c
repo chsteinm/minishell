@@ -20,13 +20,13 @@ int	ft_cd(t_data *data, t_list *node)
 	char	*oldpwd;
 
 	oldpwd = getcwd(NULL, 0);
+	if (special_cases(data, node, &oldpwd))
+		return (0);
 	if (error_cases(node))
 	{
 		free(oldpwd);
 		return (1);
 	}
-	if (special_cases(data, node, &oldpwd))
-		return (0);
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd || !data->pwd)
@@ -41,6 +41,8 @@ int	ft_cd(t_data *data, t_list *node)
 
 static int	special_cases(t_data *data, t_list *node, char **oldpwd)
 {
+	if (!node->cmd[1])
+		return (free(*oldpwd), 1);
 	if (ft_strncmp(node->cmd[1], "~", 1) == 0)
 	{
 		ft_export_env(data, "OLDPWD=", data->pwd);
@@ -70,16 +72,15 @@ static int	special_cases(t_data *data, t_list *node, char **oldpwd)
 
 static int	error_cases(t_list *node)
 {
-
+	if (node->cmd[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
+	}
 	if (ft_strncmp(node->cmd[1], "~", 1) != 0 && ft_strncmp(node->cmd[1], "-", 1) != 0 \
 		&& chdir(node->cmd[1]) == -1)
 	{
 		perror("cd");
-		return (1);
-	}
-	if (node->cmd[2])
-	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	return (0);
