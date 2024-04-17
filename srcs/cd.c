@@ -14,29 +14,27 @@
 
 static int	special_cases(t_data *data, t_list *node);
 static int	change_dir(t_list *node);
-static void	minus_case(t_data *data);
+static int	minus_case(t_data *data);
 
 int	ft_cd(t_data *data, t_list *node)
 {
 	char	*oldpwd;
 
-	if (node->cmd[2])
-	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
+	if (!node->cmd[1])
 		return (1);
-	}
+	if (node->cmd[2])
+		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
 	oldpwd = ft_strdup(data->pwd);
+	if (!oldpwd)
+		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	if (special_cases(data, node))
 		return (free(oldpwd), 0);
 	if (change_dir(node))
 		return (free(oldpwd), 1);
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
-	if (!oldpwd || !data->pwd)
-	{
-		ft_putstr_fd("malloc failed\n", 2);
-		close_free_exit(data, FAILURE);
-	}
+	if (!oldpwd)
+		return (perror("getcwd"), close_free_exit(data, FAILURE), -1);
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
 	return (free(oldpwd), 0);
@@ -44,21 +42,16 @@ int	ft_cd(t_data *data, t_list *node)
 
 static int	special_cases(t_data *data, t_list *node)
 {
-	if (!node->cmd[1])
-		return (1);
 	if (ft_strncmp(node->cmd[1], "~", 1) == 0)
 	{
 		ft_export_env(data, "OLDPWD=", data->pwd);
+		free(data->pwd);
 		data->pwd = ft_strdup(ft_getenv(data->env, "HOME="));
 		if (!data->pwd)
-		{
-			ft_putstr_fd("malloc failed\n", 2);
-			close_free_exit(data, FAILURE);
-		}
+			return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 		ft_export_env(data, "PWD=", data->pwd);
 		if (chdir(data->pwd) == -1)
 			perror("cd");
-		
 		return (1);
 	}
 	else if (ft_strncmp(node->cmd[1], "-", 1) == 0)
@@ -69,24 +62,23 @@ static int	special_cases(t_data *data, t_list *node)
 	return (0);
 }
 
-static void	minus_case(t_data *data)
+static int	minus_case(t_data *data)
 {
 	char	*oldpwd;
 
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
-	if (!oldpwd)
-	{
-		ft_putstr_fd("malloc failed\n", 2);
-		close_free_exit(data, FAILURE);
-	}
+	if (!data->pwd)
+		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
+	free(data->pwd);
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 	if (!data->pwd)
 	{
+		free(oldpwd);
 		if (ft_getenv(data->env, "OLDPWD="))
-			ft_putstr_fd("malloc failed\n", 2);
+			return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 		else
 			ft_putstr_fd("cd: OLDPWD not set\n", 2);
-		return ;
+		return (-1);
 	}
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
@@ -94,6 +86,7 @@ static void	minus_case(t_data *data)
 	ft_putstr_fd("\n", 1);
 	if (chdir(data->pwd) == -1)
 		perror("cd");
+	return (free(oldpwd), 0);
 }
 
 static int	change_dir(t_list *node)
