@@ -67,7 +67,7 @@ static int	minus_case(t_data *data)
 	if (!ft_getenv(data->env, "OLDPWD="))
 		return (ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
-	if (!data->pwd)
+	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	free(data->pwd);
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
