@@ -16,15 +16,15 @@ static int	special_cases(t_data *data, t_list *node);
 static int	change_dir(t_list *node);
 static int	minus_case(t_data *data);
 
-int	ft_cd(t_data *data, t_list *node)
+int	ft_cd(t_data *data, t_list *node) //le int n'est pas justifie
 {
 	char	*oldpwd;
 
 	if (!node->cmd[1])
-		return (1);
+		return (1); //bah non, "cd" c'est la meme chose que "cd ~" x)
 	if (node->cmd[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
-	oldpwd = ft_strdup(data->pwd);
+	oldpwd = ft_strdup(data->pwd); //il faut prendre le pwd de data->env et non celui ci 
 	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	if (special_cases(data, node))
