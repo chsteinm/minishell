@@ -23,10 +23,10 @@ int	ft_cd(t_data *data, t_list *node)
 	if (special_cases(data, node) || error_cases(node))
 	{
 		free(oldpwd);
-		close_free_exit(data, FAILURE); // TODO: its not the good way to exit
+		close_free_exit(data, FAILURE);
 		return (1);
 	}
-
+	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd || !data->pwd)
 	{

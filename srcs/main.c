@@ -67,7 +67,6 @@ void	give_env_path(t_data *data)
 void	init_data(t_data *data, char **env)
 {
 	ft_bzero((char *)data, sizeof(t_data));
-	data->pwd = getcwd(NULL, 0);
 	data->pid = fork(); // pour le cas où on rentre $$ qui correspond au pid
 	if (data->pid == -1)
 	{
