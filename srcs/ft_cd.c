@@ -16,33 +16,31 @@ static int	special_cases(t_data *data, t_list *node);
 static int	change_dir(t_list *node);
 static int	minus_case(t_data *data);
 
-int	ft_cd(t_data *data, t_list *node) //le int n'est pas justifie
+void	ft_cd(t_data *data, t_list *node) //le int n'est pas justifie
 {
 	char	*oldpwd;
 
-	if (!node->cmd[1])
-		return (1); //bah non, "cd" c'est la meme chose que "cd ~" x)
-	if (node->cmd[2])
-		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
-	oldpwd = ft_strdup(data->pwd); //il faut prendre le pwd de data->env et non celui ci 
+	if (node->cmd[1] && node->cmd[2])
+		return (ft_putstr_fd("cd: too many arguments\n", 2));
+	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!oldpwd)
-		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	if (special_cases(data, node))
-		return (free(oldpwd), 0);
+		return (free(oldpwd));
 	if (change_dir(node))
-		return (free(oldpwd), 1);
+		return (free(oldpwd));
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd)
-		return (perror("getcwd"), close_free_exit(data, FAILURE), -1);
+		return (perror("getcwd"), close_free_exit(data, FAILURE));
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
-	return (free(oldpwd), 0);
+	return (free(oldpwd));
 }
 
 static int	special_cases(t_data *data, t_list *node)
 {
-	if (ft_strncmp(node->cmd[1], "~", 1) == 0)
+	if (!node->cmd[1] || ft_strncmp(node->cmd[1], "~", 1) == 0)
 	{
 		ft_export_env(data, "OLDPWD=", data->pwd);
 		free(data->pwd);

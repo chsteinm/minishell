@@ -4,8 +4,8 @@ bool	exec_builtins_in_parent(t_data *data, t_list *node)
 {
 	if (!to_exec(node))
 		return (FALSE);
-	// if (!ft_strncmp(*node->cmd, "cd", 3))
-	// 	return (ft_cd(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "cd", 3))
+		return (ft_cd(data, node), TRUE);
 	// if (!ft_strncmp(*node->cmd, "export", 7))
 	// 	return (ft_export(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "unset", 6))

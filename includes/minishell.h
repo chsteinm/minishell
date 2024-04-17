@@ -64,18 +64,13 @@ void	close_all_fds(t_list *head);
 void	close_fds(t_list *node);
 void	final_free(t_data *data);
 
-int		ft_cd(t_data *data, t_list *node);
+void	ft_cd(t_data *data, t_list *node);
 int		ft_pwd(t_data *data, t_list *node);
 void	ft_export_env(t_data *data, char *name, char *value);
 char	*ft_getenv(char **env, char *name);
 void	ft_export(t_data *data, t_list *node);
 void	ft_echo(t_data *data, t_list *node);
-
-
-
 void	ft_exit(t_data *data, t_list *node);
 void	ft_unset(t_data *data, t_list *node);
-void	ft_echo(t_data *data, t_list *node);
-void	ft_export(t_data *data, t_list *node);
 
 #endif
