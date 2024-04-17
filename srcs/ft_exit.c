@@ -5,12 +5,12 @@ void	arg_error(t_data *data, t_list *node, int error)
 	if (error == 2)
 	{
 		ft_dprintf(2, ERR_EXIT);
-		data->last_status = 2;
+		data->last_status = 1;
 	}
 	else
 	{
 		ft_dprintf(2, ERR_EXIT_N, node->cmd[1]);
-		data->last_status = 1;
+		data->last_status = 2;
 	}
 	return (close_free_exit(data, 0));
 }
