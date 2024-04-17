@@ -54,8 +54,9 @@ char	*join_3_strs(char *s1, char *s2, char *s3)
 
 int		is_sep(char *ptr, int i)
 {
-	if (!is_in_quote(ptr, ptr + i, '"') && \
-		!is_in_quote(ptr, ptr + i, '\''))
+	// if (!is_in_quote(ptr, ptr + i, '"') && \
+	// 	!is_in_quote(ptr, ptr + i, '\''))
+	if (!is_quote_in_quote(ptr, i))
 		if (ft_iswhitespace(ptr[i]) || ft_ismeta(ptr[i]))
 			return (1);
 	return (0);

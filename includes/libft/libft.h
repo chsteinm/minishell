@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: Maya <Maya@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 16:33:48 by chrstein          #+#    #+#             */
-/*   Updated: 2024/02/15 20:58:43 by chrstein         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:04:49 by Maya             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int		ft_tolower(int c);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *str, int c);
+int		ft_strchr_index(char *s, char *to_find);
 char	*ft_strdup(const char *src);
 char	*ft_strndup(const char *ptr, size_t len);
 char	*ft_strdelspace(char *src);

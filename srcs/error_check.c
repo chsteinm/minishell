@@ -20,9 +20,11 @@ int	check_space(t_data *data)
 	index = 0;
 	while (*tmp)
 	{
-		if ((*tmp == '>' || *tmp == '<') && ft_iswhitespace(*(tmp + 1)) && \
+		/*\
 		!is_in_quote(data->line, tmp, '\'') && \
-		!is_in_quote(data->line, tmp, '"'))
+		!is_in_quote(data->line, tmp, '"'))*/
+		if ((*tmp == '>' || *tmp == '<') && ft_iswhitespace(*(tmp + 1)) && \
+		!is_quote_in_quote(data->line, ft_strchr_index(data->line, tmp)))
 		{
 			while (ft_iswhitespace(tmp[index]))
 				index++;
@@ -45,9 +47,10 @@ int	check_syntax(t_data *data)
 	ptr = data->no_space_line;
 	while (*ptr)
 	{
+		// !is_in_quote(data->no_space_line, ptr, '\'') && \
+		// !is_in_quote(data->no_space_line, ptr, '"'))
 		if (ft_ismeta(*ptr) && \
-		!is_in_quote(data->no_space_line, ptr, '\'') && \
-		!is_in_quote(data->no_space_line, ptr, '"'))
+		!is_quote_in_quote(data->no_space_line, ft_strchr_index(data->no_space_line, ptr)))
 		{
 			if (*ptr == '|' && (ptr[1] == '|' || \
 			ptr[1] == '\0' || ptr == data->no_space_line))
