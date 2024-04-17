@@ -43,10 +43,25 @@ char	*init_var_name(t_data *data, char *to_export, int *len)
 	len_var = 0;
 	while (var_name[len_var] != '=')
 		if (!(var_name[++len_var]))
-			return (NULL);
+			return (free(var_name), var_name = NULL);
 	var_name[++len_var] = 0;
 	*len = len_var;
 	return (var_name);
+}
+
+void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
+{
+	char	**new_env;
+	size_t	len_env;
+
+	len_env = ft_strssize(data->env);
+	new_env = ft_strsdup(data->env, len_env + 1);
+	if (!new_env)
+		return (perror("Malloc"), close_free_exit(data, FAILURE));
+	new_env[len_env] = node->cmd[j_cmd];
+	node->cmd[j_cmd] = NULL;
+	ft_free_strings(data->env);
+	data->env = new_env;
 }
 
 void	ft_export(t_data *data, t_list *node)
@@ -62,12 +77,16 @@ void	ft_export(t_data *data, t_list *node)
 		if (!is_valid_identifier(data, node->cmd[j_cmd]))
 			continue;
 		var_name = init_var_name(data, node->cmd[j_cmd], &len_var);
+		if (!var_name)
+			continue;
 		j_env = 0;
 		while (data->env[j_env] && \
 		!ft_strnstr(data->env[j_env], var_name, len_var))
 			j_env++;
 		free(var_name);
 		if (data->env[j_env])
-			return (update_var(data, node, j_cmd, j_env));
+			update_var(data, node, j_cmd, j_env);
+		else
+			add_var_to_env(data, node, j_cmd);
 	}
 }
