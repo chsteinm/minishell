@@ -2,7 +2,6 @@
 
 bool	exec_builtins_in_parent(t_data *data, t_list *node)
 {
-	(void)data;
 	if (!to_exec(node))
 		return (FALSE);
 	// if (!ft_strncmp(*node->cmd, "cd", 3))
@@ -18,8 +17,6 @@ bool	exec_builtins_in_parent(t_data *data, t_list *node)
 
 bool	exec_builtins_in_child(t_data *data, t_list *node)
 {
-	(void)data;
-	(void)node;
 	if (!ft_strncmp(*node->cmd, "echo", 5))
 		return (ft_echo(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "pwd", 4))
