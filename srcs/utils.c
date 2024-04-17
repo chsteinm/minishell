@@ -1,25 +1,61 @@
 #include "../includes/minishell.h"
 
+// int	is_quote_in_quote(char *line, int index, char quote)
+// {
+// 	int	i;
+// 	int	i_in_quotes;
+
+// 	i = 0;
+// 	// dprintf(2, "line = [%s], index = %d, line[index] = [%c], quote = [%c]\n", line, index, line[index], quote);
+// 	while (line[i] && i < index)
+// 	{
+// 		// dprintf(2, "line[i] = %c\n", line[i]);
+// 		i_in_quotes = 0;
+// 		if (line[i] == quote)
+// 		{
+// 			// dprintf(2, "\tin line[i] = quote\n");
+// 			while (line[i_in_quotes] && i_in_quotes < index && (line[i_in_quotes] != quote || i_in_quotes == i))
+// 				i_in_quotes++;
+// 		}
+// 		if (i_in_quotes > index)
+// 		{
+// 			// dprintf(2, "RET1\nline[i] = %c\n", line[i]);
+// 			// dprintf(2, "line = [%s], index = %d, line[index] = [%c], quote = [%c]\n\n", line, index, line[index], quote);
+// 			return (1);
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
 int	is_quote_in_quote(char *line, int index)
 {
 	int	i;
-	int	i_in_quotes;
+	int	s_quotes = 0;
+	int	d_quotes = 0;
 
-	i = 0;
-	while (line[i] && i < index)
+	i = -1;
+	while (line[++i] && i <= index)
 	{
-		i_in_quotes = 0;
 		if (line[i] == '\'')
-			while (line[i_in_quotes] && (line[i_in_quotes] != '\'' || i_in_quotes == i))
-				i_in_quotes++;
-		i_in_quotes = 0;
+		{
+			if (s_quotes == 0 && d_quotes == 0 && i != index)
+				s_quotes = 1;
+			else
+				s_quotes = 0;
+		}
 		if (line[i] == '"')
-			while (line[i_in_quotes] && (line[i_in_quotes] != '"' || i_in_quotes == i))
-				i_in_quotes++;
-		if (i_in_quotes > index)
-			return (1);
-		i++;
+		{
+			if (d_quotes == 0 && s_quotes == 0 && i != index)
+				d_quotes = 1;
+			else
+				d_quotes = 0;
+		}
 	}
+	if (d_quotes != 0)
+		return (2);
+	if (s_quotes != 0)
+		return (1);
 	return (0);
 }
 
