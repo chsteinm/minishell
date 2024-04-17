@@ -26,6 +26,7 @@
 # define ERR_EXIT_N "exit: %s: numeric argument required\n"
 # define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 # define ERR_CD "cd: %s: No such file or directory\n"
+# define ERR_EXP "export: `%s': not a valid identifier\n"
 
 typedef struct s_data
 {
