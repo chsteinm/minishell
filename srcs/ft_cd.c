@@ -49,7 +49,7 @@ static int	special_cases(t_data *data, t_list *node)
 			return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 		ft_export_env(data, "PWD=", data->pwd);
 		if (chdir(data->pwd) == -1)
-			perror("cd");
+			ft_dprintf(2, ERR_CD, data->pwd);
 		return (1);
 	}
 	else if (ft_strncmp(node->cmd[1], "-", 1) == 0)
@@ -73,12 +73,12 @@ static int	minus_case(t_data *data)
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 	if (!data->pwd)
 		return (free(oldpwd), perror("Malloc"), close_free_exit(data, FAILURE), -1);
+	if (chdir(data->pwd) == -1)
+		return (free(oldpwd), ft_dprintf(2, ERR_CD, data->pwd));
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
 	ft_putstr_fd(data->pwd, 1);
 	ft_putstr_fd("\n", 1);
-	if (chdir(data->pwd) == -1)
-		perror("cd");
 	return (free(oldpwd), 0);
 }
 
@@ -86,7 +86,7 @@ static int	change_dir(t_list *node)
 {
 	if (chdir(node->cmd[1]) == -1)
 	{
-		perror("cd");
+		ft_dprintf(2, ERR_CD, node->cmd[1]);
 		return (1);
 	}
 	return (0);
