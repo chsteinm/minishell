@@ -96,7 +96,7 @@ void	sig_handler(int signum)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -104,7 +104,7 @@ void	sig_handler(int signum)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
-	
+
 	(void)argv[argc];
 	signal(SIGINT, sig_handler);
 	signal(SIGOUT, sig_handler);

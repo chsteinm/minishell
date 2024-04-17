@@ -1,9 +1,32 @@
 #include "../includes/minishell.h"
 
-int		is_in_quote(char *line, char *ptr, char q)
+int	is_quote_in_quote(char *line, int index)
 {
-	int s_quote_left;
-	int s_quote_right;
+	int	i;
+	int	i_in_quotes;
+
+	i = 0;
+	while (line[i] && i < index)
+	{
+		i_in_quotes = 0;
+		if (line[i] == '\'')
+			while (line[i_in_quotes] && (line[i_in_quotes] != '\'' || i_in_quotes == i))
+				i_in_quotes++;
+		i_in_quotes = 0;
+		if (line[i] == '"')
+			while (line[i_in_quotes] && (line[i_in_quotes] != '"' || i_in_quotes == i))
+				i_in_quotes++;
+		if (i_in_quotes > index)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	is_in_quote(char *line, char *ptr, char q)
+{
+	int	s_quote_left;
+	int	s_quote_right;
 
 	s_quote_left = 0;
 	s_quote_right = 0;
@@ -47,11 +70,8 @@ void	strdelquotes(char *str, char *ptr, size_t len)
 	i_str = 0;
 	i = -1;
 	while (++i < len)
-	{
-		if ((ptr[i] != '"' && ptr[i] != '\'') || \
-		is_in_quote(ptr, ptr + i, '"') || is_in_quote(ptr, ptr + i, '\''))
-				str[i_str++] = ptr[i];
-	}
+		if ((ptr[i] != '"' && ptr[i] != '\'') || is_quote_in_quote(ptr, i))
+			str[i_str++] = ptr[i];
 	str[i_str] = 0;
 }
 

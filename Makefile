@@ -1,6 +1,6 @@
-NAME = minishell 
+NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 PATH_SRCS = ./srcs/
 SRCS =	main.c \
 		close.c \
@@ -21,7 +21,7 @@ LIBFT = ./includes/libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@ -lreadline -lhistory
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@ -lreadline #-lhistory
 	@echo "\nmimishell is ready for use!\n"
 
 $(BUILD_DIR)/%.o: $(PATH_SRCS)%.c Makefile $(LIBFT)
