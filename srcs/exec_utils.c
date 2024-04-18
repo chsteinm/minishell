@@ -74,17 +74,18 @@ void	find_good_path(t_data *data, t_list *node)
 	return (error_cmd(data, node));
 }
 
-bool	to_exec(t_list *node)
+void	exec_check_file_error(t_data *data, t_list *node)
 {
-	if (!node)
-		return (FALSE);
-	if (!node->cmd)
-		return (FALSE);
-	if (!node->lim && node->fd_in == -1)
-		return (FALSE);
-	if (node->fd_out == -1)
-		return (FALSE);
-	return (TRUE);
+	if (ft_strncmp(*node->cmd, "./", 2) == 0 || ft_strncmp(*node->cmd, "/", 1) == 0)
+	{
+		ft_dprintf(STDERR_FILENO, ERR_IS_FILE, *node->cmd);
+		close_free_exit(data, 126);
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
+		close_free_exit(data, 127);
+	}	
 }
 
 void	make_pipes(t_data *data, t_list *node)
