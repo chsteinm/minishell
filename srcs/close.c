@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:09 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 18:18:25 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:22:15 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	close_free_exit(t_data *data, int ret)
 	if (ret != SUCCESS || ret != 0)
 	{
 		if (ret == MUST_EXIT)
-			ret == FAILURE;
+			ret = FAILURE;
 		ft_free_and_null(&data->pwd);
 		ft_free_strings(data->path);
 		ft_free_strings(data->env);
