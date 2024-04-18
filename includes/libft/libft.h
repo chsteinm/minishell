@@ -19,6 +19,7 @@
 # include <stdarg.h>
 # include <stdbool.h>
 # include <limits.h>
+# include <fcntl.h>
 # include "get_next_line.h"
 
 # define SUCCESS 0
@@ -32,7 +33,7 @@
 typedef struct s_list
 {
 	char			**cmd;
-	char  			*file_in;
+	char			*file_in;
 	char			*file_out;
 	int				fd_in;
 	int				fd_out;

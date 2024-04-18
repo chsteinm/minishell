@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chrstein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
+/*   Updated: 2024/04/18 02:24:23 by chrstein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -6,7 +18,6 @@
 # include <stdio.h>
 # include <string.h>
 # include <errno.h>
-# include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
@@ -27,7 +38,6 @@
 # define ERR_QUOTE "quote is not closed\n"
 # define ERR_EXIT "exit: too many arguments\n"
 # define ERR_EXIT_N "exit: %s: numeric argument required\n"
-# define ERR_HERE_DOC "warning: here-document at line %d delimited by end-of-file (wanted `%s')\n"
 # define ERR_CD "cd: %s: No such file or directory\n"
 # define ERR_EXP "export: `%s': not a valid identifier\n"
 
@@ -35,8 +45,8 @@ typedef struct s_data
 {
 	t_list	*cmd_param;
 	t_list	*cmds;
-	char 	**env;
-	char 	**path;
+	char	**env;
+	char	**path;
 	char	*pwd;
 	char	*line;
 	char	*no_space_line;
