@@ -32,7 +32,7 @@
 typedef struct s_list
 {
 	char			**cmd;
-	char  			*file_in;
+	char			*file_in;
 	char			*file_out;
 	int				fd_in;
 	int				fd_out;

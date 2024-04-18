@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_dprintf.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chrstein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 02:25:29 by chrstein          #+#    #+#             */
+/*   Updated: 2024/04/18 02:25:34 by chrstein         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 int	print_c_fd(va_list args, int fd)
@@ -17,9 +29,11 @@ int	print_convert_fd(va_list args, const char *str, int fd)
 	else if (*str == 'p')
 		return (print_p_fd(args, fd));
 	else if (*str == 'x')
-		return (ft_putnbr_base_fd(va_arg(args, unsigned int), BASE16LOW, 16, fd));
+		return (ft_putnbr_base_fd(va_arg(args, unsigned int), \
+		BASE16LOW, 16, fd));
 	else if (*str == 'X')
-		return (ft_putnbr_base_fd(va_arg(args, unsigned int), BASE16UP, 16, fd));
+		return (ft_putnbr_base_fd(va_arg(args, unsigned int), \
+		BASE16UP, 16, fd));
 	else
 		return (write(fd, str, 1));
 }
