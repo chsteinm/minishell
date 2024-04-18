@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_check.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 15:29:17 by chrstein          #+#    #+#             */
+/*   Updated: 2024/04/18 15:33:51 by chrstein         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	error(t_data *data, int error, char c)
@@ -45,7 +57,8 @@ int	check_syntax(t_data *data)
 	while (*ptr)
 	{
 		if (ft_ismeta(*ptr) && \
-		!is_in_quote(data->no_space_line, ft_strchr_index(data->no_space_line, ptr)))
+		!is_in_quote(data->no_space_line, \
+		ft_strchr_index(data->no_space_line, ptr)))
 		{
 			if (*ptr == '|' && (ptr[1] == '|' || \
 			ptr[1] == '\0' || ptr == data->no_space_line))

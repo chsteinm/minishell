@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
+/*   Updated: 2024/04/18 15:32:40 by chrstein         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	wait_all_pid(t_data *data)
@@ -64,7 +76,7 @@ void	sig_handler(int signum)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -79,6 +91,7 @@ int	main(int argc, char **argv, char **env)
 	init_data(&data, env);
 	while (1)
 	{
+		write(1, CLEAR, 10);
 		data.line = readline("minishell: ");
 		if (!data.line)
 			break ;
