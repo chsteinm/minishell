@@ -13,7 +13,11 @@ SRCS =	main.c \
 		exec.c \
 		exec_utils.c \
 		ft_exit.c \
-		ft_unset.c
+		ft_unset.c \
+		ft_export.c \
+		ft_echo.c \
+		ft_cd.c \
+		ft_cd_utils.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a
@@ -21,8 +25,8 @@ LIBFT = ./includes/libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@ -lreadline #-lhistory
-	@echo "\nmimishell is ready for use!\n"
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@ -lreadline -lhistory
+	@echo "\nminishell is ready for use!\n"
 
 $(BUILD_DIR)/%.o: $(PATH_SRCS)%.c Makefile $(LIBFT)
 	@mkdir -p $(BUILD_DIR)

@@ -2,7 +2,8 @@
 
 void	error_here_doc(t_data *data, t_list *node)
 {
-	ft_dprintf(2, ERR_HERE_DOC, data->nb_line_hd, node->lim);
+	ft_dprintf(2, "warning: here-document at line %d", data->nb_line_hd);
+	ft_dprintf(2, "delimited by end-of-file (wanted `%s')\n", node->lim);
 }
 
 void	write_until_lim(t_data *data, t_list *node)

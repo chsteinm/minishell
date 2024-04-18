@@ -25,6 +25,11 @@ void	make_dup2(t_data *data, t_list *node)
 
 void	error_cmd(t_data *data, t_list *node)
 {
+	if (opendir(*node->cmd))
+	{
+		ft_dprintf(STDERR_FILENO, ERR_IS_FILE, *node->cmd);
+		close_free_exit(data, 126);
+	}
 	if (!access(*node->cmd, F_OK) && access(*node->cmd, R_OK))
 	{
 		ft_dprintf(STDERR_FILENO, ERR_DENIED, *node->cmd);
@@ -32,7 +37,10 @@ void	error_cmd(t_data *data, t_list *node)
 	}
 	else
 	{
-		ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
+		if (ft_strncmp(*node->cmd, "./", 2) == 0 || ft_strncmp(*node->cmd, "/", 1) == 0)
+			 ft_dprintf(STDERR_FILENO, "%s: No such file or directory\n", *node->cmd);
+		else
+			ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
 		close_free_exit(data, 127);
 	}
 }
@@ -42,6 +50,8 @@ void	find_good_path(t_data *data, t_list *node)
 	char	*cmd_with_path;
 	size_t	i;
 
+	if (opendir(*node->cmd))
+		exec_check_file_error(data, node);
 	if (!access(*node->cmd, X_OK))
 		return ;
 	i = -1;
@@ -64,17 +74,18 @@ void	find_good_path(t_data *data, t_list *node)
 	return (error_cmd(data, node));
 }
 
-bool	to_exec(t_list *node)
+void	exec_check_file_error(t_data *data, t_list *node)
 {
-	if (!node)
-		return (FALSE);
-	if (!node->cmd)
-		return (FALSE);
-	if (!node->lim && node->fd_in == -1)
-		return (FALSE);
-	if (node->fd_out == -1)
-		return (FALSE);
-	return (TRUE);
+	if (ft_strncmp(*node->cmd, "./", 2) == 0 || ft_strncmp(*node->cmd, "/", 1) == 0)
+	{
+		ft_dprintf(STDERR_FILENO, ERR_IS_FILE, *node->cmd);
+		close_free_exit(data, 126);
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
+		close_free_exit(data, 127);
+	}	
 }
 
 void	make_pipes(t_data *data, t_list *node)

@@ -6,7 +6,7 @@
 /*   By: chrstein <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 17:22:17 by chrstein          #+#    #+#             */
-/*   Updated: 2024/02/06 17:22:20 by chrstein         ###   ########.fr       */
+/*   Updated: 2024/04/18 02:33:45 by chrstein         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,14 @@ char	**ft_strsdup(char **strs, size_t size)
 	i = -1;
 	while (++i < size)
 	{
-		ret[i] = ft_strdup(strs[i]);
-		if (!ret[i])
-			return (ft_free_strings(ret), NULL);
+		if (!strs[i])
+			ret[i] = NULL;
+		else
+		{
+			ret[i] = ft_strdup(strs[i]);
+			if (!ret[i])
+				return (ft_free_strings(ret), NULL);
+		}
 	}
 	ret[i] = NULL;
 	return (ret);

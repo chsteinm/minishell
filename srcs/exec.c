@@ -1,14 +1,26 @@
 #include "../includes/minishell.h"
 
+bool	to_exec(t_list *node)
+{
+	if (!node)
+		return (FALSE);
+	if (!node->cmd)
+		return (FALSE);
+	if (!node->lim && node->fd_in == -1)
+		return (FALSE);
+	if (node->fd_out == -1)
+		return (FALSE);
+	return (TRUE);
+}
+
 bool	exec_builtins_in_parent(t_data *data, t_list *node)
 {
-	(void)data;
 	if (!to_exec(node))
 		return (FALSE);
-	// if (!ft_strncmp(*node->cmd, "cd", 3))
-	// 	return (ft_cd(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "export", 7))
-	// 	return (ft_export(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "cd", 3))
+		return (ft_cd(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "export", 7))
+		return (ft_export(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "unset", 6))
 		return (ft_unset(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "exit", 5))
@@ -18,18 +30,16 @@ bool	exec_builtins_in_parent(t_data *data, t_list *node)
 
 bool	exec_builtins_in_child(t_data *data, t_list *node)
 {
-	(void)data;
-	(void)node;
-	// if (!ft_strncmp(*node->cmd, "echo", 5))
-	// 	return (ft_echo(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "pwd", 4))
-	// 	return (ft_pwd(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "echo", 5))
+		return (ft_echo(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "pwd", 4))
+		return (ft_printf("%s\n", data->pwd), TRUE);
 	if (!ft_strncmp(*node->cmd, "env", 4))
 		return (ft_printstrs(data->env), TRUE);
-	// if (!ft_strncmp(*node->cmd, "cd", 3))
-	// 	return (ft_cd(data, node), TRUE);
-	// if (!ft_strncmp(*node->cmd, "export", 7))
-	// 	return (ft_export(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "cd", 3))
+		return (ft_cd(data, node), TRUE);
+	if (!ft_strncmp(*node->cmd, "export", 7))
+		return (ft_export(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "unset", 6))
 		return (ft_unset(data, node), TRUE);
 	if (!ft_strncmp(*node->cmd, "exit", 5))
@@ -73,6 +83,8 @@ void	exec(t_data *data, t_list *node)
 				exec_in_child(data, node);
 			}
 		}
+		else if (node->prev)
+			waitpid(node->prev->pid, NULL, 0);
 		node = node->next;
 	}
 }

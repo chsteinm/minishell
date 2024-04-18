@@ -55,7 +55,7 @@ void	give_env_path(t_data *data)
 	ptr = NULL;
 	ptr = getenv("PATH");
 	if (!ptr)
-		return;
+		return ;
 	data->path = ft_split(ptr, ':');
 	if (!data->path)
 	{
@@ -112,7 +112,7 @@ int	main(int argc, char **argv, char **env)
 	// write(1, CLEAR, 11); //met l'invite de commande tout en haut de la fenêtre
 	while (1)
 	{
-		data.line = readline("mimishell: ");
+		data.line = readline("minishell: ");
 		if (!data.line)
 			break ;
 		if (*data.line)

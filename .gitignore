@@ -1,8 +1,10 @@
 .build
 includes/libft/.build
 includes/libft/libft.a
+minishell_tester
 minishell
 in
 out
 nop
 miniNOP
+testdir
