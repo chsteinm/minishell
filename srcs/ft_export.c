@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:15 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:13:17 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:34:26 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,6 @@ void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
 	node->cmd[j_cmd] = NULL;
 	ft_free_strings(data->env);
 	data->env = new_env;
-}
-
-char	*add_to_list(t_data *data, char *var)
-{
-	char	*var_dup;
-
-	var_dup = ft_strdup(var);
-	if (!var_dup)
-		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
-	ft_lstadd_back(&data->var_no_value, ft_lstnew(var_dup));
-	return (var_dup);
 }
 
 void	ft_export(t_data *data, t_list *node)

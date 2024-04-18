@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:31:34 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:35:12 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int		ft_pwd(t_data *data, t_list *node);
 void	ft_export_env(t_data *data, char *name, char *value);
 char	*ft_getenv(char **env, char *name);
 void	ft_export(t_data *data, t_list *node);
+char	*add_to_list(t_data *data, char *var);
 void	export_print(t_data *data);
 void	ft_echo(t_data *data, t_list *node);
 void	ft_exit(t_data *data, t_list *node);
