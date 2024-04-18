@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 16:33:26 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:13:50 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	wait_all_pid(t_data *data)
 {
 	t_list	*node;
+	bool	must_exit;
 
+	must_exit = FALSE;
 	node = data->cmds;
 	close_all_fds(node);
 	while (node)
@@ -23,9 +25,13 @@ void	wait_all_pid(t_data *data)
 		if (node->pid)
 			waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
+		if (WEXITSTATUS(data->last_status))
+			data->last_status = WEXITSTATUS(data->last_status);
+		if (data->last_status == MUST_EXIT)
+			must_exit = TRUE;
 	}
-	if (WEXITSTATUS(data->last_status))
-		data->last_status = WEXITSTATUS(data->last_status);
+	if (must_exit == TRUE)
+		close_free_exit(data, FAILURE);
 }
 
 void	give_env_path(t_data *data)

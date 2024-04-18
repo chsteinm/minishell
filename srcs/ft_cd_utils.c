@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:26:16 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/18 16:26:17 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:17:23 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	malloc_error(t_data *data)
 {
 	ft_putstr_fd("malloc failed\n", 2);
-	close_free_exit(data, FAILURE);
+	close_free_exit(data, MUST_EXIT);
 }
 
 void	ft_export_env(t_data *data, char *name, char *value)

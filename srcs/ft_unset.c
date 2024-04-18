@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:21 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:30:22 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:20:23 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_unset(t_data *data, t_list *node)
 	{
 		tmp = ft_strjoin(node->cmd[j_cmd], "=");
 		if (!tmp)
-			return (perror("Malloc"), close_free_exit(data, FAILURE));
+			return (perror("Malloc"), close_free_exit(data, MUST_EXIT));
 		len_tmp = ft_strlen(tmp);
 		j_env = 0;
 		while (data->env[j_env] && !ft_strnstr(data->env[j_env], tmp, len_tmp))

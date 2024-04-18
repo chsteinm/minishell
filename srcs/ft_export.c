@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:15 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:30:15 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:20:15 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*init_var_name(t_data *data, char *to_export, int *len)
 
 	var_name = ft_strdup(to_export);
 	if (!var_name)
-		return (perror("Malloc"), close_free_exit(data, FAILURE), NULL);
+		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
 	len_var = 0;
 	while (var_name[len_var] != '=')
 		if (!(var_name[++len_var]))
@@ -69,7 +69,7 @@ void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
 	len_env = ft_strssize(data->env);
 	new_env = ft_strsdup(data->env, len_env + 1);
 	if (!new_env)
-		return (perror("Malloc"), close_free_exit(data, FAILURE));
+		return (perror("Malloc"), close_free_exit(data, MUST_EXIT));
 	new_env[len_env] = node->cmd[j_cmd];
 	node->cmd[j_cmd] = NULL;
 	ft_free_strings(data->env);
