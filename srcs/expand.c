@@ -24,7 +24,7 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 	free(to_rep);
 	*ptr = 0;
 	data->tmp = *line;
-	*line = join_3_strs(*line, var, ptr + len);
+	*line = ft_join_3_strs(*line, var, ptr + len);
 	free(data->tmp);
 	return (data->tmp);
 }
@@ -38,7 +38,7 @@ void	replace_status(t_data *data, char **line, char *ptr)
 		return (perror("malloc"), close_free_exit(data, FAILURE));
 	*ptr = 0;
 	data->tmp = *line;
-	*line = join_3_strs(*line, status, ptr + 2);
+	*line = ft_join_3_strs(*line, status, ptr + 2);
 	free(data->tmp);
 	free(status);
 	if (!*line)
@@ -56,7 +56,7 @@ void	replace_pid(t_data *data, char **line, char *ptr)
 		return (perror("malloc"), close_free_exit(data, FAILURE));
 	*ptr = 0;
 	tmp = *line;
-	*line = join_3_strs(*line, pid, ptr + 2);
+	*line = ft_join_3_strs(*line, pid, ptr + 2);
 	free(tmp);
 	free(pid);
 	if (!*line)
@@ -73,7 +73,7 @@ void	expand(t_data *data, char **line)
 	i = -1;
 	while (ptr[++i])
 	{
-		if (ptr[i] == '$' && ptr[i + 1] && is_in_quote(ptr, i) != 1)
+		if (ptr[i] == '$' && ptr[i + 1] && is_in_quote(ptr, i) != IN_S_QUOTE)
 		{
 			if (ptr[i + 1] == '$')
 				return (replace_pid(data, line, ptr + i));

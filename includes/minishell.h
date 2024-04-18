@@ -30,6 +30,9 @@
 # define SIGINT 2
 # define SIGOUT 3
 
+# define IN_D_QUOTE 2
+# define IN_S_QUOTE 1
+
 # define ERR_CNF "%s: command not found\n"
 # define ERR_DENIED "%s: Permission denied\n"
 # define ERR_IS_FILE "%s: Is a directory\n"
@@ -62,7 +65,7 @@ bool	check_quote(t_data *data);
 int		check_syntax(t_data *data);
 int		is_in_quote(char *line, int index);
 void	expand(t_data *data, char **line);
-char	*join_3_strs(char *s1, char *s2, char *s3);
+char	*ft_join_3_strs(char *s1, char *s2, char *s3);
 void	parse(t_data *data);
 char	*str__dup(t_data *data, char **ptr);
 void	open_out(t_data *data, t_list *node, char **ptr);

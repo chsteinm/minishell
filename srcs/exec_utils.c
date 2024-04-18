@@ -59,7 +59,7 @@ void	find_good_path(t_data *data, t_list *node)
 	i = -1;
 	while (data->path && data->path[++i])
 	{
-		cmd_with_path = join_3_strs(data->path[i], "/", *node->cmd);
+		cmd_with_path = ft_join_3_strs(data->path[i], "/", *node->cmd);
 		if (!cmd_with_path)
 		{
 			perror("malloc");

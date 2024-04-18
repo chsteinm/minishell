@@ -1,8 +1,8 @@
 #include "../includes/minishell.h"
 
-int	is_quote_open(int actual_quote, int other_quote_type, int index_quote, int index_char)
+int	is_quote_open(int actual_quote, int other_quote, int i_quote, int i_char)
 {
-	if (actual_quote == 0 && other_quote_type == 0 && index_quote != index_char)
+	if (actual_quote == 0 && other_quote == 0 && i_quote != i_char)
 		actual_quote = 1;
 	else
 		actual_quote = 0;
@@ -26,23 +26,10 @@ int	is_in_quote(char *line, int index)
 			d_quotes = is_quote_open(d_quotes, s_quotes, i, index);
 	}
 	if (d_quotes != 0)
-		return (2);
+		return (IN_D_QUOTE);
 	if (s_quotes != 0)
-		return (1);
+		return (IN_S_QUOTE);
 	return (0);
-}
-
-char	*join_3_strs(char *s1, char *s2, char *s3)
-{
-	char	*ret;
-	char	*tmp;
-
-	tmp = ft_strjoin(s1, s2);
-	if (!tmp)
-		return (NULL);
-	ret = ft_strjoin(tmp, s3);
-	free(tmp);
-	return (ret);
 }
 
 int	is_sep(char *ptr, int i)
@@ -53,7 +40,6 @@ int	is_sep(char *ptr, int i)
 	return (0);
 }
 
-// supprime les quotes qui ne sont pas dans des quotes
 void	strdelquotes(char *str, char *ptr, size_t len)
 {
 	size_t	i;

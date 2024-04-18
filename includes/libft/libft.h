@@ -121,5 +121,6 @@ int		print_p_fd(va_list args, int fd);
 void	ft_printstrs(char **strs);
 long	ft_strtol(char *str, char **endptr, int base);
 void	ft_free_one_str_in_strs(char **strs, int i_str);
+char	*ft_join_3_strs(char *s1, char *s2, char *s3);
 
 #endif
