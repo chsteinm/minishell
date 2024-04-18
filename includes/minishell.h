@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 18:13:41 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:14:28 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data
 {
 	t_list	*cmd_param;
 	t_list	*cmds;
+	t_list	*var_no_value;
 	char	**env;
 	char	**path;
 	char	*pwd;
@@ -90,6 +91,7 @@ int		ft_pwd(t_data *data, t_list *node);
 void	ft_export_env(t_data *data, char *name, char *value);
 char	*ft_getenv(char **env, char *name);
 void	ft_export(t_data *data, t_list *node);
+void	export_print(t_data *data);
 void	ft_echo(t_data *data, t_list *node);
 void	ft_exit(t_data *data, t_list *node);
 void	ft_unset(t_data *data, t_list *node);

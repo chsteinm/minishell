@@ -15,6 +15,7 @@ SRCS =	main.c \
 		ft_exit.c \
 		ft_unset.c \
 		ft_export.c \
+		ft_export_print.c \
 		ft_echo.c \
 		ft_cd.c \
 		ft_cd_utils.c

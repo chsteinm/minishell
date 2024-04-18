@@ -58,7 +58,8 @@ SRCS = 	ft_atol.c \
 		get_next_line.c \
 		ft_strtol.c \
 		ft_free_one_str_in_strs.c \
-		ft_join_3_strs.c
+		ft_join_3_strs.c \
+		ft_sort_params.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 SRCS_BONUS =	ft_lstadd_back_bonus.c \
 				ft_lstadd_front_bonus.c \

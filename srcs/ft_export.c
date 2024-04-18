@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:15 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 18:20:15 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:13:17 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	is_valid_identifier(t_data *data, char *var)
 			return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 char	*init_var_name(t_data *data, char *to_export, int *len)
@@ -53,9 +53,10 @@ char	*init_var_name(t_data *data, char *to_export, int *len)
 	if (!var_name)
 		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
 	len_var = 0;
-	while (var_name[len_var] != '=')
-		if (!(var_name[++len_var]))
-			return (free(var_name), var_name = NULL);
+	while (var_name[len_var] && var_name[len_var] != '=')
+		len_var++;
+	if (!(var_name[len_var]))
+		return (free(var_name), var_name = NULL, NULL);
 	var_name[++len_var] = 0;
 	*len = len_var;
 	return (var_name);
@@ -76,6 +77,17 @@ void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
 	data->env = new_env;
 }
 
+char	*add_to_list(t_data *data, char *var)
+{
+	char	*var_dup;
+
+	var_dup = ft_strdup(var);
+	if (!var_dup)
+		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
+	ft_lstadd_back(&data->var_no_value, ft_lstnew(var_dup));
+	return (var_dup);
+}
+
 void	ft_export(t_data *data, t_list *node)
 {
 	int		j_cmd;
@@ -84,12 +96,14 @@ void	ft_export(t_data *data, t_list *node)
 	int		len_var;
 
 	j_cmd = 0;
+	if (node->cmd[1] == NULL)
+		return (export_print(data));
 	while (node->cmd[++j_cmd])
 	{
 		if (!is_valid_identifier(data, node->cmd[j_cmd]))
 			continue ;
 		var_name = init_var_name(data, node->cmd[j_cmd], &len_var);
-		if (!var_name)
+		if (!var_name && add_to_list(data, node->cmd[j_cmd]))
 			continue ;
 		j_env = 0;
 		while (data->env[j_env] && \

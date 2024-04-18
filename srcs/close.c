@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:09 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 18:22:15 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 19:12:08 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,5 @@ void	final_free(t_data *data)
 	ft_free_and_null(&data->pwd);
 	ft_free_strings(data->path);
 	ft_free_strings(data->env);
+	ft_lstclear(&data->var_no_value, &free);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Maya <Maya@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 16:33:48 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/17 23:04:49 by Maya             ###   ########.fr       */
+/*   Updated: 2024/04/18 19:09:54 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,6 @@ void	ft_printstrs(char **strs);
 long	ft_strtol(char *str, char **endptr, int base);
 void	ft_free_one_str_in_strs(char **strs, int i_str);
 char	*ft_join_3_strs(char *s1, char *s2, char *s3);
+void	ft_sort_params(int argc, char **argv);
 
 #endif
