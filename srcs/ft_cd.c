@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/18 13:37:40 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 18:09:06 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
