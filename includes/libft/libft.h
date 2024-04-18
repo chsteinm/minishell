@@ -19,6 +19,7 @@
 # include <stdarg.h>
 # include <stdbool.h>
 # include <limits.h>
+# include <fcntl.h>
 # include "get_next_line.h"
 
 # define SUCCESS 0
