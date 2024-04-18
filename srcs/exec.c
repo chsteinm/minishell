@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:29 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:29:29 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 17:18:06 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ bool	to_exec(t_list *node)
 	if (!node->lim && node->fd_in == -1)
 		return (FALSE);
 	if (node->fd_out == -1)
+		return (FALSE);
+	if (!node->fd_out && node->next && !to_exec(node->next))
 		return (FALSE);
 	return (TRUE);
 }
@@ -85,18 +87,22 @@ void	exec(t_data *data, t_list *node)
 	}
 	while (node)
 	{
-		if (to_exec(node))
+		node->pid = fork();
+		if (node->pid == -1)
+			return (perror("fork"), close_free_exit(data, FAILURE));
+		if (!node->pid)
 		{
-			node->pid = fork();
-			if (node->pid == -1)
-				return (perror("fork"), close_free_exit(data, FAILURE));
-			if (!node->pid)
-			{
+			if (to_exec(node))
 				exec_in_child(data, node);
+			else
+			{
+				close_free_exit(data, 0);
+				final_free(data);
+				exit(data->last_status);	
 			}
 		}
-		else if (node->prev)
-			waitpid(node->prev->pid, NULL, 0);
+		// else if (node->prev && !node->next)
+		// 	waitpid(node->prev->pid, NULL, 0);
 		node = node->next;
 	}
 }
