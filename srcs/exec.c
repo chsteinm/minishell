@@ -70,6 +70,8 @@ void	exec(t_data *data, t_list *node)
 				exec_in_child(data, node);
 			}
 		}
+		else if (node->prev)
+			waitpid(node->prev->pid, NULL, 0);
 		node = node->next;
 	}
 }

@@ -13,7 +13,7 @@
 #include "../includes/minishell.h"
 
 static int	special_cases(t_data *data, t_list *node);
-static int	change_dir(t_list *node);
+static int	change_dir(char *path);
 static int	minus_case(t_data *data);
 
 void	set_last_status(t_data *data, int i)
@@ -32,7 +32,7 @@ void	ft_cd(t_data *data, t_list *node)
 		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	if (special_cases(data, node))
 		return (free(oldpwd));
-	if (change_dir(node))
+	if (change_dir(node->cmd[1]))
 		return (set_last_status(data, 1) ,free(oldpwd));
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
@@ -53,8 +53,8 @@ static int	special_cases(t_data *data, t_list *node)
 		if (!data->pwd)
 			return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 		ft_export_env(data, "PWD=", data->pwd);
-		if (chdir(data->pwd) == -1)
-			ft_dprintf(2, ERR_CD, data->pwd);
+		if (change_dir(data->pwd))
+			return (set_last_status(data, 1), -1);
 		return (1);
 	}
 	else if (ft_strncmp(node->cmd[1], "-", 1) == 0)
@@ -78,8 +78,8 @@ static int	minus_case(t_data *data)
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 	if (!data->pwd)
 		return (free(oldpwd), perror("Malloc"), close_free_exit(data, FAILURE), -1);
-	if (chdir(data->pwd) == -1)
-		return (free(oldpwd), ft_dprintf(2, ERR_CD, data->pwd));
+	if (change_dir(data->pwd))
+		return (set_last_status(data, 1) ,free(oldpwd), -1);
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
 	ft_putstr_fd(data->pwd, 1);
@@ -87,11 +87,14 @@ static int	minus_case(t_data *data)
 	return (free(oldpwd), 0);
 }
 
-static int	change_dir(t_list *node)
+static int	change_dir(char *path)
 {
-	if (chdir(node->cmd[1]) == -1)
+	if (chdir(path) == -1)
 	{
-		ft_dprintf(2, ERR_CD, node->cmd[1]);
+		if (errno == EACCES)
+			ft_dprintf(STDERR_FILENO, ERR_DENIED, path);
+		else
+			ft_dprintf(2, ERR_CD, path);
 		return (1);
 	}
 	return (0);
