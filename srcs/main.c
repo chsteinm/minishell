@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:32:40 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 15:39:09 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 
 	(void)argv[argc];
+	init_data(&data, env);
 	signal(SIGINT, sig_handler);
 	signal(SIGOUT, sig_handler);
-	init_data(&data, env);
+	write(1, CLEAR, 10);
 	while (1)
 	{
-		write(1, CLEAR, 10);
 		data.line = readline("minishell: ");
 		if (!data.line)
 			break ;
