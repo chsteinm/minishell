@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/12 09:20:45 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 13:37:40 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,15 @@ void	ft_cd(t_data *data, t_list *node)
 	char	*oldpwd;
 
 	if (node->cmd[1] && node->cmd[2])
-		return (set_last_status(data, 1) ,ft_putstr_fd("cd: too many arguments\n", 2));
+		return (set_last_status(data, 1), \
+				ft_putstr_fd("cd: too many arguments\n", 2));
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE));
 	if (special_cases(data, node))
 		return (free(oldpwd));
 	if (change_dir(node->cmd[1]))
-		return (set_last_status(data, 1) ,free(oldpwd));
+		return (set_last_status(data, 1), free(oldpwd));
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
 	if (!oldpwd)
@@ -70,16 +71,18 @@ static int	minus_case(t_data *data)
 	char	*oldpwd;
 
 	if (!ft_getenv(data->env, "OLDPWD="))
-		return (set_last_status(data, 1) ,ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
+		return (set_last_status(data, 1), \
+				ft_putstr_fd("cd: OLDPWD not set\n", 2), -1);
 	oldpwd = ft_strdup(ft_getenv(data->env, "PWD="));
 	if (!oldpwd)
 		return (perror("Malloc"), close_free_exit(data, FAILURE), -1);
 	free(data->pwd);
 	data->pwd = ft_strdup(ft_getenv(data->env, "OLDPWD="));
 	if (!data->pwd)
-		return (free(oldpwd), perror("Malloc"), close_free_exit(data, FAILURE), -1);
+		return (free(oldpwd), perror("Malloc"), \
+					close_free_exit(data, FAILURE), -1);
 	if (change_dir(data->pwd))
-		return (set_last_status(data, 1) ,free(oldpwd), -1);
+		return (set_last_status(data, 1), free(oldpwd), -1);
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
 	ft_putstr_fd(data->pwd, 1);

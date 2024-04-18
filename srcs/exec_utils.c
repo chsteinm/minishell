@@ -37,8 +37,10 @@ void	error_cmd(t_data *data, t_list *node)
 	}
 	else
 	{
-		if (ft_strncmp(*node->cmd, "./", 2) == 0 || ft_strncmp(*node->cmd, "/", 1) == 0)
-			 ft_dprintf(STDERR_FILENO, "%s: No such file or directory\n", *node->cmd);
+		if (ft_strncmp(*node->cmd, "./", 2) == 0 || \
+			ft_strncmp(*node->cmd, "/", 1) == 0)
+			ft_dprintf(STDERR_FILENO, \
+			"%s: No such file or directory\n", *node->cmd);
 		else
 			ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
 		close_free_exit(data, 127);
@@ -76,7 +78,8 @@ void	find_good_path(t_data *data, t_list *node)
 
 void	exec_check_file_error(t_data *data, t_list *node)
 {
-	if (ft_strncmp(*node->cmd, "./", 2) == 0 || ft_strncmp(*node->cmd, "/", 1) == 0)
+	if (ft_strncmp(*node->cmd, "./", 2) == 0 || \
+		ft_strncmp(*node->cmd, "/", 1) == 0)
 	{
 		ft_dprintf(STDERR_FILENO, ERR_IS_FILE, *node->cmd);
 		close_free_exit(data, 126);
@@ -85,7 +88,7 @@ void	exec_check_file_error(t_data *data, t_list *node)
 	{
 		ft_dprintf(STDERR_FILENO, ERR_CNF, *node->cmd);
 		close_free_exit(data, 127);
-	}	
+	}
 }
 
 void	make_pipes(t_data *data, t_list *node)

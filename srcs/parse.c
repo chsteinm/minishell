@@ -105,7 +105,7 @@ void	parse(t_data *data)
 		return (error(data, 1, 'q'));
 	if (check_syntax(data))
 		return ;
-	expand(data, &data->line); //les modifications se font directement sur la ligne renvoyer par readline (data->line)
+	expand(data, &data->line);
 	ptr = data->line;
 	while (*ptr)
 	{
@@ -115,7 +115,7 @@ void	parse(t_data *data)
 			node = ft_calloc(1, sizeof(t_list));
 			if (!node)
 				return (perror("malloc"), close_free_exit(data, FAILURE));
-			ft_lstadd_back(&data->cmds, node);			
+			ft_lstadd_back(&data->cmds, node);
 			parse_cmd(data, node, &ptr);
 			ft_lstclear(&data->cmd_param, NULL);
 		}

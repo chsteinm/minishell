@@ -22,7 +22,7 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 	if (var)
 		var += len;
 	free(to_rep);
-	*ptr = 0; //remplace le $ par un \0
+	*ptr = 0;
 	data->tmp = *line;
 	*line = join_3_strs(*line, var, ptr + len);
 	free(data->tmp);
@@ -46,7 +46,6 @@ void	replace_status(t_data *data, char **line, char *ptr)
 	return (expand(data, line));
 }
 
-//replace "$$" by the pid of the curate processus
 void	replace_pid(t_data *data, char **line, char *ptr)
 {
 	char	*pid;

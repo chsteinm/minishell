@@ -10,7 +10,7 @@ void	error(t_data *data, int error, char c)
 		ft_dprintf(2, ERR_QUOTE);
 	data->last_status = error;
 }
-// error if < <... / > >... /
+
 int	check_space(t_data *data)
 {
 	char	*tmp;
@@ -33,12 +33,12 @@ int	check_space(t_data *data)
 	}
 	return (SUCCESS);
 }
-//error if # |...   or #<<<.. / >>>..  or #><... / <>...  or #>ø / <ø  or  #...|ø / ||
+
 int	check_syntax(t_data *data)
 {
 	char	*ptr;
 
-	data->no_space_line = ft_strdelspace(data->line); //pour une première vérification sans espaces
+	data->no_space_line = ft_strdelspace(data->line);
 	if (!data->no_space_line)
 		return (perror("malloc"), close_free_exit(data, FAILURE), 1);
 	ptr = data->no_space_line;
@@ -58,7 +58,7 @@ int	check_syntax(t_data *data)
 		}
 		ptr++;
 	}
-	return (check_space(data)); //et une deuxieme en splitant sur les white spaces
+	return (check_space(data));
 }
 
 bool	check_quote(t_data *data)
@@ -87,5 +87,5 @@ bool	check_quote(t_data *data)
 				in_s_quote = FALSE;
 		}
 	}
-	return (in_s_quote || in_quote); // il faut qu'à la fin de la ligne, les deux soit FALSE / fermé, sinon, 1 est retouré
+	return (in_s_quote || in_quote);
 }

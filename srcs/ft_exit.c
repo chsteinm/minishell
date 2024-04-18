@@ -17,7 +17,7 @@ void	arg_error(t_data *data, t_list *node, int error)
 
 void	ft_exit(t_data *data, t_list *node)
 {
-	int 	status;
+	int		status;
 	char	*endptr;
 
 	status = 0;

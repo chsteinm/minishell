@@ -75,10 +75,10 @@ void	ft_export(t_data *data, t_list *node)
 	while (node->cmd[++j_cmd])
 	{
 		if (!is_valid_identifier(data, node->cmd[j_cmd]))
-			continue;
+			continue ;
 		var_name = init_var_name(data, node->cmd[j_cmd], &len_var);
 		if (!var_name)
-			continue;
+			continue ;
 		j_env = 0;
 		while (data->env[j_env] && \
 		!ft_strnstr(data->env[j_env], var_name, len_var))
