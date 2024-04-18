@@ -19,6 +19,6 @@ void	ft_unset(t_data *data, t_list *node)
 			j_env++;
 		free(tmp);
 		if (data->env[j_env])
-			ft_free_str_in_strs(data->env, j_env);
+			ft_free_one_str_in_strs(data->env, j_env);
 	}
 }
