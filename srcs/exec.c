@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:29 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:29:29 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 17:22:07 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ bool	to_exec(t_list *node)
 	if (!node->lim && node->fd_in == -1)
 		return (FALSE);
 	if (node->fd_out == -1)
+		return (FALSE);
+	if (!node->fd_out && node->next && !to_exec(node->next))
 		return (FALSE);
 	return (TRUE);
 }
@@ -95,8 +97,6 @@ void	exec(t_data *data, t_list *node)
 				exec_in_child(data, node);
 			}
 		}
-		else if (node->prev)
-			waitpid(node->prev->pid, NULL, 0);
 		node = node->next;
 	}
 }
