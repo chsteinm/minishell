@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:24 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:29:24 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 15:49:40 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	find_good_path(t_data *data, t_list *node)
 	if (!access(*node->cmd, X_OK))
 		return ;
 	i = -1;
-	while (data->path && data->path[++i])
+	while (data->path && data->path[++i] && !ft_strchr(*node->cmd, '/'))
 	{
 		cmd_with_path = ft_join_3_strs(data->path[i], "/", *node->cmd);
 		if (!cmd_with_path)
