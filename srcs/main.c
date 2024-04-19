@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 18:13:50 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/19 02:15:23 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	wait_all_pid(t_data *data)
 {
 	t_list	*node;
 	bool	must_exit;
+	bool	New_Line = 0;
 
 	must_exit = FALSE;
 	node = data->cmds;
@@ -25,6 +26,23 @@ void	wait_all_pid(t_data *data)
 		if (node->pid)
 			waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
+		
+		if (WIFEXTIED(data->last_status))
+		{
+			
+			data->last_status = WEXITSTATUS(data->last_status);
+		}
+		else if (WIFSIGNALED(data->last_status))
+		{
+			data->last_status = WTERMSIG(data->last_status) + 128;
+			if (New_Line = 0)
+			{
+				write(1, "\n", 1);
+				New_Line = 1;
+			}
+		}
+
+		
 		if (WEXITSTATUS(data->last_status))
 			data->last_status = WEXITSTATUS(data->last_status);
 		if (data->last_status == MUST_EXIT)
@@ -78,13 +96,7 @@ void	init_data(t_data *data, char **env)
 
 void	sig_handler(int signum)
 {
-	if (signum == SIGINT)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+	(void) signum;
 }
 
 int	main(int argc, char **argv, char **env)
