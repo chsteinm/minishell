@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_utils.c                                  :+:      :+:    :+:   */
+/*   ft_export_print.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 21:13:54 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:34:50 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:37:11 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*add_to_list(t_data *data, char *var)
-{
-	char	*var_dup;
-
-	var_dup = ft_strdup(var);
-	if (!var_dup)
-		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
-	ft_lstadd_back(&data->var_no_value, ft_lstnew(var_dup));
-	return (var_dup);
-}
 
 void	print_var_like_export(char *str)
 {
@@ -59,4 +48,15 @@ void	export_print(t_data *data)
 	while (tmp_env[++len])
 		print_var_like_export(tmp_env[len]);
 	ft_free_strings(tmp_env);
+}
+
+char	*add_to_list(t_data *data, char *var)
+{
+	char	*var_dup;
+
+	var_dup = ft_strdup(var);
+	if (!var_dup)
+		return (perror("Malloc"), close_free_exit(data, MUST_EXIT), NULL);
+	ft_lstadd_back(&data->var_no_value, ft_lstnew(var_dup));
+	return (var_dup);
 }

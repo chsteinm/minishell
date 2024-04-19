@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:29 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 17:22:07 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 20:17:15 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ bool	to_exec(t_list *node)
 		return (FALSE);
 	if (node->fd_out == -1)
 		return (FALSE);
+	if (!ft_strncmp(*node->cmd, "cd", 3))
+		return (TRUE);
+	if (!ft_strncmp(*node->cmd, "exit", 5))
+		return (TRUE);
+	if (!ft_strncmp(*node->cmd, "export", 7))
+		return (TRUE);
 	if (!node->fd_out && node->next && !to_exec(node->next))
 		return (FALSE);
 	return (TRUE);
@@ -65,6 +71,7 @@ void	exec_in_child(t_data *data, t_list *node)
 {
 	make_dup2(data, node);
 	close_all_fds(data->cmds);
+	give_env_path(data);
 	if (exec_builtins_in_child(data, node) == FALSE)
 	{
 		find_good_path(data, node);

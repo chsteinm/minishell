@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:15 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:34:26 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 21:36:58 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,20 @@ bool	is_valid_identifier(t_data *data, char *var)
 	{
 		ft_dprintf(2, ERR_EXP, var);
 		data->last_status = 1;
-		return (0);
+		return (FALSE);
 	}
 	while (var[++i])
 	{
 		if (var[i] == '=')
-			return (1);
+			return (TRUE);
 		if (!ft_isalnum(var[i]))
 		{
 			ft_dprintf(2, ERR_EXP, var);
 			data->last_status = 1;
-			return (0);
+			return (FALSE);
 		}
 	}
-	return (1);
+	return (TRUE);
 }
 
 char	*init_var_name(t_data *data, char *to_export, int *len)

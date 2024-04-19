@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_manage.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:25 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:30:26 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/18 20:21:53 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_here_doc(t_data *data, t_list *node)
 {
-	ft_dprintf(2, "warning: here-document at line %d", data->nb_line_hd);
+	ft_dprintf(2, "warning: here-document at line %d ", data->nb_line_hd);
 	ft_dprintf(2, "delimited by end-of-file (wanted `%s')\n", node->lim);
 }
 
