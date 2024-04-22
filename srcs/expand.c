@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:28:53 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 15:28:53 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/20 22:41:41 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,11 @@ void	replace_status(t_data *data, char **line, char *ptr)
 {
 	char	*status;
 
+	signal_set_status(data);
 	status = ft_itoa(data->last_status);
 	if (!status)
 		return (perror("malloc"), close_free_exit(data, FAILURE));
+	g_signal = STANDBY;
 	*ptr = 0;
 	data->tmp = *line;
 	*line = ft_join_3_strs(*line, status, ptr + 2);

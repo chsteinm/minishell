@@ -6,11 +6,13 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:43:54 by chrstein         ###   ########.fr       */
+/*   Updated: 2024/04/20 22:41:06 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_signal;
 
 void	wait_all_pid(t_data *data)
 {
@@ -29,6 +31,7 @@ void	wait_all_pid(t_data *data)
 			data->last_status = WEXITSTATUS(data->last_status);
 		if (data->last_status == MUST_EXIT)
 			must_exit = TRUE;
+		signal_set_status(data);
 	}
 	if (must_exit == TRUE)
 		close_free_exit(data, FAILURE);
@@ -64,6 +67,7 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 
 	(void)argv[argc];
+	g_signal = STANDBY;
 	init_data(&data, env);
 	handle_signal(&data);
 	write(1, CLEAR, 10);
@@ -72,6 +76,7 @@ int	main(int argc, char **argv, char **env)
 		data.line = readline("mimishell: ");
 		if (!data.line)
 			break ;
+		signal_set_status(&data);
 		if (*data.line)
 		{
 			add_history(data.line);
