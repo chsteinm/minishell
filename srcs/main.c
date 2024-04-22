@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/20 22:41:06 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 16:24:36 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ void	wait_all_pid(t_data *data)
 
 	must_exit = FALSE;
 	node = data->cmds;
+	// printf("end status = %d\n", g_signal);
+	if (g_signal == CTRL_C)
+		data->last_status = 130;
+	// printf("end status after = %d\n", g_signal);
 	close_all_fds(node);
 	while (node)
 	{
@@ -67,12 +71,12 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 
 	(void)argv[argc];
-	g_signal = STANDBY;
 	init_data(&data, env);
 	handle_signal(&data);
 	write(1, CLEAR, 10);
 	while (1)
 	{
+		g_signal = STANDBY;
 		data.line = readline("mimishell: ");
 		if (!data.line)
 			break ;
