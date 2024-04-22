@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/20 22:15:09 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 17:48:28 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_data
 
 void	heredoc_handle_signal(t_data *data);
 void	signal_set_status(t_data *data);
+void	ignore_signal(t_data *data);
 
 void	give_env_path(t_data *data);
 void	handle_signal(t_data *data);

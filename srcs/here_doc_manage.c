@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:25 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/22 16:12:25 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 18:12:02 by guilrodr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ static char	*get_line(void);
 void	error_here_doc(t_data *data, t_list *node)
 {
 	if (g_signal == CTRL_C)
+	{
+		open("/dev/tty", O_RDONLY);
 		return (ft_free_and_null(&node->lim));
+	}
 	ft_dprintf(2, "warning: here-document at line %d ", data->nb_line_hd);
 	ft_dprintf(2, "delimited by end-of-file (wanted `%s')\n", node->lim);
 }
@@ -26,21 +29,12 @@ void	write_until_lim(t_data *data, t_list *node)
 {
 	char	*line;
 
-	while (1 && g_signal != CTRL_C)
+	while (1)
 	{
 		data->nb_line_hd++;
 		line = get_line();
-		// printf("line [%s]\n", line);
 		if (!line)
-		{
-			if (g_signal == 2)
-			{
-				g_signal = 0;
-				continue ;
-			}
-			else
-				return (error_here_doc(data, node));
-		}
+			return (error_here_doc(data, node));
 		line[ft_strlen(line) - 1] = '\0';
 		if (!ft_strncmp(node->lim, line, ft_strlen(line) + 1))
 			return (free(line));

@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/22 13:25:31 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 18:11:15 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static int	special_cases(t_data *data, t_list *node)
 		minus_case(data);
 		return (1);
 	}
-	else if (ft_strncmp(node->cmd[1], "..", 1) == 0 || ft_strncmp(node->cmd[1], ".", 1) == 0)
+	else if (ft_strncmp(node->cmd[1], "..", 1) == 0 || \
+				ft_strncmp(node->cmd[1], ".", 1) == 0)
 	{
 		if (chdir(node->cmd[1]) == -1)
 			return (ft_dprintf(2, ERR_CD, node->cmd[1]), 1);

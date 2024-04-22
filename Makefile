@@ -20,6 +20,7 @@ SRCS =	main.c \
 		ft_cd.c \
 		ft_cd_utils.c \
 		signal.c \
+		signal_utils.c \
 		exec_utils2.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
