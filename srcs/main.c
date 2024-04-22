@@ -6,11 +6,13 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:43:54 by chrstein         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:08:18 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_signal;
 
 void	wait_all_pid(t_data *data)
 {
@@ -19,6 +21,8 @@ void	wait_all_pid(t_data *data)
 
 	must_exit = FALSE;
 	node = data->cmds;
+	if (g_signal == CTRL_C)
+		data->last_status = 130;
 	close_all_fds(node);
 	while (node)
 	{
@@ -26,9 +30,12 @@ void	wait_all_pid(t_data *data)
 			waitpid(node->pid, &data->last_status, 0);
 		node = node->next;
 		if (WEXITSTATUS(data->last_status))
-			data->last_status = WEXITSTATUS(data->last_status);
+			data->last_status = WEXITSTATUS(data->last_status) + 128;
+		if (WIFSIGNALED(data->last_status))
+			data->last_status = WTERMSIG(data->last_status) + 128;
 		if (data->last_status == MUST_EXIT)
 			must_exit = TRUE;
+		signal_set_status(data);
 	}
 	if (must_exit == TRUE)
 		close_free_exit(data, FAILURE);
@@ -65,13 +72,15 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv[argc];
 	init_data(&data, env);
-	handle_signal(&data);
 	write(1, CLEAR, 10);
 	while (1)
 	{
+		handle_signal(&data);
+		g_signal = STANDBY;
 		data.line = readline("mimishell: ");
 		if (!data.line)
 			break ;
+		signal_set_status(&data);
 		if (*data.line)
 		{
 			add_history(data.line);

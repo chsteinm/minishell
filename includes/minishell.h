@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:35:12 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 17:48:28 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@
 # define IN_D_QUOTE 2
 # define IN_S_QUOTE 1
 
+# define STANDBY 0
+# define CTRL_C 1
+# define IN_LOOP 2
+
 # define ERR_CNF "%s: command not found\n"
 # define ERR_DENIED "%s: Permission denied\n"
 # define ERR_IS_FILE "%s: Is a directory\n"
@@ -45,6 +49,8 @@
 # define ERR_EXIT_N "exit: %s: numeric argument required\n"
 # define ERR_CD "cd: %s: No such file or directory\n"
 # define ERR_EXP "export: `%s': not a valid identifier\n"
+
+extern int	g_signal;
 
 typedef struct s_data
 {
@@ -64,6 +70,12 @@ typedef struct s_data
 	size_t	i;
 }					t_data;
 
+void	heredoc_handle_signal(t_data *data);
+void	signal_set_status(t_data *data);
+void	ignore_signal(t_data *data);
+
+void	give_env_path(t_data *data);
+void	handle_signal(t_data *data);
 bool	check_quote(t_data *data);
 int		check_syntax(t_data *data);
 int		is_in_quote(char *line, int index);

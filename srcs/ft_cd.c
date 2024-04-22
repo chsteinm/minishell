@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:11:46 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/18 18:19:31 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 18:11:15 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static int	special_cases(t_data *data, t_list *node);
-static int	change_dir(char *path);
+static int	change_dir(t_data *data, char *path);
 static int	minus_case(t_data *data);
 
 void	set_last_status(t_data *data, int i)
@@ -33,7 +33,7 @@ void	ft_cd(t_data *data, t_list *node)
 		return (perror("Malloc"), close_free_exit(data, MUST_EXIT));
 	if (special_cases(data, node))
 		return (free(oldpwd));
-	if (change_dir(node->cmd[1]))
+	if (change_dir(data, node->cmd[1]))
 		return (set_last_status(data, 1), free(oldpwd));
 	free(data->pwd);
 	data->pwd = getcwd(NULL, 0);
@@ -54,13 +54,20 @@ static int	special_cases(t_data *data, t_list *node)
 		if (!data->pwd)
 			return (perror("Malloc"), close_free_exit(data, MUST_EXIT), -1);
 		ft_export_env(data, "PWD=", data->pwd);
-		if (change_dir(data->pwd))
+		if (change_dir(data, data->pwd))
 			return (set_last_status(data, 1), -1);
 		return (1);
 	}
 	else if (ft_strncmp(node->cmd[1], "-", 1) == 0)
 	{
 		minus_case(data);
+		return (1);
+	}
+	else if (ft_strncmp(node->cmd[1], "..", 1) == 0 || \
+				ft_strncmp(node->cmd[1], ".", 1) == 0)
+	{
+		if (chdir(node->cmd[1]) == -1)
+			return (ft_dprintf(2, ERR_CD, node->cmd[1]), 1);
 		return (1);
 	}
 	return (0);
@@ -81,7 +88,7 @@ static int	minus_case(t_data *data)
 	if (!data->pwd)
 		return (free(oldpwd), perror("Malloc"), \
 					close_free_exit(data, MUST_EXIT), -1);
-	if (change_dir(data->pwd))
+	if (change_dir(data, data->pwd))
 		return (set_last_status(data, 1), free(oldpwd), -1);
 	ft_export_env(data, "OLDPWD=", oldpwd);
 	ft_export_env(data, "PWD=", data->pwd);
@@ -90,8 +97,20 @@ static int	minus_case(t_data *data)
 	return (free(oldpwd), 0);
 }
 
-static int	change_dir(char *path)
+static int	change_dir(t_data *data, char *path)
 {
+	char	*cd_path;
+
+	cd_path = NULL;
+	cd_path = ft_strdup(ft_getenv(data->env, "CDPATH="));
+	if (cd_path && ft_strlen(cd_path))
+	{
+		cd_path = ft_strjoin(cd_path, "/");
+		cd_path = ft_strjoin(cd_path, path);
+		if (chdir(cd_path) == 0)
+			return (free(cd_path), 0);
+	}
+	free(cd_path);
 	if (chdir(path) == -1)
 	{
 		if (errno == EACCES)

@@ -18,7 +18,10 @@ SRCS =	main.c \
 		ft_export_utils.c \
 		ft_echo.c \
 		ft_cd.c \
-		ft_cd_utils.c
+		ft_cd_utils.c \
+		signal.c \
+		signal_utils.c \
+		exec_utils2.c
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 BUILD_DIR = .build
 LIBFT = ./includes/libft/libft.a

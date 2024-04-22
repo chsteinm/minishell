@@ -6,7 +6,7 @@
 /*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:29 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 20:17:15 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 18:10:40 by guilrodr         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	exec(t_data *data, t_list *node)
 	{
 		return (close_free_exit(data, SUCCESS));
 	}
+	ignore_signal(data);
 	while (node)
 	{
 		if (to_exec(node))
