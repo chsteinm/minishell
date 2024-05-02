@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chrstein <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 16:14:53 by chrstein          #+#    #+#             */
-/*   Updated: 2023/11/06 16:18:34 by chrstein         ###   ########.fr       */
+/*   Updated: 2024/04/22 19:42:26 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	count_words(char const *s, char c)
 	int	n;
 
 	n = 0;
-	while (*s)
+	while (s && *s)
 	{
 		if (*s != c)
 		{
@@ -46,8 +46,6 @@ char	**ft_split(char const *s, char c)
 	int		len;
 	char	**strs;
 
-	if (!s)
-		return (NULL);
 	w = count_words(s, c);
 	strs = ft_calloc((w + 1), sizeof(char *));
 	if (!strs)

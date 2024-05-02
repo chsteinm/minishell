@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/22 17:48:28 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/23 13:05:51 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define ERR_EXIT "exit: too many arguments\n"
 # define ERR_EXIT_N "exit: %s: numeric argument required\n"
 # define ERR_CD "cd: %s: No such file or directory\n"
+# define ERR_CD_TMA "cd: too many arguments\n"
 # define ERR_EXP "export: `%s': not a valid identifier\n"
 
 extern int	g_signal;
@@ -65,6 +66,7 @@ typedef struct s_data
 	int		last_status;
 	pid_t	pid;
 	char	*tmp;
+	char	*to_free;
 	int		nb_line_hd;
 	size_t	nb_cmds;
 	size_t	i;
@@ -99,8 +101,11 @@ void	final_free(t_data *data);
 void	exec_check_file_error(t_data *data, t_list *node);
 
 void	ft_cd(t_data *data, t_list *node);
-int		ft_pwd(t_data *data, t_list *node);
+int		change_dir_cd_path(t_data *data, char *path);
+void	update_env_path(t_data *data, char *old);
+void	add_var_to_env(t_data *data, char **var_addrs);
 void	ft_export_env(t_data *data, char *name, char *value);
+int		ft_pwd(t_data *data, t_list *node);
 char	*ft_getenv(char **env, char *name);
 void	ft_export(t_data *data, t_list *node);
 char	*add_to_list(t_data *data, char *var);

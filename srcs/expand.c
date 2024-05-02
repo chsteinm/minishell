@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:28:53 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/20 22:41:41 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/23 13:04:44 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 	size_t	len;
 
 	len = 1;
-	while (ptr[len] && !ft_iswhitespace(ptr[len]) && \
-	!ft_ismeta(ptr[len]) && ptr[len] != '$' && \
-	ptr[len] != '"' && ptr[len] != '\'')
+	while (ptr[len] && ft_isalnum(ptr[len]))
 		len++;
 	to_rep = ft_strndup(ptr + 1, len);
 	if (!to_rep)
@@ -38,7 +36,7 @@ char	*replace_var(t_data *data, char **line, char *ptr)
 	data->tmp = *line;
 	*line = ft_join_3_strs(*line, var, ptr + len);
 	free(data->tmp);
-	return (data->tmp);
+	return (*line);
 }
 
 void	replace_status(t_data *data, char **line, char *ptr)

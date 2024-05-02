@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:15 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 21:36:58 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/22 23:47:11 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*init_var_name(t_data *data, char *to_export, int *len)
 	return (var_name);
 }
 
-void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
+void	add_var_to_env(t_data *data, char **var_addrs)
 {
 	char	**new_env;
 	size_t	len_env;
@@ -71,8 +71,8 @@ void	add_var_to_env(t_data *data, t_list *node, int j_cmd)
 	new_env = ft_strsdup(data->env, len_env + 1);
 	if (!new_env)
 		return (perror("Malloc"), close_free_exit(data, MUST_EXIT));
-	new_env[len_env] = node->cmd[j_cmd];
-	node->cmd[j_cmd] = NULL;
+	new_env[len_env] = *var_addrs;
+	*var_addrs = NULL;
 	ft_free_strings(data->env);
 	data->env = new_env;
 }
@@ -102,6 +102,6 @@ void	ft_export(t_data *data, t_list *node)
 		if (data->env[j_env])
 			update_var(data, node, j_cmd, j_env);
 		else
-			add_var_to_env(data, node, j_cmd);
+			add_var_to_env(data, &node->cmd[j_cmd]);
 	}
 }

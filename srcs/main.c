@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/22 18:08:18 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/04/23 13:46:08 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ void	wait_all_pid(t_data *data)
 	while (node)
 	{
 		if (node->pid)
+		{
 			waitpid(node->pid, &data->last_status, 0);
+			if (WIFEXITED(data->last_status))
+				data->last_status = WEXITSTATUS(data->last_status);
+			else if (WIFSIGNALED(data->last_status))
+				data->last_status = WTERMSIG(data->last_status) + 128;
+		}
 		node = node->next;
-		if (WEXITSTATUS(data->last_status))
-			data->last_status = WEXITSTATUS(data->last_status) + 128;
-		if (WIFSIGNALED(data->last_status))
-			data->last_status = WTERMSIG(data->last_status) + 128;
 		if (data->last_status == MUST_EXIT)
 			must_exit = TRUE;
 		signal_set_status(data);

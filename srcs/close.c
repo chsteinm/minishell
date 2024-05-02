@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:09 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/18 19:12:08 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/04/23 13:07:53 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	close_free_exit(t_data *data, int ret)
 	ft_lstclear(&data->cmd_param, &free);
 	ft_free_and_null(&data->line);
 	ft_free_and_null(&data->no_space_line);
+	ft_free_and_null(&data->to_free);
 	if (ret != SUCCESS || ret != 0)
 	{
 		if (ret == MUST_EXIT)
