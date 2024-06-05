@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:57:31 by guilrodr          #+#    #+#             */
-/*   Updated: 2024/04/22 18:13:23 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/06/05 11:43:22 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static void	heredoc_sig_handler(int signum)
 	{
 		g_signal = CTRL_C;
 		ft_putstr_fd("\n", 1);
-		write(1, "\0", 0);
 		close(0);
 	}
 	else if (signum == SIGQUIT)
