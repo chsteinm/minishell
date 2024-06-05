@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 02:03:01 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/23 13:05:51 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/06/05 12:54:55 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_data
 	int		nb_line_hd;
 	size_t	nb_cmds;
 	size_t	i;
+	bool	cancel;
 }					t_data;
 
 void	heredoc_handle_signal(t_data *data);

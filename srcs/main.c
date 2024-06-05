@@ -6,7 +6,7 @@
 /*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:33 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/23 13:46:08 by chrstein         ###   ########lyon.fr   */
+/*   Updated: 2024/06/05 12:56:00 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	main(int argc, char **argv, char **env)
 	write(1, CLEAR, 10);
 	while (1)
 	{
+		data.cancel = false;
 		handle_signal(&data);
 		g_signal = STANDBY;
 		data.line = readline("mimishell: ");

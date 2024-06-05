@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:29:29 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/22 18:10:40 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/06/05 12:57:32 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 bool	to_exec(t_list *node)
 {
-	if (!node)
-		return (FALSE);
-	if (!node->cmd)
+	if (!node || !node->cmd)
 		return (FALSE);
 	if (!node->lim && node->fd_in == -1)
 		return (FALSE);
@@ -86,6 +84,8 @@ void	exec_in_child(t_data *data, t_list *node)
 
 void	exec(t_data *data, t_list *node)
 {
+	if (data->cancel == true)
+		return ;
 	make_pipes(data, node);
 	data->nb_cmds = ft_lstsize(node);
 	if (data->nb_cmds == 1 && exec_builtins_in_parent(data, node))

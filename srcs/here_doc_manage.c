@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_manage.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guilrodr <guilrodr@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: chrstein <chrstein@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:30:25 by chrstein          #+#    #+#             */
-/*   Updated: 2024/04/22 18:24:23 by guilrodr         ###   ########lyon.fr   */
+/*   Updated: 2024/06/05 12:55:07 by chrstein         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	error_here_doc(t_data *data, t_list *node)
 	if (g_signal == CTRL_C)
 	{
 		open("/dev/tty", O_RDONLY);
-		return (ft_free_and_null(&node->lim));
+		data->cancel = true;
+		return ;
+		// return (ft_free_and_null(&node->lim));
 	}
 	ft_dprintf(2, "\nwarning: here-document at line %d ", data->nb_line_hd);
 	ft_dprintf(2, "delimited by end-of-file (wanted `%s')\n", node->lim);
